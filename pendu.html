@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+  <title>PlayBed - Jeu du Pendu</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Jeu du Pendu - Devinez le mot lettre par lettre avec PlayBed.">
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+  <header>
+    <div class="container">
+      <h1>Bienvenue sur le <strong>jeu du Pendu</strong> !</h1>
+
+      <nav>
+        <ul>
+          <li><a href="index.html">Page d'accueil</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section>
+      <p>Prêt à t'amuser ? Lance-toi ! On ne vit qu'une seule fois</p>
+    </section>
+
+    <section>
+
+      <article class="game-box">
+
+        <div class="reponse">
+          <p>
+            <REPONSE>
+          </p>
+        </div>
+
+        <form method="POST">
+
+          <div class="form-group">
+            <label for="choix">Choisir une lettre :</label>
+
+            <input type="text" id="choix" name="choix" maxlength="1" required pattern="[A-Za-z]">
+          </div>
+
+          <div class="buttons">
+            <button type="submit">Envoyer</button>
+          </div>
+
+        </form>
+        <form class="buttons" method="GET" action="/new/<GAME_ID>">
+          <button type="submit">Nouvelle partie</button>
+        </form>
+
+      </article>
+
+    </section>
+
+    <section>
+      <figure>
+        <img src="/Images/pendu.png" alt="Illustration du jeu du Pendu" width="150">
+        <figcaption>Trouve le mot avant que vous ne soyez pendu </figcaption>
+      </figure>
+    </section>
+
+    <aside class="astuce">
+      <h2> Astuce du jour</h2>
+      <p>Commence toujours par les <strong>voyelles</strong> au Pendu !</p>
+    </aside>
+
+  </main>
+
+  <footer>
+    <p> 2026 Tassango Obed</p>
+  </footer>
+
+</body>
+
+</html>

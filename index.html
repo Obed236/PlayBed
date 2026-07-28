@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+  <title>PlayBed - Accueil</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="PlayBed - Plateforme de mini-jeux : Pendu, Plus ou Moins, Vrai ou Faux.">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <header>
+    <div class="container">
+      <h1> Bienvenue sur <strong>PlayBed</strong> !</h1>
+      <p>Nous te proposons trois supers jeux. Dis adieu à l'ennui </p>
+
+      <nav>
+        <ul class="menu">
+          <li><a href="pendu.html">Pendu</a></li>
+          <li><a href="pom.html">Plus ou Moins</a></li>
+          <li><a href="vof.html">Vrai ou Faux</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section>
+      <h2>Choisis ton jeu</h2>
+
+      <form action="/start" method="POST">
+        <div class="form-group">
+          <label for="jeux">Jeux disponibles :</label>
+          <select id="jeux" name="jeux">
+            <option value="pendu">Pendu</option>
+            <option value="pom">Plus ou Moins</option>
+            <option value="vof">Vrai ou Faux</option>
+          </select>
+        </div>
+        <button type="submit">START</button>
+      </form>
+
+
+    </section>
+
+    <section>
+      <h3>Illustrations des jeux proposés :</h3>
+
+      <div>
+
+        <article class="card">
+          <figure>
+            <img src="Images/pendu.png" alt="Illustration du Jeu du Pendu" width="150">
+            <figcaption>Le Jeu Pendu</figcaption>
+          </figure>
+        </article>
+
+        <article class="card">
+          <figure>
+            <img src="Images/Plusoumoins.png" alt="Illustration du Jeu Plus ou Moins" width="150">
+            <figcaption>Le Jeu Plus ou Moins</figcaption>
+          </figure>
+        </article>
+
+        <article class="card">
+          <figure>
+            <img src="Images/vof.png" alt="Illustration du Jeu Vrai ou Faux" width="150">
+            <figcaption>Le Jeu Vrai ou Faux</figcaption>
+          </figure>
+        </article>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>2026 Tassango Obed</p>
+  </footer>
+
+</body>
+
+</html>

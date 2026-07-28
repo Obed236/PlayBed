@@ -1,0 +1,40 @@
+Le Soleil se lève à l'est|vrai
+La Terre est la planète la plus proche du Soleil|faux
+Les dauphins sont très intelligents|vrai
+Les serpents ont des paupières|faux
+Le caméléon peut changer de couleur|vrai
+Les étoiles sont toutes de la même taille|faux
+Le cerveau humain consomme de l'énergie|vrai
+Les bananes poussent sur des arbres|faux
+Les abeilles produisent du miel|vrai
+Les tortues peuvent sortir de leur carapace|faux
+Le cœur humain bat en permanence|vrai
+Les chats peuvent voir dans le noir complet|faux
+La pluie vient des nuages|vrai
+Les volcans peuvent être actifs|vrai
+La glace peut flotter sur l'eau|vrai
+Les lions vivent uniquement en Afrique|faux
+Les humains ont deux reins|vrai
+Le tonnerre vient des éclairs|vrai
+Les poissons respirent avec des branchies|vrai
+Les étoiles sont visibles pendant la journée|faux
+La vitesse de la lumière est très rapide|vrai
+Les grenouilles vivent dans l'eau et sur terre|vrai
+Les plantes respirent aussi|vrai
+Les camions volent dans le ciel|faux
+Les pandas mangent du bambou|vrai
+Les humains ont cinq sens principaux|vrai
+Les météorites viennent de l'espace|vrai
+Les serpents ont des pattes|faux
+Le vent est de l'air en mouvement|vrai
+Les glaciers sont faits de glace|vrai
+Les abeilles peuvent communiquer entre elles|vrai
+Les kangourous vivent en Australie|vrai
+Les étoiles sont des planètes|faux
+Les tortues marines vivent dans l'océan|vrai
+Les nuages sont solides|faux
+Les humains peuvent vivre sans eau|faux
+Le sel peut se dissoudre dans l'eau|vrai
+Les caméléons sont des mammifères|faux
+La Terre tourne sur elle-même|vrai
+Les oiseaux ont des plumes|vrai

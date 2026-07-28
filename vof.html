@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+  <title>PlayBed - Vrai ou Faux</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Jeu Vrai ou Faux - Testez vos connaissances !">
+  <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+
+<body>
+
+  <header>
+    <div class="container">
+      <h1>Bienvenue sur le Jeu <strong>Vrai ✅</strong> ou <strong>Faux ❌</strong></h1>
+
+      <nav>
+        <ul>
+          <li><a href="index.html"> Page d'accueil</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section>
+      <p>Testez vos connaissances ! Chaque question est soit <strong>vraie</strong>, soit <strong>fausse</strong>. </p>
+    </section>
+
+    <section>
+
+      <article class="question-box">
+        <div class="reponse">
+          <p>
+            <REPONSE>
+          </p>
+        </div>
+
+        <form method="POST">
+          <div class="buttons">
+            <button type="submit" name="choix" value="vrai">Vrai ✅</button>
+            <button type="submit" name="choix" value="faux">Faux ❌</button>
+          </div>
+        </form>
+        <form class="buttons" method="GET" action="/new/<GAME_ID>">
+          <button type="submit">Nouvelle partie</button>
+        </form>
+      </article>
+
+    </section>
+
+    <section>
+      <figure>
+        <img src="/Images/vof.png" alt="Illustration du jeu Vrai ou Faux" width="150">
+        <figcaption>Testez votre logique </figcaption>
+      </figure>
+    </section>
+
+    <aside class="astuce">
+      <h2> Astuce du jour</h2>
+      <p>Si vous hésitez, faites confiance à votre instinct !</p>
+    </aside>
+
+  </main>
+
+  <footer>
+    <p> 2026 Tassango Obed</p>
+  </footer>
+
+</body>
+
+</html>
