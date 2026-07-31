@@ -189,7 +189,7 @@ class handler(http.server.SimpleHTTPRequestHandler):
                         content = f.read()
 
                     self.send_response(200)
-                    self.send_header("Content-type", "text/plain")
+                    self.send_header("Content-type", "text/plain; charset=utf-8")
                     self.end_headers()
                     self.wfile.write(content)
 
@@ -197,24 +197,26 @@ class handler(http.server.SimpleHTTPRequestHandler):
                     self.send_error(404, "ads.txt not found")
 
                 return
-            
-                # Servir le fichier sw.js
-        if self.path == "/sw.js":
-            try:
-                with open("sw.js", "rb") as f:
-                    content = f.read()
 
-                self.send_response(200)
-                self.send_header("Content-type", "application/javascript")
-                self.end_headers()
-                self.wfile.write(content)
+            # Servir le fichier sw.js à la racine du site
+            if self.path == "/sw.js":
+                try:
+                    with open("sw.js", "rb") as f:
+                        content = f.read()
 
-            except FileNotFoundError:
-                self.send_error(404, "sw.js not found")
+                    self.send_response(200)
+                    self.send_header("Content-type", "application/javascript; charset=utf-8")
+                    self.send_header("Service-Worker-Allowed", "/")
+                    self.send_header("Cache-Control", "no-cache")
+                    self.end_headers()
+                    self.wfile.write(content)
 
-            return
+                except FileNotFoundError:
+                    self.send_error(404, "sw.js not found")
 
-            # Dans les autres cas, on gère le GET normalement
+                return
+
+            # Dans les autres cas, servir normalement les fichiers HTML, CSS, JS et images
             super().do_GET()
             return
         
