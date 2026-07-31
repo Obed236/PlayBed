@@ -4,6 +4,37 @@ from random import randint, choice
 
 class handler(http.server.SimpleHTTPRequestHandler):
 
+    def end_headers(self):
+        """
+        Ajoute des en-têtes de sécurité à toutes les réponses HTTP.
+        """
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("X-Frame-Options", "SAMEORIGIN")
+        self.send_header("Referrer-Policy", "strict-origin-when-cross-origin")
+        self.send_header(
+            "Permissions-Policy",
+            "camera=(), microphone=(), geolocation=()"
+        )
+        self.send_header(
+            "Content-Security-Policy",
+            "default-src 'self'; "
+            "base-uri 'self'; "
+            "form-action 'self'; "
+            "object-src 'none'; "
+            "frame-ancestors 'self'; "
+            "img-src 'self' data: https:; "
+            "style-src 'self' 'unsafe-inline'; "
+            "script-src 'self' 'unsafe-inline' "
+            "https://pagead2.googlesyndication.com "
+            "https://www.googletagservices.com "
+            "https://googleads.g.doubleclick.net; "
+            "frame-src 'self' "
+            "https://googleads.g.doubleclick.net "
+            "https://tpc.googlesyndication.com; "
+            "connect-src 'self' https:;"
+        )
+        super().end_headers()
+
     # Le dictionnaire `games` associe les identifiants des parties en cours à l'état du jeu, qui est lui-même un dictionnaire.
     # Par exemple :
     # games["0"] = { "jeux" : "pendu", "secret" : "chaise", "score" : 4, "decouvert" : ["_", "_", "a", "i", "_", "e"]}
