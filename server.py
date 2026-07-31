@@ -197,6 +197,22 @@ class handler(http.server.SimpleHTTPRequestHandler):
                     self.send_error(404, "ads.txt not found")
 
                 return
+            
+                # Servir le fichier sw.js
+        if self.path == "/sw.js":
+            try:
+                with open("sw.js", "rb") as f:
+                    content = f.read()
+
+                self.send_response(200)
+                self.send_header("Content-type", "application/javascript")
+                self.end_headers()
+                self.wfile.write(content)
+
+            except FileNotFoundError:
+                self.send_error(404, "sw.js not found")
+
+            return
 
             # Dans les autres cas, on gère le GET normalement
             super().do_GET()
