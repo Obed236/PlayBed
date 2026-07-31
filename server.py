@@ -33,6 +33,10 @@ class handler(http.server.SimpleHTTPRequestHandler):
             "https://tpc.googlesyndication.com; "
             "connect-src 'self' https:;"
         )
+        self.send_header(
+            "Strict-Transport-Security",
+            "max-age=31536000; includeSubDomains"
+        )
         super().end_headers()
 
     # Le dictionnaire `games` associe les identifiants des parties en cours à l'état du jeu, qui est lui-même un dictionnaire.
