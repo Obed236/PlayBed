@@ -144,10 +144,26 @@ class handler(http.server.SimpleHTTPRequestHandler):
 
             self.goto_url(f"/play/{game_id}")
             return
+        
 
         else:
-            # Dans les autres cas, on gère le GET normalement (permet
-            # entre autre, d'envoyer les fichiers CSS, images etc.)
+            # Servir le fichier ads.txt
+            if self.path == "/ads.txt":
+                try:
+                    with open("ads.txt", "rb") as f:
+                        content = f.read()
+
+                    self.send_response(200)
+                    self.send_header("Content-type", "text/plain")
+                    self.end_headers()
+                    self.wfile.write(content)
+
+                except FileNotFoundError:
+                    self.send_error(404, "ads.txt not found")
+
+                return
+
+            # Dans les autres cas, on gère le GET normalement
             super().do_GET()
             return
         
