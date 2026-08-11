@@ -1,0 +1,82 @@
+[
+  {
+    "question": "La Terre tourne autour du Soleil.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Python est uniquement un serpent.",
+    "answer": "faux"
+  },
+  {
+    "question": "Un octet contient 8 bits.",
+    "answer": "vrai"
+  },
+  {
+    "question": "HTML est un langage de programmation généraliste.",
+    "answer": "faux"
+  },
+  {
+    "question": "Le Soleil est une étoile.",
+    "answer": "vrai"
+  },
+  {
+    "question": "La capitale de la France est Paris.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Les dauphins sont des poissons.",
+    "answer": "faux"
+  },
+  {
+    "question": "Un clavier est un périphérique d'entrée.",
+    "answer": "vrai"
+  },
+  {
+    "question": "HTTP signifie HyperText Transfer Protocol.",
+    "answer": "vrai"
+  },
+  {
+    "question": "La Lune est plus grande que la Terre.",
+    "answer": "faux"
+  },
+  {
+    "question": "Linux est un système d'exploitation.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Une adresse IPv4 contient 32 bits.",
+    "answer": "vrai"
+  },
+  {
+    "question": "CSS sert principalement à structurer une base de données.",
+    "answer": "faux"
+  },
+  {
+    "question": "Les abeilles produisent du miel.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Le cœur humain possède quatre cavités.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Un gigaoctet est plus petit qu'un mégaoctet.",
+    "answer": "faux"
+  },
+  {
+    "question": "Git est un système de gestion de versions.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Mars est surnommée la planète rouge.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Les araignées ont six pattes.",
+    "answer": "faux"
+  },
+  {
+    "question": "Le protocole HTTPS chiffre les échanges web.",
+    "answer": "vrai"
+  }
+]

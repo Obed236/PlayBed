@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block description %}PlayBed, la plateforme gratuite de mini-jeux rapides sur navigateur.{% endblock %}">
+    <meta name="theme-color" content="#08111f">
+    <meta property="og:title" content="{% block og_title %}PlayBed V2{% endblock %}">
+    <meta property="og:description" content="Joue gratuitement à des mini-jeux rapides sur PlayBed.">
+    <meta property="og:type" content="website">
+    <title>{% block title %}PlayBed V2{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
+</head>
+<body>
+    <header class="navbar">
+        <a class="brand" href="{{ url_for('home') }}"><span>🎮</span> PlayBed</a>
+        <nav class="nav-links">
+            <a href="{{ url_for('home') }}#games">Jeux</a>
+            <a href="{{ url_for('leaderboard') }}">Classement</a>
+            <button class="theme-toggle" id="themeToggle" type="button" aria-label="Changer de thème">☀️</button>
+            {% if pseudo %}
+                <span class="player-chip">👤 {{ pseudo }}</span>
+            {% endif %}
+        </nav>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <footer>
+        <span>© 2026 PlayBed. Tous droits réservés.</span>
+        <span>Gratuit · Rapide · Accessible</span>
+    </footer>
+</body>
+</html>

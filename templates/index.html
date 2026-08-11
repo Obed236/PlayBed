@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}PlayBed V2 — Joue. Défie-toi. Bats ton record.{% endblock %}
+{% block content %}
+<main>
+    <section class="hero">
+        <div class="hero-copy">
+            <span class="eyebrow">PLAYBED V2</span>
+            <h1>Joue.<br>Défie-toi.<br><span>Bats ton record.</span></h1>
+            <p>Des mini-jeux gratuits, rapides et accessibles depuis ton navigateur. Choisis ton pseudo, joue et grimpe dans le classement.</p>
+            <div class="hero-actions">
+                <a class="primary-button" href="#games">Choisir un jeu</a>
+                <a class="secondary-button" href="{{ url_for('leaderboard') }}">🏆 Voir le classement</a>
+            </div>
+        </div>
+        <div class="hero-card">
+            <div class="orb">🕹️</div>
+            <strong>{{ games|length }} jeux disponibles</strong>
+            <span>{{ total_scores }} score(s) enregistré(s)</span>
+            <div class="mini-stats">
+                <span>⚡ Rapide</span><span>💸 Gratuit</span><span>📱 Mobile</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="section player-panel" id="player">
+        <div>
+            <span class="eyebrow">JOUEUR</span>
+            {% if pseudo %}
+                <h2>Salut {{ pseudo }} 👋</h2>
+                <p>Ton pseudo est actif. Tes scores terminés seront ajoutés au classement.</p>
+            {% else %}
+                <h2>Choisis ton pseudo</h2>
+                <p>Aucun compte n'est nécessaire. Ce pseudo sera associé à tes scores.</p>
+            {% endif %}
+        </div>
+
+        {% if pseudo %}
+            <div class="player-actions">
+                <a class="secondary-button" href="{{ url_for('leaderboard') }}">Mesurer mes scores</a>
+                <a class="danger-link" href="{{ url_for('clear_pseudo') }}">Changer de joueur</a>
+            </div>
+        {% else %}
+            <form class="pseudo-form" action="{{ url_for('set_pseudo') }}" method="post">
+                <input type="text" name="pseudo" minlength="2" maxlength="20" required placeholder="Ex. Obed">
+                <button class="primary-button" type="submit">Commencer</button>
+            </form>
+        {% endif %}
+    </section>
+
+    <section class="section" id="games">
+        <div class="section-heading">
+            <span class="eyebrow">JEUX</span>
+            <h2>À quoi veux-tu jouer ?</h2>
+            <p>Choisis ton défi. Les scores sont enregistrés lorsque tu termines une partie.</p>
+        </div>
+
+        <div class="game-grid">
+            {% for slug, game in games.items() %}
+            <article class="game-card">
+                <div class="card-top">
+                    <div class="game-icon">{{ game.emoji }}</div>
+                    <span class="game-tag">{{ game.tag }}</span>
+                </div>
+                <h3>{{ game.name }}</h3>
+                <p>{{ game.description }}</p>
+                <a href="{{ url_for('start_game', game=slug) }}">Jouer maintenant <span>→</span></a>
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="section about">
+        <span class="eyebrow">PLAYBED</span>
+        <h2>Un projet étudiant devenu une vraie plateforme publique.</h2>
+        <p>La V2 apporte une nouvelle interface, des profils par pseudo, un classement, de nouveaux jeux et une architecture Flask plus propre.</p>
+    </section>
+</main>
+{% endblock %}

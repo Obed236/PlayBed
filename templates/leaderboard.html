@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Classement — PlayBed{% endblock %}
+{% block content %}
+<main class="leaderboard-shell">
+    <section class="section-heading leaderboard-heading">
+        <span class="eyebrow">CLASSEMENT</span>
+        <h1>Les meilleurs joueurs</h1>
+        <p>Le classement général additionne les points gagnés sur tous les jeux.</p>
+    </section>
+
+    <section class="leaderboard-card">
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr><th>#</th><th>Joueur</th><th>Parties</th><th>Points</th></tr>
+                </thead>
+                <tbody>
+                    {% for row in overall %}
+                    <tr class="{{ 'me' if pseudo and row.pseudo == pseudo else '' }}">
+                        <td>{{ loop.index }}</td>
+                        <td>{{ row.pseudo }}</td>
+                        <td>{{ row.games_played }}</td>
+                        <td><strong>{{ row.total_points }}</strong></td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="4" class="empty">Aucun score pour le moment. Sois le premier !</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="section game-leaders">
+        <div class="section-heading">
+            <span class="eyebrow">PAR JEU</span>
+            <h2>Records</h2>
+        </div>
+        <div class="leader-grid">
+            {% for slug, game in games.items() %}
+            <article class="mini-leader-card">
+                <div class="card-top">
+                    <div class="game-icon">{{ game.emoji }}</div>
+                    <h3>{{ game.name }}</h3>
+                </div>
+                <ol>
+                    {% for row in best_by_game[slug] %}
+                        <li><span>{{ row.pseudo }}</span><strong>{{ row.points }} pts</strong></li>
+                    {% else %}
+                        <li class="empty">Aucun score</li>
+                    {% endfor %}
+                </ol>
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+</main>
+{% endblock %}

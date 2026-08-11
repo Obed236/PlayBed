@@ -1,0 +1,152 @@
+[
+  {
+    "question": "Quel langage est utilisé pour styliser une page web ?",
+    "options": [
+      "CSS",
+      "SQL",
+      "Bash",
+      "C"
+    ],
+    "answer": "CSS"
+  },
+  {
+    "question": "Combien de bits contient un octet ?",
+    "options": [
+      "4",
+      "8",
+      "16",
+      "32"
+    ],
+    "answer": "8"
+  },
+  {
+    "question": "Quelle planète est la plus proche du Soleil ?",
+    "options": [
+      "Vénus",
+      "Terre",
+      "Mercure",
+      "Mars"
+    ],
+    "answer": "Mercure"
+  },
+  {
+    "question": "Quel outil est un gestionnaire de versions ?",
+    "options": [
+      "Git",
+      "Flask",
+      "Chrome",
+      "SQLite"
+    ],
+    "answer": "Git"
+  },
+  {
+    "question": "Quelle balise HTML contient le contenu principal visible ?",
+    "options": [
+      "<body>",
+      "<head>",
+      "<meta>",
+      "<title>"
+    ],
+    "answer": "<body>"
+  },
+  {
+    "question": "Quel langage est au cœur de Flask ?",
+    "options": [
+      "Python",
+      "Java",
+      "PHP",
+      "Rust"
+    ],
+    "answer": "Python"
+  },
+  {
+    "question": "Quelle ville est la capitale de la France ?",
+    "options": [
+      "Lyon",
+      "Paris",
+      "Lille",
+      "Nice"
+    ],
+    "answer": "Paris"
+  },
+  {
+    "question": "Quel protocole sécurisé est utilisé pour le Web ?",
+    "options": [
+      "HTTPS",
+      "FTP",
+      "SMTP",
+      "SSH"
+    ],
+    "answer": "HTTPS"
+  },
+  {
+    "question": "Quelle structure stocke des paires clé/valeur en Python ?",
+    "options": [
+      "dict",
+      "tuple",
+      "int",
+      "float"
+    ],
+    "answer": "dict"
+  },
+  {
+    "question": "Quel fichier liste généralement les dépendances Python ?",
+    "options": [
+      "requirements.txt",
+      "index.html",
+      "style.css",
+      "robots.txt"
+    ],
+    "answer": "requirements.txt"
+  },
+  {
+    "question": "Quel composant exécute les instructions d'un ordinateur ?",
+    "options": [
+      "CPU",
+      "Écran",
+      "Clavier",
+      "Routeur"
+    ],
+    "answer": "CPU"
+  },
+  {
+    "question": "Quel langage sert principalement à structurer une page web ?",
+    "options": [
+      "HTML",
+      "CSS",
+      "SQL",
+      "Bash"
+    ],
+    "answer": "HTML"
+  },
+  {
+    "question": "Quelle base de données légère est intégrée à Python ?",
+    "options": [
+      "SQLite",
+      "MongoDB",
+      "Redis",
+      "Oracle"
+    ],
+    "answer": "SQLite"
+  },
+  {
+    "question": "Combien de continents compte-t-on généralement ?",
+    "options": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "answer": "7"
+  },
+  {
+    "question": "Quel symbole commence un commentaire Python ?",
+    "options": [
+      "#",
+      "//",
+      "<!--",
+      "**"
+    ],
+    "answer": "#"
+  }
+]
