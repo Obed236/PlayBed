@@ -148,5 +148,1025 @@
       "**"
     ],
     "answer": "#"
+  },
+  {
+    "question": "Que signifie HTML ?",
+    "options": [
+      "HyperText Markup Language",
+      "HighText Machine Language",
+      "Hyper Transfer Main Link",
+      "Home Tool Markup Language"
+    ],
+    "answer": "HyperText Markup Language"
+  },
+  {
+    "question": "Que signifie CSS ?",
+    "options": [
+      "Cascading Style Sheets",
+      "Computer Style System",
+      "Code Styling Software",
+      "Creative Sheet System"
+    ],
+    "answer": "Cascading Style Sheets"
+  },
+  {
+    "question": "Quel langage est principalement utilisé pour rendre une page web interactive ?",
+    "options": [
+      "JavaScript",
+      "SQL",
+      "C",
+      "Bash"
+    ],
+    "answer": "JavaScript"
+  },
+  {
+    "question": "Quelle balise HTML permet de créer un lien ?",
+    "options": [
+      "<a>",
+      "<linker>",
+      "<url>",
+      "<href>"
+    ],
+    "answer": "<a>"
+  },
+  {
+    "question": "Quelle balise HTML permet d'afficher une image ?",
+    "options": [
+      "<img>",
+      "<image>",
+      "<picture-src>",
+      "<photo>"
+    ],
+    "answer": "<img>"
+  },
+  {
+    "question": "Quelle propriété CSS change la couleur du texte ?",
+    "options": [
+      "color",
+      "background",
+      "font-style",
+      "text-size"
+    ],
+    "answer": "color"
+  },
+  {
+    "question": "Quelle propriété CSS permet de changer la taille du texte ?",
+    "options": [
+      "font-size",
+      "text-height",
+      "size",
+      "font-weight"
+    ],
+    "answer": "font-size"
+  },
+  {
+    "question": "Quel langage est utilisé pour interroger une base de données relationnelle ?",
+    "options": [
+      "SQL",
+      "HTML",
+      "CSS",
+      "Markdown"
+    ],
+    "answer": "SQL"
+  },
+  {
+    "question": "Quelle commande SQL permet de récupérer des données ?",
+    "options": [
+      "SELECT",
+      "DELETE",
+      "INSERT",
+      "DROP"
+    ],
+    "answer": "SELECT"
+  },
+  {
+    "question": "Quelle commande SQL permet d'ajouter une ligne dans une table ?",
+    "options": [
+      "INSERT",
+      "SELECT",
+      "SHOW",
+      "READ"
+    ],
+    "answer": "INSERT"
+  },
+  {
+    "question": "Quelle commande SQL permet de supprimer des données ?",
+    "options": [
+      "DELETE",
+      "SELECT",
+      "ADD",
+      "PRINT"
+    ],
+    "answer": "DELETE"
+  },
+  {
+    "question": "Quelle extension est généralement utilisée pour un fichier Python ?",
+    "options": [
+      ".py",
+      ".python",
+      ".pt",
+      ".pyt"
+    ],
+    "answer": ".py"
+  },
+  {
+    "question": "Quelle fonction Python permet d'afficher du texte ?",
+    "options": [
+      "print()",
+      "show()",
+      "echo()",
+      "displayText()"
+    ],
+    "answer": "print()"
+  },
+  {
+    "question": "Quelle fonction Python permet de récupérer une saisie utilisateur ?",
+    "options": [
+      "input()",
+      "read()",
+      "scan()",
+      "get()"
+    ],
+    "answer": "input()"
+  },
+  {
+    "question": "Quel mot-clé Python permet de définir une fonction ?",
+    "options": [
+      "def",
+      "function",
+      "func",
+      "define"
+    ],
+    "answer": "def"
+  },
+  {
+    "question": "Quel mot-clé Python permet de créer une boucle conditionnelle ?",
+    "options": [
+      "while",
+      "during",
+      "repeat",
+      "loop"
+    ],
+    "answer": "while"
+  },
+  {
+    "question": "Quel mot-clé Python est utilisé pour une boucle sur une collection ?",
+    "options": [
+      "for",
+      "foreach",
+      "repeat",
+      "loop"
+    ],
+    "answer": "for"
+  },
+  {
+    "question": "Quel opérateur Python vérifie l'égalité ?",
+    "options": [
+      "==",
+      "=",
+      "!=",
+      "=>"
+    ],
+    "answer": "=="
+  },
+  {
+    "question": "Quel opérateur Python signifie différent de ?",
+    "options": [
+      "!=",
+      "==",
+      "=",
+      "<>"
+    ],
+    "answer": "!="
+  },
+  {
+    "question": "Quel type Python représente une chaîne de caractères ?",
+    "options": [
+      "str",
+      "int",
+      "float",
+      "bool"
+    ],
+    "answer": "str"
+  },
+  {
+    "question": "Quel type Python représente un entier ?",
+    "options": [
+      "int",
+      "str",
+      "float",
+      "char"
+    ],
+    "answer": "int"
+  },
+  {
+    "question": "Quel type Python représente vrai ou faux ?",
+    "options": [
+      "bool",
+      "str",
+      "int",
+      "list"
+    ],
+    "answer": "bool"
+  },
+  {
+    "question": "Quelle structure Python est délimitée par des crochets ?",
+    "options": [
+      "list",
+      "dict",
+      "tuple",
+      "set uniquement"
+    ],
+    "answer": "list"
+  },
+  {
+    "question": "Quel mot-clé Python permet d'importer un module ?",
+    "options": [
+      "import",
+      "include",
+      "require",
+      "using"
+    ],
+    "answer": "import"
+  },
+  {
+    "question": "Quelle commande Git initialise un dépôt ?",
+    "options": [
+      "git init",
+      "git start",
+      "git create",
+      "git new"
+    ],
+    "answer": "git init"
+  },
+  {
+    "question": "Quelle commande Git ajoute les fichiers à la zone de préparation ?",
+    "options": [
+      "git add",
+      "git push",
+      "git commit",
+      "git clone"
+    ],
+    "answer": "git add"
+  },
+  {
+    "question": "Quelle commande Git crée un commit ?",
+    "options": [
+      "git commit",
+      "git save",
+      "git push",
+      "git upload"
+    ],
+    "answer": "git commit"
+  },
+  {
+    "question": "Quelle commande Git envoie les commits vers un dépôt distant ?",
+    "options": [
+      "git push",
+      "git pull",
+      "git status",
+      "git add"
+    ],
+    "answer": "git push"
+  },
+  {
+    "question": "Quelle commande Git récupère les modifications distantes ?",
+    "options": [
+      "git pull",
+      "git add",
+      "git commit",
+      "git status"
+    ],
+    "answer": "git pull"
+  },
+  {
+    "question": "Quelle commande Git affiche l'état des fichiers ?",
+    "options": [
+      "git status",
+      "git check",
+      "git info",
+      "git files"
+    ],
+    "answer": "git status"
+  },
+  {
+    "question": "Quel service est principalement utilisé pour héberger des dépôts Git en ligne ?",
+    "options": [
+      "GitHub",
+      "Netflix",
+      "Spotify",
+      "Canva"
+    ],
+    "answer": "GitHub"
+  },
+  {
+    "question": "Que signifie HTTP ?",
+    "options": [
+      "HyperText Transfer Protocol",
+      "High Transfer Text Program",
+      "Hyper Tool Transmission Process",
+      "Home Text Transfer Protocol"
+    ],
+    "answer": "HyperText Transfer Protocol"
+  },
+  {
+    "question": "Quel est le port par défaut de HTTP ?",
+    "options": [
+      "80",
+      "443",
+      "22",
+      "21"
+    ],
+    "answer": "80"
+  },
+  {
+    "question": "Quel est le port par défaut de HTTPS ?",
+    "options": [
+      "443",
+      "80",
+      "22",
+      "25"
+    ],
+    "answer": "443"
+  },
+  {
+    "question": "Quel protocole est principalement utilisé pour envoyer des emails ?",
+    "options": [
+      "SMTP",
+      "HTTP",
+      "FTP",
+      "DNS"
+    ],
+    "answer": "SMTP"
+  },
+  {
+    "question": "Quel protocole permet de traduire un nom de domaine en adresse IP ?",
+    "options": [
+      "DNS",
+      "FTP",
+      "SSH",
+      "SMTP"
+    ],
+    "answer": "DNS"
+  },
+  {
+    "question": "Que signifie IP dans adresse IP ?",
+    "options": [
+      "Internet Protocol",
+      "Internal Program",
+      "Internet Port",
+      "Information Process"
+    ],
+    "answer": "Internet Protocol"
+  },
+  {
+    "question": "Combien de bits contient une adresse IPv4 ?",
+    "options": [
+      "32",
+      "64",
+      "128",
+      "16"
+    ],
+    "answer": "32"
+  },
+  {
+    "question": "Combien de bits contient une adresse IPv6 ?",
+    "options": [
+      "128",
+      "32",
+      "64",
+      "256"
+    ],
+    "answer": "128"
+  },
+  {
+    "question": "Quel équipement permet principalement de relier plusieurs réseaux ?",
+    "options": [
+      "Routeur",
+      "Clavier",
+      "Écran",
+      "Imprimante"
+    ],
+    "answer": "Routeur"
+  },
+  {
+    "question": "Quel équipement connecte plusieurs appareils dans un réseau local ?",
+    "options": [
+      "Switch",
+      "Écran",
+      "Scanner",
+      "GPU"
+    ],
+    "answer": "Switch"
+  },
+  {
+    "question": "Que signifie RAM ?",
+    "options": [
+      "Random Access Memory",
+      "Rapid Access Machine",
+      "Read All Memory",
+      "Random Application Module"
+    ],
+    "answer": "Random Access Memory"
+  },
+  {
+    "question": "Quel composant stocke temporairement les données utilisées par les programmes ?",
+    "options": [
+      "RAM",
+      "SSD",
+      "Clavier",
+      "Écran"
+    ],
+    "answer": "RAM"
+  },
+  {
+    "question": "Quel composant est spécialisé dans les calculs graphiques ?",
+    "options": [
+      "GPU",
+      "RAM",
+      "SSD",
+      "Routeur"
+    ],
+    "answer": "GPU"
+  },
+  {
+    "question": "Lequel est un système d'exploitation ?",
+    "options": [
+      "Linux",
+      "Python",
+      "HTML",
+      "Git"
+    ],
+    "answer": "Linux"
+  },
+  {
+    "question": "Lequel est également un système d'exploitation ?",
+    "options": [
+      "Windows",
+      "Chrome",
+      "Flask",
+      "MySQL"
+    ],
+    "answer": "Windows"
+  },
+  {
+    "question": "Quelle commande Linux affiche le contenu d'un dossier ?",
+    "options": [
+      "ls",
+      "cd",
+      "mkdir",
+      "rm"
+    ],
+    "answer": "ls"
+  },
+  {
+    "question": "Quelle commande Linux permet de changer de dossier ?",
+    "options": [
+      "cd",
+      "ls",
+      "pwd",
+      "touch"
+    ],
+    "answer": "cd"
+  },
+  {
+    "question": "Quelle commande Linux permet de créer un dossier ?",
+    "options": [
+      "mkdir",
+      "touch",
+      "rm",
+      "cd"
+    ],
+    "answer": "mkdir"
+  },
+  {
+    "question": "Quelle commande Linux affiche le chemin du dossier courant ?",
+    "options": [
+      "pwd",
+      "path",
+      "dirpath",
+      "where"
+    ],
+    "answer": "pwd"
+  },
+  {
+    "question": "Quel framework web Python est léger et populaire ?",
+    "options": [
+      "Flask",
+      "React",
+      "Angular",
+      "Bootstrap"
+    ],
+    "answer": "Flask"
+  },
+  {
+    "question": "Quel framework Python est également utilisé pour créer des applications web ?",
+    "options": [
+      "Django",
+      "Photoshop",
+      "Docker",
+      "Git"
+    ],
+    "answer": "Django"
+  },
+  {
+    "question": "Quel format est fréquemment utilisé pour échanger des données entre applications web ?",
+    "options": [
+      "JSON",
+      "PNG",
+      "MP3",
+      "EXE"
+    ],
+    "answer": "JSON"
+  },
+  {
+    "question": "Que signifie API ?",
+    "options": [
+      "Application Programming Interface",
+      "Automatic Program Installation",
+      "Application Protocol Internet",
+      "Advanced Programming Input"
+    ],
+    "answer": "Application Programming Interface"
+  },
+  {
+    "question": "Quel code HTTP signifie généralement que la requête a réussi ?",
+    "options": [
+      "200",
+      "404",
+      "500",
+      "403"
+    ],
+    "answer": "200"
+  },
+  {
+    "question": "Quel code HTTP signifie généralement page introuvable ?",
+    "options": [
+      "404",
+      "200",
+      "301",
+      "100"
+    ],
+    "answer": "404"
+  },
+  {
+    "question": "Quel code HTTP indique une erreur interne du serveur ?",
+    "options": [
+      "500",
+      "200",
+      "404",
+      "301"
+    ],
+    "answer": "500"
+  },
+  {
+    "question": "Quel code HTTP indique généralement une redirection permanente ?",
+    "options": [
+      "301",
+      "404",
+      "500",
+      "200"
+    ],
+    "answer": "301"
+  },
+  {
+    "question": "Quelle entreprise développe le système Android ?",
+    "options": [
+      "Google",
+      "Apple",
+      "Sony",
+      "Nintendo"
+    ],
+    "answer": "Google"
+  },
+  {
+    "question": "Quelle entreprise développe principalement iOS ?",
+    "options": [
+      "Apple",
+      "Microsoft",
+      "Google",
+      "IBM"
+    ],
+    "answer": "Apple"
+  },
+  {
+    "question": "Quel navigateur est développé par Mozilla ?",
+    "options": [
+      "Firefox",
+      "Chrome",
+      "Edge",
+      "Safari"
+    ],
+    "answer": "Firefox"
+  },
+  {
+    "question": "Quel navigateur est développé par Google ?",
+    "options": [
+      "Chrome",
+      "Safari",
+      "Firefox",
+      "Opera Mini uniquement"
+    ],
+    "answer": "Chrome"
+  },
+  {
+    "question": "Quel navigateur est développé par Microsoft ?",
+    "options": [
+      "Edge",
+      "Safari",
+      "Firefox",
+      "Brave"
+    ],
+    "answer": "Edge"
+  },
+  {
+    "question": "Quel moteur de recherche appartient à Microsoft ?",
+    "options": [
+      "Bing",
+      "Google",
+      "Yahoo",
+      "DuckDuckGo"
+    ],
+    "answer": "Bing"
+  },
+  {
+    "question": "Quel langage de programmation a été créé par Guido van Rossum ?",
+    "options": [
+      "Python",
+      "Java",
+      "C",
+      "Rust"
+    ],
+    "answer": "Python"
+  },
+  {
+    "question": "Quel langage de programmation est historiquement associé à Dennis Ritchie ?",
+    "options": [
+      "C",
+      "Python",
+      "JavaScript",
+      "Ruby"
+    ],
+    "answer": "C"
+  },
+  {
+    "question": "Quel symbole termine généralement une instruction en C ?",
+    "options": [
+      ";",
+      ":",
+      ".",
+      "#"
+    ],
+    "answer": ";"
+  },
+  {
+    "question": "Quelle fonction est le point d'entrée classique d'un programme C ?",
+    "options": [
+      "main()",
+      "start()",
+      "init()",
+      "run()"
+    ],
+    "answer": "main()"
+  },
+  {
+    "question": "Quelle fonction C permet généralement d'afficher du texte dans le terminal ?",
+    "options": [
+      "printf()",
+      "print()",
+      "echo()",
+      "display()"
+    ],
+    "answer": "printf()"
+  },
+  {
+    "question": "Quel langage est utilisé par le moteur de base de données MySQL ?",
+    "options": [
+      "SQL",
+      "HTML",
+      "CSS",
+      "Markdown"
+    ],
+    "answer": "SQL"
+  },
+  {
+    "question": "Quel fichier indique aux moteurs de recherche quelles pages explorer ?",
+    "options": [
+      "robots.txt",
+      "requirements.txt",
+      "style.css",
+      "README.md"
+    ],
+    "answer": "robots.txt"
+  },
+  {
+    "question": "Quel fichier aide les moteurs de recherche à découvrir les pages d'un site ?",
+    "options": [
+      "sitemap.xml",
+      "package.json",
+      "server.py",
+      "style.css"
+    ],
+    "answer": "sitemap.xml"
+  },
+  {
+    "question": "Quelle balise HTML contient généralement les métadonnées d'une page ?",
+    "options": [
+      "<head>",
+      "<body>",
+      "<footer>",
+      "<main>"
+    ],
+    "answer": "<head>"
+  },
+  {
+    "question": "Quelle balise HTML définit le titre affiché dans l'onglet du navigateur ?",
+    "options": [
+      "<title>",
+      "<h1>",
+      "<header>",
+      "<name>"
+    ],
+    "answer": "<title>"
+  },
+  {
+    "question": "Quelle balise HTML représente le titre principal d'une page ?",
+    "options": [
+      "<h1>",
+      "<p>",
+      "<title>",
+      "<strong>"
+    ],
+    "answer": "<h1>"
+  },
+  {
+    "question": "Quelle balise HTML est utilisée pour créer un paragraphe ?",
+    "options": [
+      "<p>",
+      "<text>",
+      "<paragraph>",
+      "<spanp>"
+    ],
+    "answer": "<p>"
+  },
+  {
+    "question": "Quelle planète est surnommée la planète rouge ?",
+    "options": [
+      "Mars",
+      "Jupiter",
+      "Mercure",
+      "Saturne"
+    ],
+    "answer": "Mars"
+  },
+  {
+    "question": "Quelle est la plus grande planète du système solaire ?",
+    "options": [
+      "Jupiter",
+      "Terre",
+      "Mars",
+      "Vénus"
+    ],
+    "answer": "Jupiter"
+  },
+  {
+    "question": "Quelle planète possède des anneaux particulièrement visibles ?",
+    "options": [
+      "Saturne",
+      "Mars",
+      "Mercure",
+      "Terre"
+    ],
+    "answer": "Saturne"
+  },
+  {
+    "question": "Quel satellite naturel tourne autour de la Terre ?",
+    "options": [
+      "La Lune",
+      "Le Soleil",
+      "Mars",
+      "Titan"
+    ],
+    "answer": "La Lune"
+  },
+  {
+    "question": "Quelle étoile est au centre du système solaire ?",
+    "options": [
+      "Le Soleil",
+      "Sirius",
+      "Polaris",
+      "Proxima Centauri"
+    ],
+    "answer": "Le Soleil"
+  },
+  {
+    "question": "Quelle est la capitale de l'Allemagne ?",
+    "options": [
+      "Berlin",
+      "Munich",
+      "Francfort",
+      "Hambourg"
+    ],
+    "answer": "Berlin"
+  },
+  {
+    "question": "Quelle est la capitale de l'Italie ?",
+    "options": [
+      "Rome",
+      "Milan",
+      "Naples",
+      "Turin"
+    ],
+    "answer": "Rome"
+  },
+  {
+    "question": "Quelle est la capitale de l'Espagne ?",
+    "options": [
+      "Madrid",
+      "Barcelone",
+      "Séville",
+      "Valence"
+    ],
+    "answer": "Madrid"
+  },
+  {
+    "question": "Quelle est la capitale du Royaume-Uni ?",
+    "options": [
+      "Londres",
+      "Manchester",
+      "Liverpool",
+      "Birmingham"
+    ],
+    "answer": "Londres"
+  },
+  {
+    "question": "Quelle est la capitale du Japon ?",
+    "options": [
+      "Tokyo",
+      "Kyoto",
+      "Osaka",
+      "Nagoya"
+    ],
+    "answer": "Tokyo"
+  },
+  {
+    "question": "Quelle est la capitale du Canada ?",
+    "options": [
+      "Ottawa",
+      "Toronto",
+      "Montréal",
+      "Vancouver"
+    ],
+    "answer": "Ottawa"
+  },
+  {
+    "question": "Quel est le plus grand océan du monde ?",
+    "options": [
+      "Océan Pacifique",
+      "Océan Atlantique",
+      "Océan Indien",
+      "Océan Arctique"
+    ],
+    "answer": "Océan Pacifique"
+  },
+  {
+    "question": "Quel gaz est principalement utilisé par l'être humain pour respirer ?",
+    "options": [
+      "Oxygène",
+      "Hydrogène",
+      "Hélium",
+      "Méthane"
+    ],
+    "answer": "Oxygène"
+  },
+  {
+    "question": "Quelle est la formule chimique de l'eau ?",
+    "options": [
+      "H2O",
+      "CO2",
+      "O2",
+      "NaCl"
+    ],
+    "answer": "H2O"
+  },
+  {
+    "question": "Combien font 12 × 12 ?",
+    "options": [
+      "144",
+      "124",
+      "132",
+      "154"
+    ],
+    "answer": "144"
+  },
+  {
+    "question": "Quelle est la racine carrée de 81 ?",
+    "options": [
+      "9",
+      "8",
+      "7",
+      "10"
+    ],
+    "answer": "9"
+  },
+  {
+    "question": "Combien font 2 puissance 8 ?",
+    "options": [
+      "256",
+      "128",
+      "512",
+      "64"
+    ],
+    "answer": "256"
+  },
+  {
+    "question": "Quel nombre est binaire ?",
+    "options": [
+      "101101",
+      "2389",
+      "789",
+      "XYZ"
+    ],
+    "answer": "101101"
+  },
+  {
+    "question": "Quels chiffres sont utilisés dans le système binaire ?",
+    "options": [
+      "0 et 1",
+      "0 à 9",
+      "1 à 8",
+      "A à F"
+    ],
+    "answer": "0 et 1"
+  },
+  {
+    "question": "Quel système numérique utilise les chiffres de 0 à 9 et les lettres A à F ?",
+    "options": [
+      "Hexadécimal",
+      "Binaire",
+      "Décimal",
+      "Octal"
+    ],
+    "answer": "Hexadécimal"
+  },
+  {
+    "question": "Quelle est la valeur décimale du nombre binaire 10 ?",
+    "options": [
+      "2",
+      "10",
+      "1",
+      "4"
+    ],
+    "answer": "2"
+  },
+  {
+    "question": "Quelle est la valeur décimale du nombre binaire 111 ?",
+    "options": [
+      "7",
+      "6",
+      "8",
+      "3"
+    ],
+    "answer": "7"
+  },
+  {
+    "question": "Combien d'octets contient un kilo-octet selon la convention binaire classique ?",
+    "options": [
+      "1024",
+      "100",
+      "1000",
+      "2048"
+    ],
+    "answer": "1024"
+  },
+  {
+    "question": "Quel périphérique permet principalement de saisir du texte ?",
+    "options": [
+      "Clavier",
+      "Écran",
+      "Imprimante",
+      "Haut-parleur"
+    ],
+    "answer": "Clavier"
+  },
+  {
+    "question": "Quel périphérique affiche les informations visuelles d'un ordinateur ?",
+    "options": [
+      "Écran",
+      "Souris",
+      "Clavier",
+      "Microphone"
+    ],
+    "answer": "Écran"
+  },
+  {
+    "question": "Quel périphérique permet de déplacer le curseur ?",
+    "options": [
+      "Souris",
+      "Écran",
+      "Imprimante",
+      "Webcam"
+    ],
+    "answer": "Souris"
   }
 ]

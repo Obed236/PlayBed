@@ -78,5 +78,405 @@
   {
     "question": "Le protocole HTTPS chiffre les échanges web.",
     "answer": "vrai"
+  },
+  {
+    "question": "JavaScript peut être exécuté dans un navigateur web.",
+    "answer": "vrai"
+  },
+  {
+    "question": "CSS signifie Cascading Style Sheets.",
+    "answer": "vrai"
+  },
+  {
+    "question": "SQL est principalement utilisé pour modifier le style des pages web.",
+    "answer": "faux"
+  },
+  {
+    "question": "Python utilise le mot-clé def pour déclarer une fonction.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Une liste Python est obligatoirement composée uniquement de nombres.",
+    "answer": "faux"
+  },
+  {
+    "question": "La fonction print() permet d'afficher du texte en Python.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Le symbole # permet de commencer un commentaire en Python.",
+    "answer": "vrai"
+  },
+  {
+    "question": "La commande git push permet généralement d'envoyer des commits vers un dépôt distant.",
+    "answer": "vrai"
+  },
+  {
+    "question": "GitHub et Git désignent exactement le même logiciel.",
+    "answer": "faux"
+  },
+  {
+    "question": "La commande git status permet de consulter l'état d'un dépôt Git.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Flask est un framework web basé sur Python.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Django est un système d'exploitation.",
+    "answer": "faux"
+  },
+  {
+    "question": "JSON peut être utilisé pour échanger des données entre applications.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Une API permet à des logiciels de communiquer entre eux.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Le code HTTP 404 indique généralement qu'une ressource est introuvable.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Le code HTTP 200 correspond généralement à une requête réussie.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Le code HTTP 500 indique généralement une erreur côté serveur.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Le port 443 est couramment utilisé par HTTPS.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Le port 80 est couramment associé à HTTP.",
+    "answer": "vrai"
+  },
+  {
+    "question": "DNS sert notamment à associer des noms de domaine à des adresses IP.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Une adresse IPv6 contient 128 bits.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Une adresse IPv6 est plus courte en nombre de bits qu'une adresse IPv4.",
+    "answer": "faux"
+  },
+  {
+    "question": "Un routeur peut permettre de faire communiquer plusieurs réseaux.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Un switch est uniquement utilisé pour afficher des images.",
+    "answer": "faux"
+  },
+  {
+    "question": "La RAM est une mémoire utilisée temporairement par les programmes en cours d'exécution.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Un SSD est un périphérique de stockage.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Le GPU est spécialisé notamment dans les calculs graphiques.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Le CPU est généralement chargé d'exécuter les instructions des programmes.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Windows est un langage de programmation.",
+    "answer": "faux"
+  },
+  {
+    "question": "Ubuntu est une distribution Linux.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Android est basé sur un noyau Linux.",
+    "answer": "vrai"
+  },
+  {
+    "question": "La balise HTML <p> permet de créer un paragraphe.",
+    "answer": "vrai"
+  },
+  {
+    "question": "La balise HTML <img> sert à afficher une image.",
+    "answer": "vrai"
+  },
+  {
+    "question": "La balise HTML <a> peut être utilisée pour créer un lien.",
+    "answer": "vrai"
+  },
+  {
+    "question": "La balise HTML <title> définit le titre affiché dans l'onglet du navigateur.",
+    "answer": "vrai"
+  },
+  {
+    "question": "La balise HTML <body> est normalement placée à l'intérieur de la balise <head>.",
+    "answer": "faux"
+  },
+  {
+    "question": "La propriété CSS color permet de modifier la couleur du texte.",
+    "answer": "vrai"
+  },
+  {
+    "question": "La propriété CSS font-size permet de modifier la taille du texte.",
+    "answer": "vrai"
+  },
+  {
+    "question": "HTML sert principalement à définir la structure d'une page web.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Java et JavaScript sont exactement le même langage.",
+    "answer": "faux"
+  },
+  {
+    "question": "Le système binaire utilise uniquement les chiffres 0 et 1.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Le nombre binaire 10 correspond au nombre décimal 2.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Le système hexadécimal utilise notamment les lettres A à F.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Deux puissance huit est égal à 256.",
+    "answer": "vrai"
+  },
+  {
+    "question": "La racine carrée de 64 est 8.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Sept multiplié par huit est égal à 54.",
+    "answer": "faux"
+  },
+  {
+    "question": "Un nombre premier possède exactement deux diviseurs positifs.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Le nombre 2 est un nombre premier.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Le nombre 9 est un nombre premier.",
+    "answer": "faux"
+  },
+  {
+    "question": "La somme des angles d'un triangle dans la géométrie euclidienne est de 180 degrés.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Un carré possède quatre côtés de même longueur.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Un triangle possède quatre sommets.",
+    "answer": "faux"
+  },
+  {
+    "question": "Jupiter est la plus grande planète du système solaire.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Mercure est la planète la plus proche du Soleil.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Vénus est plus éloignée du Soleil que Neptune.",
+    "answer": "faux"
+  },
+  {
+    "question": "Saturne possède un système d'anneaux.",
+    "answer": "vrai"
+  },
+  {
+    "question": "La Terre possède deux lunes naturelles.",
+    "answer": "faux"
+  },
+  {
+    "question": "La lumière du Soleil met environ huit minutes pour atteindre la Terre.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Le Soleil tourne autour de la Terre une fois par jour.",
+    "answer": "faux"
+  },
+  {
+    "question": "La Terre effectue une rotation sur elle-même.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Mars est plus grande que Jupiter.",
+    "answer": "faux"
+  },
+  {
+    "question": "L'eau pure est composée d'hydrogène et d'oxygène.",
+    "answer": "vrai"
+  },
+  {
+    "question": "La formule chimique de l'eau est H2O.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Le dioxyde de carbone a pour formule CO2.",
+    "answer": "vrai"
+  },
+  {
+    "question": "L'oxygène est le seul gaz présent dans l'atmosphère terrestre.",
+    "answer": "faux"
+  },
+  {
+    "question": "L'eau bout généralement à environ 100 degrés Celsius au niveau de la mer.",
+    "answer": "vrai"
+  },
+  {
+    "question": "L'eau gèle généralement à 0 degré Celsius à pression atmosphérique normale.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Le corps humain adulte possède généralement 206 os.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Le cerveau humain se trouve principalement dans la cage thoracique.",
+    "answer": "faux"
+  },
+  {
+    "question": "Les poumons participent aux échanges gazeux de la respiration.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Le sang est pompé dans le corps par le cœur.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Les humains possèdent normalement trois cœurs.",
+    "answer": "faux"
+  },
+  {
+    "question": "Les baleines sont des mammifères.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Les requins sont des mammifères.",
+    "answer": "faux"
+  },
+  {
+    "question": "Une araignée possède normalement huit pattes.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Les chauves-souris sont des mammifères.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Les manchots peuvent naturellement voler comme les aigles.",
+    "answer": "faux"
+  },
+  {
+    "question": "Les grenouilles sont des amphibiens.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Le crocodile est un reptile.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Les poissons respirent généralement grâce à des branchies.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Paris est traversée par la Seine.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Rome est la capitale de l'Italie.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Madrid est la capitale du Portugal.",
+    "answer": "faux"
+  },
+  {
+    "question": "Berlin est la capitale de l'Allemagne.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Tokyo est la capitale du Japon.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Ottawa est la capitale du Canada.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Sydney est la capitale de l'Australie.",
+    "answer": "faux"
+  },
+  {
+    "question": "Le Brésil se trouve en Amérique du Sud.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Le Japon se trouve en Afrique.",
+    "answer": "faux"
+  },
+  {
+    "question": "L'océan Pacifique est plus vaste que l'océan Atlantique.",
+    "answer": "vrai"
+  },
+  {
+    "question": "L'Antarctique se situe autour du pôle Sud.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Le mont Everest est le plus haut sommet terrestre au-dessus du niveau de la mer.",
+    "answer": "vrai"
+  },
+  {
+    "question": "La France partage une frontière terrestre avec l'Espagne.",
+    "answer": "vrai"
+  },
+  {
+    "question": "L'Italie partage une frontière terrestre avec la France.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Londres est la capitale de l'Espagne.",
+    "answer": "faux"
+  },
+  {
+    "question": "Le français utilise l'alphabet latin.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Une année normale compte 365 jours.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Une semaine compte huit jours.",
+    "answer": "faux"
+  },
+  {
+    "question": "Une heure contient 60 minutes.",
+    "answer": "vrai"
+  },
+  {
+    "question": "Une minute contient 100 secondes.",
+    "answer": "faux"
   }
 ]
