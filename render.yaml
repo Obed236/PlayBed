@@ -1,9 +1,0 @@
-services:
-  - type: web
-    name: playbed
-    runtime: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app
-    envVars:
-      - key: SECRET_KEY
-        generateValue: true
