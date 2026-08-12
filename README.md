@@ -2,7 +2,7 @@
 
 Version autonome de PlayBed.
 
-**Créé et développé par Obed.**
+**Créé et développé par Obed Gelly Ousmane Tassango.**
 
 ## Fonctionnalités
 - Flask + Gunicorn
