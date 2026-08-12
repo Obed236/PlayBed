@@ -2,6 +2,8 @@
 
 Version autonome de PlayBed.
 
+**Créé et développé par Obed.**
+
 ## Fonctionnalités
 - Flask + Gunicorn
 - 5 jeux : Pendu, Plus ou Moins, Vrai ou Faux, Quiz Express, Memory
