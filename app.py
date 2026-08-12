@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_from_directory
 from pathlib import Path
 from random import choice, randint, sample
+from contextlib import contextmanager
 import sqlite3
 import os
 import re
@@ -9,6 +10,12 @@ from datetime import datetime, timezone
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
 DB_PATH = BASE_DIR / "playbed.db"
+DATABASE_URL = os.environ.get("DATABASE_URL")
+USE_POSTGRES = bool(DATABASE_URL)
+
+if USE_POSTGRES:
+    import psycopg
+    from psycopg.rows import dict_row
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "playbed-v2-dev-secret-change-me")
@@ -51,17 +58,44 @@ GAMES = {
 }
 
 
+class DatabaseAdapter:
+    def __init__(self, connection, postgres=False):
+        self.connection = connection
+        self.postgres = postgres
+
+    def execute(self, query, params=()):
+        if self.postgres:
+            query = query.replace("?", "%s")
+        return self.connection.execute(query, params)
+
+    def commit(self):
+        self.connection.commit()
+
+
+@contextmanager
 def db_connection():
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    return conn
+    if USE_POSTGRES:
+        connection = psycopg.connect(DATABASE_URL, row_factory=dict_row)
+        adapter = DatabaseAdapter(connection, postgres=True)
+    else:
+        connection = sqlite3.connect(DB_PATH)
+        connection.row_factory = sqlite3.Row
+        adapter = DatabaseAdapter(connection)
+
+    try:
+        yield adapter
+        connection.commit()
+    except Exception:
+        connection.rollback()
+        raise
+    finally:
+        connection.close()
 
 
 def init_db():
     with db_connection() as conn:
         conn.execute("""
             CREATE TABLE IF NOT EXISTS scores (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
                 pseudo TEXT NOT NULL,
                 game TEXT NOT NULL,
                 points INTEGER NOT NULL,
@@ -450,7 +484,11 @@ def sitemap_xml():
 
 @app.route("/health")
 def health():
-    return {"status": "ok", "version": "2"}
+    return {
+        "status": "ok",
+        "version": "2",
+        "database": "postgresql" if USE_POSTGRES else "sqlite",
+    }
 
 
 if __name__ == "__main__":
