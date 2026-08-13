@@ -212,16 +212,6 @@ def new_game(game):
 
 
 @app.before_request
-def redirect_to_www():
-    host = request.host.split(":", 1)[0].lower()
-    if host == "playbed.fr":
-        target = f"https://www.playbed.fr{request.full_path}"
-        if target.endswith("?"):
-            target = target[:-1]
-        return redirect(target, code=308)
-
-
-@app.before_request
 def ensure_database():
     init_db()
 
