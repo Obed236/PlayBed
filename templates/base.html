@@ -12,7 +12,9 @@
     <meta property="og:title" content="{% block og_title %}PlayBed V2{% endblock %}">
     <meta property="og:description" content="Joue gratuitement à des mini-jeux rapides sur PlayBed.">
     <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.playbed.fr{{ request.path }}">
     <title>{% block title %}PlayBed{% endblock %}</title>
+    <link rel="canonical" href="https://www.playbed.fr{{ request.path }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8115913863262508"
