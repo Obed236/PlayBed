@@ -1,14 +1,17 @@
 {% extends "base.html" %}
-{% block title %}PlayBed V2 — Joue. Défie-toi. Bats ton record.{% endblock %}
+{% block title %}PlayBed V2 — Mini-jeux gratuits en ligne{% endblock %}
+{% block description %}PlayBed propose cinq mini-jeux gratuits en ligne : Pendu, Plus ou Moins, Vrai ou Faux, Quiz Express et Memory. Joue sans compte et compare tes scores.{% endblock %}
+{% block og_description %}Cinq mini-jeux gratuits sur navigateur, sans compte obligatoire. Choisis un pseudo, joue et grimpe dans le classement PlayBed.{% endblock %}
 {% block content %}
 <main>
     <section class="hero">
         <div class="hero-copy">
             <span class="eyebrow">PLAYBED V2</span>
             <h1>Joue.<br>Défie-toi.<br><span>Bats ton record.</span></h1>
-            <p>Des mini-jeux gratuits, rapides et accessibles depuis ton navigateur. Choisis ton pseudo, joue et grimpe dans le classement.</p>
+            <p>PlayBed rassemble des mini-jeux gratuits, rapides et accessibles directement depuis ton navigateur. Choisis simplement un pseudo, lance une partie et tente d'améliorer ton score au Pendu, à Plus ou Moins, à Vrai ou Faux, au Quiz Express ou au Memory.</p>
             <div class="hero-actions">
                 <a class="primary-button" href="#games">Choisir un jeu</a>
+                <a class="secondary-button" href="{{ url_for('how_to_play_page') }}">Comment jouer</a>
                 <a class="secondary-button" href="{{ url_for('leaderboard') }}">🏆 Voir le classement</a>
             </div>
         </div>
@@ -27,10 +30,10 @@
             <span class="eyebrow">JOUEUR</span>
             {% if pseudo %}
                 <h2>Salut {{ pseudo }} 👋</h2>
-                <p>Ton pseudo est actif. Tes scores terminés seront ajoutés au classement.</p>
+                <p>Ton pseudo est actif. Tes scores terminés seront ajoutés au classement public de PlayBed.</p>
             {% else %}
                 <h2>Choisis ton pseudo</h2>
-                <p>Aucun compte n'est nécessaire. Ce pseudo sera associé à tes scores.</p>
+                <p>Aucun compte n'est nécessaire. Ton pseudo sert uniquement à identifier tes scores dans le classement.</p>
             {% endif %}
         </div>
 
@@ -41,7 +44,7 @@
             </div>
         {% else %}
             <form class="pseudo-form" action="{{ url_for('set_pseudo') }}" method="post">
-                <input type="text" name="pseudo" minlength="2" maxlength="20" required placeholder="Ex. Obed">
+                <input type="text" name="pseudo" minlength="2" maxlength="20" required placeholder="Ex. Obed" aria-label="Choisir un pseudo">
                 <button class="primary-button" type="submit">Commencer</button>
             </form>
         {% endif %}
@@ -51,7 +54,7 @@
         <div class="section-heading">
             <span class="eyebrow">JEUX</span>
             <h2>À quoi veux-tu jouer ?</h2>
-            <p>Choisis ton défi. Les scores sont enregistrés lorsque tu termines une partie.</p>
+            <p>Chaque jeu propose un défi différent : vocabulaire, logique, culture générale ou mémoire. Termine ta partie pour enregistrer ton score et comparer ta performance aux autres joueurs.</p>
         </div>
 
         <div class="game-grid">
@@ -69,10 +72,30 @@
         </div>
     </section>
 
+    <section class="section info-grid" aria-label="Pourquoi utiliser PlayBed">
+        <article class="info-card">
+            <span class="eyebrow">SIMPLE</span>
+            <h3>Pas de compte à créer</h3>
+            <p>Un pseudo suffit pour commencer. L'objectif est de pouvoir lancer une partie en quelques secondes, sur ordinateur comme sur mobile.</p>
+        </article>
+        <article class="info-card">
+            <span class="eyebrow">VARIÉ</span>
+            <h3>Des défis différents</h3>
+            <p>Les jeux font travailler la mémoire, la logique, le vocabulaire et la culture générale avec des règles simples à comprendre.</p>
+        </article>
+        <article class="info-card">
+            <span class="eyebrow">COMPÉTITIF</span>
+            <h3>Un classement public</h3>
+            <p>Les parties terminées génèrent des points. Tu peux consulter le classement général et les meilleurs scores par jeu.</p>
+        </article>
+    </section>
+
     <section class="section about">
         <span class="eyebrow">PLAYBED</span>
-        <h2>Un projet étudiant devenu une vraie plateforme publique.</h2>
-        <p>PlayBed a été créé et développé par Obed Gelly Ousmane Tassango. La V2 apporte une nouvelle interface, des profils par pseudo, un classement, de nouveaux jeux et une architecture Flask plus propre.</p>
+        <h2>Un projet étudiant devenu une plateforme publique.</h2>
+        <p>PlayBed a été créé et développé par Obed Gelly Ousmane Tassango dans le cadre d'un projet informatique autour du web, du réseau et de la programmation. La plateforme a ensuite été mise en ligne pour permettre à tous d'en profiter gratuitement. La V2 apporte une nouvelle interface, des profils par pseudo, un classement, de nouveaux jeux et une architecture Flask plus complète.</p>
+        <p>L'objectif est de proposer une expérience légère et accessible, tout en faisant évoluer progressivement le projet avec de nouveaux jeux, de nouvelles questions et des améliorations techniques.</p>
+        <a class="secondary-button" href="{{ url_for('about_page') }}">En savoir plus sur PlayBed</a>
     </section>
 </main>
 {% endblock %}

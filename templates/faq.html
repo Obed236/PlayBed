@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}FAQ PlayBed — Questions fréquentes{% endblock %}
+{% block description %}Réponses aux questions fréquentes sur PlayBed : gratuité, pseudo, scores, classement, compatibilité mobile, données et fonctionnement des jeux.{% endblock %}
+{% block og_description %}Les réponses aux questions fréquentes sur PlayBed et ses mini-jeux.{% endblock %}
+{% block content %}
+<main class="content-shell">
+    <header class="content-hero">
+        <span class="eyebrow">FAQ</span>
+        <h1>Questions fréquentes sur PlayBed.</h1>
+        <p>Voici les réponses aux principales questions concernant l'accès aux jeux, les scores, les pseudos et le fonctionnement général de la plateforme.</p>
+    </header>
+
+    <section class="faq-list">
+        <article class="content-card prose">
+            <h2>PlayBed est-il gratuit ?</h2>
+            <p>Oui. Les mini-jeux proposés sur PlayBed sont accessibles gratuitement depuis un navigateur. Aucun abonnement n'est nécessaire pour lancer une partie.</p>
+        </article>
+
+        <article class="content-card prose">
+            <h2>Faut-il créer un compte ?</h2>
+            <p>Non. PlayBed ne demande pas la création d'un compte classique avec une adresse e-mail et un mot de passe. Il suffit de choisir un pseudo pour identifier les scores enregistrés.</p>
+        </article>
+
+        <article class="content-card prose">
+            <h2>Pourquoi choisir un pseudo ?</h2>
+            <p>Le pseudo permet d'associer les points obtenus pendant les parties à un nom visible dans le classement. Il facilite la comparaison des performances sans imposer un système d'inscription complet.</p>
+        </article>
+
+        <article class="content-card prose">
+            <h2>Que se passe-t-il si je change de pseudo ?</h2>
+            <p>Le nouveau pseudo sera utilisé pour tes prochaines parties. Les scores déjà enregistrés sous l'ancien pseudo peuvent rester visibles dans le classement, car il n'existe pas de compte personnel reliant automatiquement plusieurs pseudos entre eux.</p>
+        </article>
+
+        <article class="content-card prose">
+            <h2>Comment les scores sont-ils calculés ?</h2>
+            <p>Le calcul dépend du jeu. Par exemple, Plus ou Moins récompense un nombre réduit de tentatives, le Pendu valorise les vies conservées, les quiz récompensent les bonnes réponses et Memory tient compte du nombre de coups ainsi que du temps.</p>
+        </article>
+
+        <article class="content-card prose">
+            <h2>PlayBed fonctionne-t-il sur téléphone ?</h2>
+            <p>La plateforme est conçue avec une interface responsive afin de fonctionner sur les navigateurs modernes d'ordinateur, de tablette et de smartphone. L'affichage peut varier légèrement selon l'appareil ou le navigateur utilisé.</p>
+        </article>
+
+        <article class="content-card prose">
+            <h2>Quelles données sont utilisées ?</h2>
+            <p>Le service utilise notamment le pseudo choisi, les scores et les informations nécessaires au fonctionnement de la session de jeu. Des services techniques ou publicitaires tiers peuvent également traiter certaines données selon leur propre politique. Les détails sont présentés dans la politique de confidentialité.</p>
+            <p><a class="text-link" href="{{ url_for('privacy_page') }}">Consulter la politique de confidentialité →</a></p>
+        </article>
+
+        <article class="content-card prose">
+            <h2>Pourquoi certaines parties ne sont-elles pas identiques ?</h2>
+            <p>Plusieurs jeux utilisent une sélection aléatoire de mots, de nombres ou de questions. Cela permet de renouveler les parties et d'éviter que le contenu soit toujours présenté dans le même ordre.</p>
+        </article>
+
+        <article class="content-card prose">
+            <h2>D'autres jeux seront-ils ajoutés ?</h2>
+            <p>PlayBed est un projet évolutif. De nouveaux jeux, de nouvelles questions et des améliorations peuvent être ajoutés au fil des versions lorsque leur fonctionnement est suffisamment stable pour être proposé au public.</p>
+        </article>
+    </section>
+</main>
+{% endblock %}

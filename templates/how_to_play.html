@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Comment jouer à PlayBed — Règles des mini-jeux{% endblock %}
+{% block description %}Retrouve les règles du Pendu, de Plus ou Moins, de Vrai ou Faux, du Quiz Express et du Memory sur PlayBed, ainsi que le fonctionnement des scores.{% endblock %}
+{% block og_description %}Toutes les règles des jeux PlayBed et le fonctionnement des scores.{% endblock %}
+{% block content %}
+<main class="content-shell">
+    <header class="content-hero">
+        <span class="eyebrow">COMMENT JOUER</span>
+        <h1>Des règles simples, un objectif : faire le meilleur score.</h1>
+        <p>PlayBed est conçu pour être compris rapidement. Choisis un pseudo, sélectionne un jeu et termine ta partie pour enregistrer tes points.</p>
+    </header>
+
+    <section class="content-card prose">
+        <h2>Commencer une partie</h2>
+        <ol>
+            <li>Sur la page d'accueil, choisis un pseudo de 2 à 20 caractères.</li>
+            <li>Sélectionne l'un des cinq jeux disponibles.</li>
+            <li>Termine la partie : ton score est alors associé à ton pseudo.</li>
+            <li>Consulte le classement pour comparer ta performance avec les autres joueurs.</li>
+        </ol>
+        <p>Tu n'as pas besoin de créer un compte avec une adresse e-mail ou un mot de passe. Le pseudo sert principalement à afficher les scores dans le classement.</p>
+    </section>
+
+    <section class="rules-grid">
+        <article class="content-card prose rule-card">
+            <div class="rule-title"><span>🪢</span><h2>Pendu</h2></div>
+            <p>Un mot est choisi au hasard et ses lettres sont masquées. Propose une lettre à la fois pour révéler celles qui sont présentes dans le mot.</p>
+            <p>Une mauvaise lettre te fait perdre une vie. Tu disposes de 10 vies au début de la partie. Tu gagnes si tu retrouves toutes les lettres avant d'arriver à zéro.</p>
+            <p><strong>Pour améliorer ton score :</strong> trouve le mot en conservant le plus de vies possible.</p>
+        </article>
+
+        <article class="content-card prose rule-card">
+            <div class="rule-title"><span>🔢</span><h2>Plus ou Moins</h2></div>
+            <p>Le jeu choisit secrètement un nombre compris entre 0 et 100. Entre une proposition et PlayBed t'indique si le nombre recherché est plus grand ou plus petit.</p>
+            <p>Continue jusqu'à trouver la bonne valeur. Chaque tentative compte.</p>
+            <p><strong>Pour améliorer ton score :</strong> utilise les indices intelligemment et trouve le nombre avec le moins d'essais possible.</p>
+        </article>
+
+        <article class="content-card prose rule-card">
+            <div class="rule-title"><span>🧠</span><h2>Vrai ou Faux</h2></div>
+            <p>Une série de 10 affirmations de culture générale t'est proposée. Pour chacune, choisis simplement « Vrai » ou « Faux ».</p>
+            <p>Chaque bonne réponse rapporte des points et le résultat final est calculé lorsque toutes les affirmations ont été traitées.</p>
+            <p><strong>Pour améliorer ton score :</strong> vise le 10/10 et rejoue pour découvrir d'autres affirmations.</p>
+        </article>
+
+        <article class="content-card prose rule-card">
+            <div class="rule-title"><span>⚡</span><h2>Quiz Express</h2></div>
+            <p>Le Quiz Express sélectionne 10 questions à choix multiples. Lis la question, compare les réponses proposées et sélectionne celle qui te paraît correcte.</p>
+            <p>Les questions sont tirées dans une base de culture générale afin de varier les parties.</p>
+            <p><strong>Pour améliorer ton score :</strong> chaque bonne réponse compte, alors prends le temps de lire toutes les propositions.</p>
+        </article>
+
+        <article class="content-card prose rule-card">
+            <div class="rule-title"><span>🃏</span><h2>Memory</h2></div>
+            <p>Les cartes sont placées face cachée. Retourne-en deux à la fois et mémorise leur position pour reconstituer les 8 paires.</p>
+            <p>Une paire correcte reste visible. Sinon, les deux cartes sont de nouveau cachées et tu dois te souvenir de leur emplacement pour la suite.</p>
+            <p><strong>Pour améliorer ton score :</strong> termine avec le moins de coups possible et évite de perdre du temps.</p>
+        </article>
+    </section>
+
+    <section class="content-card prose">
+        <h2>Comment fonctionne le classement ?</h2>
+        <p>Les points sont calculés selon la logique de chaque jeu. Certains récompensent la précision, d'autres la rapidité ou le nombre d'erreurs évitées. Les points obtenus au fil des parties sont additionnés pour établir le classement général.</p>
+        <p>Des classements spécifiques permettent également de voir les meilleurs résultats pour chaque jeu.</p>
+        <div class="content-actions">
+            <a class="primary-button" href="{{ url_for('home') }}#games">Choisir un jeu</a>
+            <a class="secondary-button" href="{{ url_for('leaderboard') }}">Voir le classement</a>
+        </div>
+    </section>
+</main>
+{% endblock %}

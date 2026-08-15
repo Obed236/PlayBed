@@ -28,31 +28,31 @@ GAMES = {
     "pendu": {
         "name": "Pendu",
         "emoji": "🪢",
-        "description": "Trouve le mot avant de perdre toutes tes vies.",
+        "description": "Retrouve un mot lettre par lettre avant d'épuiser tes 10 vies. Observe les lettres déjà proposées et essaie de terminer avec le plus de vies possible.",
         "tag": "Lettres",
     },
     "pom": {
         "name": "Plus ou Moins",
         "emoji": "🔢",
-        "description": "Devine le nombre secret entre 0 et 100.",
+        "description": "Devine un nombre secret entre 0 et 100 grâce aux indices « plus » ou « moins ». Moins tu utilises d'essais, meilleur est ton score.",
         "tag": "Logique",
     },
     "vof": {
         "name": "Vrai ou Faux",
         "emoji": "🧠",
-        "description": "Réponds à 10 affirmations et vise le sans-faute.",
+        "description": "Réponds à 10 affirmations de culture générale et découvre immédiatement si tu avais raison. Chaque bonne réponse rapporte des points.",
         "tag": "Culture",
     },
     "quiz": {
         "name": "Quiz Express",
         "emoji": "⚡",
-        "description": "10 questions à choix multiples pour tester ta culture.",
+        "description": "Teste ta culture avec 10 questions à choix multiples tirées aléatoirement. Essaie d'enchaîner les bonnes réponses et vise le sans-faute.",
         "tag": "Quiz",
     },
     "memory": {
         "name": "Memory",
         "emoji": "🃏",
-        "description": "Retrouve toutes les paires avec le moins de coups possible.",
+        "description": "Retourne les cartes, mémorise leur position et retrouve les 8 paires. Ton nombre de coups et ton temps influencent ton score final.",
         "tag": "Mémoire",
     },
 }
@@ -235,6 +235,31 @@ def home():
         pseudo=current_pseudo(),
         total_scores=total_scores,
     )
+
+
+@app.route("/a-propos")
+def about_page():
+    return render_template("about.html", pseudo=current_pseudo())
+
+
+@app.route("/comment-jouer")
+def how_to_play_page():
+    return render_template("how_to_play.html", games=GAMES, pseudo=current_pseudo())
+
+
+@app.route("/faq")
+def faq_page():
+    return render_template("faq.html", pseudo=current_pseudo())
+
+
+@app.route("/politique-confidentialite")
+def privacy_page():
+    return render_template("privacy.html", pseudo=current_pseudo())
+
+
+@app.route("/conditions-utilisation")
+def terms_page():
+    return render_template("terms.html", pseudo=current_pseudo())
 
 
 @app.route("/pseudo", methods=["POST"])

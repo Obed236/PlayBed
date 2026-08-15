@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Politique de confidentialité — PlayBed{% endblock %}
+{% block description %}Politique de confidentialité de PlayBed : données liées aux pseudos, scores, cookies de session, services techniques et publicité Google AdSense.{% endblock %}
+{% block og_description %}Informations sur les données, cookies et services utilisés par PlayBed.{% endblock %}
+{% block content %}
+<main class="content-shell">
+    <header class="content-hero">
+        <span class="eyebrow">CONFIDENTIALITÉ</span>
+        <h1>Politique de confidentialité.</h1>
+        <p>Cette page explique quelles informations peuvent être traitées lorsque tu utilises PlayBed et dans quel but.</p>
+    </header>
+
+    <article class="content-card prose">
+        <p class="updated-note"><strong>Dernière mise à jour :</strong> 15 août 2026.</p>
+
+        <h2>1. Responsable du site</h2>
+        <p>PlayBed est un projet créé et développé par <strong>Obed Gelly Ousmane Tassango</strong>. La plateforme a pour objectif de proposer des mini-jeux gratuits accessibles depuis un navigateur.</p>
+
+        <h2>2. Données liées au fonctionnement des jeux</h2>
+        <p>Pour permettre l'utilisation du service et du classement, PlayBed peut traiter les informations suivantes :</p>
+        <ul>
+            <li>le pseudo choisi par le joueur ;</li>
+            <li>le nom du jeu joué ;</li>
+            <li>les points obtenus et la date d'enregistrement du score ;</li>
+            <li>les informations temporaires nécessaires à la session de jeu.</li>
+        </ul>
+        <p>PlayBed ne demande pas la création d'un compte classique avec mot de passe pour accéder aux mini-jeux.</p>
+
+        <h2>3. Cookies et session</h2>
+        <p>Un cookie de session peut être utilisé pour conserver temporairement des informations nécessaires au fonctionnement du site, par exemple le pseudo actif ou l'état d'une partie. Ces éléments permettent de naviguer entre les pages sans recommencer la configuration à chaque action.</p>
+        <p>D'autres cookies ou technologies similaires peuvent être utilisés par des services tiers, notamment lorsque des fonctions publicitaires sont actives.</p>
+
+        <h2>4. Hébergement et journaux techniques</h2>
+        <p>Comme la plupart des services web, l'infrastructure d'hébergement peut générer des journaux techniques permettant d'assurer la disponibilité, la sécurité et le diagnostic du service. Ces journaux peuvent notamment contenir des informations techniques telles que l'adresse IP, le navigateur, l'heure d'une requête ou la page demandée, selon les pratiques du fournisseur d'hébergement.</p>
+
+        <h2>5. Publicité et Google AdSense</h2>
+        <p>PlayBed peut utiliser Google AdSense afin d'afficher des annonces. Google et ses partenaires peuvent utiliser des cookies, identifiants ou autres technologies afin de mesurer la diffusion des annonces, lutter contre la fraude et, selon les choix de consentement applicables, personnaliser ou non la publicité.</p>
+        <p>Pour en savoir plus sur l'utilisation des données dans les produits publicitaires Google, tu peux consulter les informations officielles de Google concernant les technologies publicitaires et la confidentialité.</p>
+
+        <h2>6. Finalités du traitement</h2>
+        <p>Les informations utilisées par PlayBed servent principalement à :</p>
+        <ul>
+            <li>faire fonctionner les parties et conserver l'état d'une session ;</li>
+            <li>enregistrer et afficher les scores dans les classements ;</li>
+            <li>sécuriser et maintenir la plateforme ;</li>
+            <li>comprendre et corriger les problèmes techniques ;</li>
+            <li>permettre la diffusion et la mesure de publicités lorsque ces services sont activés.</li>
+        </ul>
+
+        <h2>7. Conservation</h2>
+        <p>Les scores peuvent être conservés aussi longtemps qu'ils sont utiles au fonctionnement du classement et du projet. Les données techniques traitées par les prestataires sont conservées selon leurs propres durées et politiques. Les informations temporaires de session peuvent disparaître lorsque la session expire ou lorsque les données du navigateur sont supprimées.</p>
+
+        <h2>8. Services tiers</h2>
+        <p>PlayBed peut dépendre de services externes pour l'hébergement, la diffusion du site ou la publicité. Ces fournisseurs peuvent traiter certaines informations conformément à leurs propres politiques de confidentialité et obligations légales.</p>
+
+        <h2>9. Tes droits</h2>
+        <p>Lorsque la réglementation applicable le prévoit, tu peux disposer de droits concernant tes données personnelles, notamment des droits d'accès, de rectification, d'effacement, de limitation ou d'opposition. Comme PlayBed fonctionne principalement avec des pseudos et sans compte utilisateur complet, il peut être nécessaire de fournir suffisamment d'éléments pour identifier un score ou une donnée concernée par une demande.</p>
+
+        <h2>10. Évolution de cette politique</h2>
+        <p>Cette politique peut être mise à jour lorsque le fonctionnement de PlayBed, ses prestataires ou ses fonctionnalités évoluent. La date affichée en haut de cette page permet d'identifier la version la plus récente.</p>
+
+        <div class="content-actions">
+            <a class="secondary-button" href="{{ url_for('faq_page') }}">Voir la FAQ</a>
+            <a class="secondary-button" href="{{ url_for('terms_page') }}">Conditions d’utilisation</a>
+        </div>
+    </article>
+</main>
+{% endblock %}
