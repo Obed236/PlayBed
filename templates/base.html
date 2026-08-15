@@ -7,6 +7,10 @@
     <meta name="description" content="{% block description %}PlayBed, la plateforme gratuite de mini-jeux rapides sur navigateur.{% endblock %}">
     <meta name="author" content="Obed Gelly Ousmane Tassango">
     <meta name="theme-color" content="#08111f">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="PlayBed">
     <meta name="google-adsense-account" content="ca-pub-8115913863262508">
     <meta name="robots" content="{% block robots %}index,follow,max-image-preview:large{% endblock %}">
     <meta property="og:title" content="{% block og_title %}PlayBed V2{% endblock %}">
@@ -15,8 +19,12 @@
     <meta property="og:url" content="https://playbed.fr{{ request.path }}">
     <title>{% block title %}PlayBed{% endblock %}</title>
     <link rel="canonical" href="https://playbed.fr{{ request.path }}">
+    <link rel="manifest" href="{{ url_for('pwa_manifest') }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static', filename='icons/playbed-192.png') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/playbed-192.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/platform.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/engagement.css') }}">
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
@@ -24,6 +32,7 @@
     </script>
     <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script defer src="{{ url_for('static', filename='js/platform.js') }}"></script>
+    <script defer src="{{ url_for('static', filename='js/pwa.js') }}"></script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"PlayBed","url":"https://playbed.fr/","inLanguage":"fr","description":"Plateforme gratuite de mini-jeux en ligne : Pendu, Plus ou Moins, Vrai ou Faux, Quiz Express et Memory."}</script>
     {% block head_extra %}{% endblock %}
 </head>
@@ -47,7 +56,7 @@
     <footer>
         <div class="footer-copy"><span>© 2026 PlayBed · Créé et développé par Obed Gelly Ousmane Tassango.</span><span>Mini-jeux gratuits · Mobile et ordinateur · Aucun compte obligatoire</span></div>
         <nav class="footer-links" aria-label="Informations et mentions">
-            <a href="{{ url_for('about_page') }}">À propos</a><a href="{{ url_for('how_to_play_page') }}">Comment jouer</a><a href="{{ url_for('platform_guides') }}">Guides</a><a href="{{ url_for('platform_news') }}">Nouveautés</a><a href="{{ url_for('faq_page') }}">FAQ</a><a href="{{ url_for('platform_contact') }}">Contact</a><a href="{{ url_for('platform_legal') }}">Mentions légales</a><a href="{{ url_for('privacy_page') }}">Confidentialité</a><a href="{{ url_for('terms_page') }}">Conditions d’utilisation</a><button class="footer-link-button" id="openPrivacyPreferences" type="button">Gérer les cookies</button>
+            <a href="{{ url_for('about_page') }}">À propos</a><a href="{{ url_for('how_to_play_page') }}">Comment jouer</a><a href="{{ url_for('platform_guides') }}">Guides</a><a href="{{ url_for('platform_news') }}">Nouveautés</a><a href="{{ url_for('faq_page') }}">FAQ</a><a href="{{ url_for('platform_contact') }}">Contact</a><a href="{{ url_for('platform_legal') }}">Mentions légales</a><a href="{{ url_for('privacy_page') }}">Confidentialité</a><a href="{{ url_for('terms_page') }}">Conditions d’utilisation</a><button class="footer-link-button pwa-install-button" data-pwa-install type="button" hidden>Installer PlayBed</button><button class="footer-link-button" id="openPrivacyPreferences" type="button">Gérer les cookies</button>
         </nav>
     </footer>
     <section class="consent-panel" id="consentPanel" hidden aria-labelledby="consentTitle" aria-modal="true" role="dialog">

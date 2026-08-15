@@ -1,57 +1,13 @@
 {% extends "base.html" %}
 {% block title %}Classement — PlayBed{% endblock %}
+{% block description %}Découvre les classements PlayBed du jour, de la semaine, du mois et le classement général.{% endblock %}
 {% block content %}
+{% set active_period = period|default('general') %}
 <main class="leaderboard-shell">
-    <section class="section-heading leaderboard-heading">
-        <span class="eyebrow">CLASSEMENT</span>
-        <h1>Les meilleurs joueurs</h1>
-        <p>Le classement général additionne les points gagnés sur tous les jeux.</p>
-    </section>
-
-    <section class="leaderboard-card">
-        <div class="table-wrap">
-            <table>
-                <thead>
-                    <tr><th>#</th><th>Joueur</th><th>Parties</th><th>Points</th></tr>
-                </thead>
-                <tbody>
-                    {% for row in overall %}
-                    <tr class="{{ 'me' if pseudo and row.pseudo == pseudo else '' }}">
-                        <td>{{ loop.index }}</td>
-                        <td>{{ row.pseudo }}</td>
-                        <td>{{ row.games_played }}</td>
-                        <td><strong>{{ row.total_points }}</strong></td>
-                    </tr>
-                    {% else %}
-                    <tr><td colspan="4" class="empty">Aucun score pour le moment. Sois le premier !</td></tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </section>
-
-    <section class="section game-leaders">
-        <div class="section-heading">
-            <span class="eyebrow">PAR JEU</span>
-            <h2>Records</h2>
-        </div>
-        <div class="leader-grid">
-            {% for slug, game in games.items() %}
-            <article class="mini-leader-card">
-                <div class="card-top">
-                    <div class="game-icon">{{ game.emoji }}</div>
-                    <h3>{{ game.name }}</h3>
-                </div>
-                <ol>
-                    {% for row in best_by_game[slug] %}
-                        <li><span>{{ row.pseudo }}</span><strong>{{ row.points }} pts</strong></li>
-                    {% else %}
-                        <li class="empty">Aucun score</li>
-                    {% endfor %}
-                </ol>
-            </article>
-            {% endfor %}
-        </div>
-    </section>
+    <section class="section-heading leaderboard-heading"><span class="eyebrow">CLASSEMENT</span><h1>{% if active_period == 'general' %}Les meilleurs joueurs{% else %}{{ period_label }}{% endif %}</h1><p>{% if active_period == 'general' %}Le classement général additionne tous les points gagnés depuis le lancement de PlayBed.{% elif active_period == 'jour' %}Les points enregistrés depuis minuit, heure de Paris.{% elif active_period == 'semaine' %}Les points enregistrés depuis lundi, heure de Paris.{% else %}Les points enregistrés depuis le premier jour du mois, heure de Paris.{% endif %}</p></section>
+    <nav class="ranking-tabs" aria-label="Période du classement"><a class="{{ 'active' if active_period == 'jour' else '' }}" href="{{ url_for('platform_period_leaderboard', period='jour') }}">Aujourd’hui</a><a class="{{ 'active' if active_period == 'semaine' else '' }}" href="{{ url_for('platform_period_leaderboard', period='semaine') }}">Cette semaine</a><a class="{{ 'active' if active_period == 'mois' else '' }}" href="{{ url_for('platform_period_leaderboard', period='mois') }}">Ce mois</a><a class="{{ 'active' if active_period == 'general' else '' }}" href="{{ url_for('leaderboard') }}">Général</a></nav>
+    {% if pseudo and engagement_ranks %}<section class="my-rank-strip"><span>Ton rang</span><strong>{% if active_period == 'general' and engagement_ranks.general %}#{{ engagement_ranks.general }}{% elif active_period == 'jour' and engagement_ranks.jour %}#{{ engagement_ranks.jour }}{% elif active_period == 'semaine' and engagement_ranks.semaine %}#{{ engagement_ranks.semaine }}{% elif active_period == 'mois' and engagement_ranks.mois %}#{{ engagement_ranks.mois }}{% else %}—{% endif %}</strong><span>{{ pseudo }}</span></section>{% endif %}
+    <section class="leaderboard-card"><div class="table-wrap"><table><thead><tr><th>#</th><th>Joueur</th><th>Parties</th><th>Points</th></tr></thead><tbody>{% for row in overall %}<tr class="{{ 'me' if pseudo and row.pseudo == pseudo else '' }}"><td>{% if loop.index == 1 %}🥇{% elif loop.index == 2 %}🥈{% elif loop.index == 3 %}🥉{% else %}{{ loop.index }}{% endif %}</td><td>{{ row.pseudo }}</td><td>{{ row.games_played }}</td><td><strong>{{ row.total_points }}</strong></td></tr>{% else %}<tr><td colspan="4" class="empty">Aucun score sur cette période. Sois le premier !</td></tr>{% endfor %}</tbody></table></div></section>
+    <section class="section game-leaders"><div class="section-heading"><span class="eyebrow">PAR JEU</span><h2>{% if active_period == 'general' %}Records{% else %}Meilleurs scores sur la période{% endif %}</h2></div><div class="leader-grid">{% for slug, game in games.items() %}<article class="mini-leader-card"><div class="card-top"><div class="game-icon">{{ game.emoji }}</div><h3>{{ game.name }}</h3></div><ol>{% for row in best_by_game[slug] %}<li><span>{{ row.pseudo }}</span><strong>{{ row.points }} pts</strong></li>{% else %}<li class="empty">Aucun score</li>{% endfor %}</ol></article>{% endfor %}</div></section>
 </main>
 {% endblock %}
