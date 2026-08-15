@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}{{ guide.title }} | Guide PlayBed{% endblock %}
+{% block description %}{{ guide.description }}{% endblock %}
+{% block content %}
+<main class="content-shell"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="{{ url_for('home') }}">Accueil</a><span>›</span><a href="{{ url_for('platform_guides') }}">Guides</a><span>›</span><span>{{ guide.title }}</span></nav><header class="content-hero"><span class="eyebrow">GUIDE · {{ guide.read_time|upper }}</span><h1>{{ guide.title }}</h1><p>{{ guide.description }}</p></header><article class="content-card prose article-prose">{% for heading, paragraphs in guide.sections %}<section><h2>{{ heading }}</h2>{% for paragraph in paragraphs %}<p>{{ paragraph }}</p>{% endfor %}</section>{% endfor %}<div class="content-actions">{% if guide.game %}<a class="primary-button" href="{{ url_for('platform_game_detail', game=guide.game) }}">Voir le jeu associé</a>{% endif %}<a class="secondary-button" href="{{ url_for('platform_guides') }}">Tous les guides</a></div></article></main>
+{% endblock %}

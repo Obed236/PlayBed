@@ -1,0 +1,4 @@
+{% extends "base.html" %}
+{% block robots %}noindex,nofollow{% endblock %}
+{% block title %}Erreur temporaire — PlayBed{% endblock %}
+{% block content %}<main class="error-shell"><div class="error-code">500</div><span class="eyebrow">ERREUR TEMPORAIRE</span><h1>La partie technique a rencontré un problème.</h1><p>Une erreur inattendue s’est produite. Aucun clic publicitaire ni aucune action particulière n’est nécessaire : retourne simplement à l’accueil et réessaie.</p><div class="content-actions centered"><a class="primary-button" href="{{ url_for('home') }}">Retour à l’accueil</a><a class="secondary-button" href="{{ url_for('platform_contact') }}">Signaler le problème</a></div></main>{% endblock %}

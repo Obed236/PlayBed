@@ -1,0 +1,4 @@
+{% extends "base.html" %}
+{% block robots %}noindex,nofollow{% endblock %}
+{% block title %}Page introuvable — PlayBed{% endblock %}
+{% block content %}<main class="error-shell"><div class="error-code">404</div><span class="eyebrow">PAGE INTROUVABLE</span><h1>Ce niveau n’existe pas.</h1><p>Le lien est peut-être incorrect ou la page a été déplacée. Tu peux retourner à l’accueil, choisir un jeu ou consulter les guides.</p><div class="content-actions centered"><a class="primary-button" href="{{ url_for('home') }}">Retour à l’accueil</a><a class="secondary-button" href="{{ url_for('platform_guides') }}">Voir les guides</a></div></main>{% endblock %}

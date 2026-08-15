@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="{% block description %}PlayBed, la plateforme gratuite de mini-jeux rapides sur navigateur.{% endblock %}">
+    <meta name="description" content="{% block description %}PlayBed, la plateforme gratuite de mini-jeux rapides sur navigateur.{% endblock %}">
     <meta name="author" content="Obed Gelly Ousmane Tassango">
     <meta name="theme-color" content="#08111f">
     <meta name="google-adsense-account" content="ca-pub-8115913863262508">
+    <meta name="robots" content="{% block robots %}index,follow,max-image-preview:large{% endblock %}">
     <meta property="og:title" content="{% block og_title %}PlayBed V2{% endblock %}">
     <meta property="og:description" content="{% block og_description %}Joue gratuitement à des mini-jeux rapides sur PlayBed.{% endblock %}">
     <meta property="og:type" content="website">
@@ -16,41 +16,49 @@
     <title>{% block title %}PlayBed{% endblock %}</title>
     <link rel="canonical" href="https://playbed.fr{{ request.path }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/platform.css') }}">
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('consent', 'default', {'ad_storage': 'denied','ad_user_data': 'denied','ad_personalization': 'denied','analytics_storage': 'denied','wait_for_update': 500});
+    </script>
     <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8115913863262508"
-        crossorigin="anonymous"></script>
+    <script defer src="{{ url_for('static', filename='js/platform.js') }}"></script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"PlayBed","url":"https://playbed.fr/","inLanguage":"fr","description":"Plateforme gratuite de mini-jeux en ligne : Pendu, Plus ou Moins, Vrai ou Faux, Quiz Express et Memory."}</script>
+    {% block head_extra %}{% endblock %}
 </head>
 
-<body>
+<body data-ads-page="{{ 'false' if request.path.startswith('/play/') else 'true' }}">
+    <a class="skip-link" href="#main-content">Aller au contenu principal</a>
     <header class="navbar">
-        <a class="brand" href="{{ url_for('home') }}"><span>🎮</span> PlayBed</a>
-        <nav class="nav-links" aria-label="Navigation principale">
+        <a class="brand" href="{{ url_for('home') }}" aria-label="Accueil PlayBed"><span aria-hidden="true">🎮</span> PlayBed</a>
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-expanded="false" aria-controls="mainNavigation" aria-label="Ouvrir le menu">☰</button>
+        <nav class="nav-links" id="mainNavigation" aria-label="Navigation principale">
             <a href="{{ url_for('home') }}#games">Jeux</a>
-            <a href="{{ url_for('how_to_play_page') }}">Comment jouer</a>
-            <a href="{{ url_for('about_page') }}">À propos</a>
+            <a href="{{ url_for('platform_guides') }}">Guides</a>
+            <a href="{{ url_for('platform_daily_challenge') }}">Défi du jour</a>
             <a href="{{ url_for('leaderboard') }}">Classement</a>
+            {% if pseudo %}<a href="{{ url_for('platform_profile') }}">Mon profil</a>{% endif %}
             <button class="theme-toggle" id="themeToggle" type="button" aria-label="Changer de thème">☀️</button>
-            {% if pseudo %}
-            <span class="player-chip">👤 {{ pseudo }}</span>
-            {% endif %}
+            {% if pseudo %}<span class="player-chip">👤 {{ pseudo }}</span>{% endif %}
         </nav>
     </header>
-
-    {% block content %}{% endblock %}
-
+    <div id="main-content" tabindex="-1">{% block content %}{% endblock %}</div>
     <footer>
-        <div class="footer-copy">
-            <span>© 2026 PlayBed · Créé et développé par Obed Gelly Ousmane Tassango.</span>
-            <span>Gratuit · Rapide · Accessible</span>
-        </div>
+        <div class="footer-copy"><span>© 2026 PlayBed · Créé et développé par Obed Gelly Ousmane Tassango.</span><span>Mini-jeux gratuits · Mobile et ordinateur · Aucun compte obligatoire</span></div>
         <nav class="footer-links" aria-label="Informations et mentions">
-            <a href="{{ url_for('about_page') }}">À propos</a>
-            <a href="{{ url_for('how_to_play_page') }}">Comment jouer</a>
-            <a href="{{ url_for('faq_page') }}">FAQ</a>
-            <a href="{{ url_for('privacy_page') }}">Confidentialité</a>
-            <a href="{{ url_for('terms_page') }}">Conditions d’utilisation</a>
+            <a href="{{ url_for('about_page') }}">À propos</a><a href="{{ url_for('how_to_play_page') }}">Comment jouer</a><a href="{{ url_for('platform_guides') }}">Guides</a><a href="{{ url_for('platform_news') }}">Nouveautés</a><a href="{{ url_for('faq_page') }}">FAQ</a><a href="{{ url_for('platform_contact') }}">Contact</a><a href="{{ url_for('platform_legal') }}">Mentions légales</a><a href="{{ url_for('privacy_page') }}">Confidentialité</a><a href="{{ url_for('terms_page') }}">Conditions d’utilisation</a><button class="footer-link-button" id="openPrivacyPreferences" type="button">Gérer les cookies</button>
         </nav>
     </footer>
+    <section class="consent-panel" id="consentPanel" hidden aria-labelledby="consentTitle" aria-modal="true" role="dialog">
+        <div class="consent-card">
+            <span class="eyebrow">VIE PRIVÉE</span><h2 id="consentTitle">Tes choix de confidentialité</h2>
+            <p>PlayBed utilise un cookie de session nécessaire pour conserver ton pseudo pendant la navigation. Les technologies publicitaires Google ne sont chargées qu’en fonction de ton choix.</p>
+            <div class="consent-setting"><div><strong>Fonctionnement essentiel</strong><span>Session, sécurité et préférences indispensables.</span></div><span class="required-pill">Toujours actif</span></div>
+            <label class="consent-setting" for="adsConsent"><div><strong>Publicité</strong><span>Autoriser le chargement de Google AdSense et ses technologies associées.</span></div><input id="adsConsent" type="checkbox"></label>
+            <p class="consent-note">Tu peux modifier ce choix à tout moment depuis « Gérer les cookies ». Consulte aussi notre <a href="{{ url_for('privacy_page') }}">politique de confidentialité</a>.</p>
+            <div class="consent-actions"><button class="secondary-button" id="rejectAllConsent" type="button">Tout refuser</button><button class="secondary-button" id="saveConsent" type="button">Enregistrer mes choix</button><button class="primary-button" id="acceptAllConsent" type="button">Tout accepter</button></div>
+        </div>
+    </section>
 </body>
-
 </html>

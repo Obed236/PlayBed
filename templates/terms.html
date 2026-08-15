@@ -1,51 +1,6 @@
 {% extends "base.html" %}
-{% block title %}Conditions d’utilisation — PlayBed{% endblock %}
-{% block description %}Conditions d’utilisation de PlayBed : accès aux mini-jeux, règles de comportement, scores, disponibilité du service, propriété intellectuelle et services tiers.{% endblock %}
-{% block og_description %}Les règles et conditions applicables à l'utilisation de PlayBed.{% endblock %}
+{% block title %}Conditions d’utilisation | PlayBed{% endblock %}
+{% block description %}Conditions d’utilisation de PlayBed : accès aux jeux, pseudos, scores, comportement attendu, disponibilité et propriété intellectuelle.{% endblock %}
 {% block content %}
-<main class="content-shell">
-    <header class="content-hero">
-        <span class="eyebrow">CONDITIONS</span>
-        <h1>Conditions d’utilisation.</h1>
-        <p>En utilisant PlayBed, tu acceptes les règles ci-dessous, destinées à garantir un service simple, équitable et utilisable par tous.</p>
-    </header>
-
-    <article class="content-card prose">
-        <p class="updated-note"><strong>Dernière mise à jour :</strong> 15 août 2026.</p>
-
-        <h2>1. Objet du service</h2>
-        <p>PlayBed est une plateforme de mini-jeux en ligne accessible depuis un navigateur. Le service est proposé principalement à des fins de divertissement, d'expérimentation et de démonstration d'un projet informatique.</p>
-
-        <h2>2. Accès à PlayBed</h2>
-        <p>L'accès aux jeux est gratuit. Certaines fonctionnalités nécessitent de choisir un pseudo afin d'enregistrer les scores et de les afficher dans le classement. Il n'est pas nécessaire de créer un compte avec une adresse e-mail et un mot de passe.</p>
-
-        <h2>3. Utilisation acceptable</h2>
-        <p>Les utilisateurs doivent utiliser PlayBed de manière normale et loyale. Il est notamment demandé de ne pas chercher à perturber le service, contourner ses protections, automatiser artificiellement les parties ou manipuler les scores.</p>
-        <p>Un pseudo ne doit pas être utilisé dans le but d'usurper l'identité d'une personne, d'afficher un contenu manifestement illicite ou de nuire au fonctionnement de la communauté.</p>
-
-        <h2>4. Scores et classement</h2>
-        <p>Les scores sont calculés automatiquement selon les règles propres à chaque jeu. Ils peuvent être enregistrés et affichés publiquement avec le pseudo utilisé au moment de la partie.</p>
-        <p>PlayBed peut corriger, masquer ou supprimer des scores manifestement incohérents, obtenus par manipulation technique ou susceptibles de perturber l'intégrité du classement.</p>
-
-        <h2>5. Disponibilité du service</h2>
-        <p>PlayBed est un projet évolutif. Le site peut être temporairement indisponible en raison d'une maintenance, d'une mise à jour, d'un incident technique ou d'un problème lié à un prestataire externe. La disponibilité permanente du service ne peut donc pas être garantie.</p>
-
-        <h2>6. Contenu et propriété intellectuelle</h2>
-        <p>La structure du site, son identité visuelle, son code original, ses textes et les éléments créés spécifiquement pour PlayBed restent protégés par les droits applicables. Les éventuels contenus provenant de services ou ressources tiers restent soumis aux droits de leurs propriétaires respectifs.</p>
-
-        <h2>7. Publicité et services tiers</h2>
-        <p>PlayBed peut afficher des annonces ou utiliser des services techniques fournis par des tiers. La disponibilité, le contenu et le traitement des données effectués par ces services peuvent dépendre de leurs propres conditions et politiques.</p>
-
-        <h2>8. Responsabilité</h2>
-        <p>PlayBed est fourni en l'état. Des erreurs, interruptions ou pertes de données peuvent exceptionnellement survenir. Le site ne doit pas être utilisé comme un système critique ou comme une source unique d'information pour une décision importante.</p>
-
-        <h2>9. Modification des conditions</h2>
-        <p>Ces conditions peuvent évoluer avec les fonctionnalités du site, ses méthodes d'hébergement ou ses obligations réglementaires. La version publiée sur cette page est la version applicable au moment de la consultation.</p>
-
-        <div class="content-actions">
-            <a class="secondary-button" href="{{ url_for('privacy_page') }}">Politique de confidentialité</a>
-            <a class="primary-button" href="{{ url_for('home') }}#games">Retour aux jeux</a>
-        </div>
-    </article>
-</main>
+<main class="content-shell"><header class="content-hero"><span class="eyebrow">CONDITIONS</span><h1>Conditions d’utilisation</h1><p>Les règles essentielles applicables à l’utilisation gratuite de PlayBed.</p></header><article class="content-card prose"><p class="updated-note"><strong>Dernière mise à jour :</strong> 15 août 2026</p><h2>1. Objet</h2><p>PlayBed propose gratuitement des mini-jeux accessibles depuis un navigateur, ainsi que des classements, statistiques, guides et contenus d’aide associés.</p><h2>2. Accès au service</h2><p>Aucune création de compte n’est actuellement nécessaire. Certaines fonctions comme l’enregistrement des scores nécessitent simplement le choix d’un pseudo.</p><h2>3. Choix du pseudo</h2><p>Tu dois choisir un pseudo respectueux et ne pas utiliser l’identité d’un tiers de manière trompeuse. Évite d’insérer des données personnelles ou sensibles dans un pseudo destiné à apparaître publiquement.</p><h2>4. Classement et scores</h2><p>Les scores sont calculés automatiquement selon les règles propres à chaque jeu. Toute tentative visant à manipuler artificiellement les scores, détourner les requêtes du site ou perturber le classement peut entraîner la suppression des résultats concernés.</p><h2>5. Utilisation acceptable</h2><p>Il est interdit d’utiliser PlayBed pour tenter de compromettre le service, automatiser abusivement des requêtes ou contourner les protections techniques.</p><h2>6. Disponibilité</h2><p>PlayBed peut être modifié, interrompu temporairement ou mis à jour afin de corriger des problèmes, améliorer les jeux ou faire évoluer l’infrastructure.</p><h2>7. Publicité</h2><p>La plateforme peut afficher des annonces afin de contribuer au financement de son hébergement et de son évolution. Les annonces ne doivent pas être confondues avec les contrôles de jeu et l’utilisateur n’est jamais obligé de cliquer sur une publicité pour accéder à une partie.</p><h2>8. Propriété intellectuelle</h2><p>La reproduction ou l’exploitation non autorisée des éléments originaux de PlayBed n’est pas permise, sauf droits accordés par les licences applicables aux composants open source utilisés.</p><h2>9. Évolution des conditions</h2><p>Ces conditions peuvent être adaptées lorsque PlayBed ajoute de nouvelles fonctionnalités ou lorsque les exigences applicables au service évoluent.</p><h2>10. Contact</h2><p>Pour signaler un problème ou poser une question, utilise la <a class="text-link" href="{{ url_for('platform_contact') }}">page Contact & support</a>.</p></article></main>
 {% endblock %}
