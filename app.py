@@ -1,7 +1,7 @@
 import os
 
 from core import app, GAMES, db_connection, current_pseudo, init_db
-from platform import register_platform_routes
+from platform_routes import register_platform_routes
 
 register_platform_routes(app, GAMES, db_connection, current_pseudo)
 
