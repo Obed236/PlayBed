@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}Obed Gelly Ousmane Tassango — Créateur de PlayBed{% endblock %}
+{% block description %}Profil officiel d’Obed Gelly Ousmane Tassango, créateur et développeur de PlayBed, plateforme gratuite de mini-jeux en ligne.{% endblock %}
+{% block og_title %}Obed Gelly Ousmane Tassango — Créateur de PlayBed{% endblock %}
+{% block og_description %}Découvre le profil officiel du créateur et développeur de PlayBed, ses projets et ses publications.{% endblock %}
+{% block head_extra %}
+<style>
+    .creator-photo{width:min(220px,70vw);aspect-ratio:1;object-fit:cover;border-radius:28px;border:1px solid var(--border);box-shadow:var(--shadow);margin:0 auto 24px;display:block}.creator-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}.creator-links a{display:inline-flex;align-items:center;gap:7px;padding:10px 14px;border-radius:999px;border:1px solid var(--border);background:var(--surface-2);font-weight:800}.creator-links a:hover{border-color:#a995ff}.creator-source-list{display:grid;gap:12px;margin:18px 0 0;padding:0;list-style:none}.creator-source-list li{padding:16px 18px;border:1px solid var(--border);border-radius:16px;background:var(--surface-2)}.creator-source-list a{font-weight:850;color:#a995ff}.creator-note{color:var(--muted);font-size:.92rem}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "ProfilePage",
+      "@id": "https://playbed.fr/createur#profilepage",
+      "url": "https://playbed.fr/createur",
+      "name": "Obed Gelly Ousmane Tassango — Créateur de PlayBed",
+      "inLanguage": "fr",
+      "mainEntity": {"@id": "https://playbed.fr/createur#person"}
+    },
+    {
+      "@type": "Person",
+      "@id": "https://playbed.fr/createur#person",
+      "name": "Obed Gelly Ousmane Tassango",
+      "url": "https://playbed.fr/createur",
+      "image": "https://avatars.githubusercontent.com/u/196083713?v=4",
+      "jobTitle": "Créateur et développeur de PlayBed",
+      "description": "Créateur et développeur de PlayBed, une plateforme gratuite de mini-jeux en ligne, et auteur de Les Fractures d’Aetherlume.",
+      "knowsAbout": ["Python", "Flask", "développement web", "développement logiciel"],
+      "sameAs": [
+        "https://github.com/Obed236",
+        "https://www.poemes.co/obed-gelly-ousmane-tassango.html",
+        "https://fable.co/author/obed-gelly-ousmane-tassango"
+      ]
+    }
+  ]
+}
+</script>
+{% endblock %}
+{% block content %}
+<main class="content-shell">
+    <nav class="breadcrumb" aria-label="Fil d’Ariane">
+        <a href="{{ url_for('home') }}">Accueil</a><span aria-hidden="true">›</span><span>Créateur</span>
+    </nav>
+
+    <section class="game-detail-hero" aria-labelledby="creator-title">
+        <div>
+            <span class="eyebrow">PROFIL OFFICIEL</span>
+            <h1 id="creator-title">Obed Gelly Ousmane Tassango</h1>
+            <p>Créateur et développeur de <strong>PlayBed</strong>, une plateforme indépendante de mini-jeux gratuits accessible directement depuis un navigateur.</p>
+            <p>Son travail autour de PlayBed réunit programmation Python, développement web, déploiement d’applications, bases de données, sécurité et référencement.</p>
+            <div class="creator-links" aria-label="Profils officiels et publics">
+                <a href="https://github.com/Obed236" target="_blank" rel="me noopener noreferrer">GitHub</a>
+                <a href="https://www.poemes.co/obed-gelly-ousmane-tassango.html" target="_blank" rel="me noopener noreferrer">Poèmes.co</a>
+                <a href="https://fable.co/author/obed-gelly-ousmane-tassango" target="_blank" rel="me noopener noreferrer">Fable</a>
+            </div>
+        </div>
+
+        <aside class="quick-facts" aria-label="Informations sur le créateur">
+            <img class="creator-photo" src="https://avatars.githubusercontent.com/u/196083713?v=4" width="220" height="220" alt="Photo de profil publique d’Obed Gelly Ousmane Tassango" loading="eager" referrerpolicy="no-referrer">
+            <p><strong>Nom :</strong><br>Obed Gelly Ousmane Tassango</p>
+            <p><strong>Activité :</strong><br>Développement informatique et création de projets web</p>
+            <p><strong>Projet :</strong><br><a href="{{ url_for('home') }}">PlayBed</a></p>
+        </aside>
+    </section>
+
+    <article class="content-card prose">
+        <h2>À propos</h2>
+        <p>Obed Gelly Ousmane Tassango a créé PlayBed comme projet informatique avant de le faire évoluer vers une plateforme publique. Le site propose aujourd’hui plusieurs mini-jeux, un système de scores, un classement, des guides et différentes fonctionnalités pensées pour une utilisation sur mobile comme sur ordinateur.</p>
+
+        <h2>Développement de PlayBed</h2>
+        <p>PlayBed s’appuie notamment sur Python et Flask côté serveur ainsi que sur HTML, CSS et JavaScript côté interface. Le projet est déployé en ligne et évolue régulièrement avec de nouvelles améliorations techniques et fonctionnelles.</p>
+        <p><a href="{{ url_for('about_page') }}">En savoir plus sur l’histoire de PlayBed</a></p>
+
+        <h2>Publications et présence publique</h2>
+        <p>Obed Gelly Ousmane Tassango est également l’auteur du roman <em>Les Fractures d’Aetherlume</em>, publié en 2025. Plusieurs pages publiques indépendantes permettent de relier son nom à ses projets et publications.</p>
+        <ul class="creator-source-list">
+            <li><a href="https://github.com/Obed236" target="_blank" rel="me noopener noreferrer">GitHub — Obed236</a><br><span class="creator-note">Projets et dépôts de développement.</span></li>
+            <li><a href="https://www.fnac.com/livre-numerique/a21801954/Obed-Gelly-Ousmane-Tassango-Les-Fractures-d-Aetherlume" target="_blank" rel="noopener noreferrer">Fnac — Les Fractures d’Aetherlume</a><br><span class="creator-note">Page publique du livre attribuée à Obed Gelly Ousmane Tassango.</span></li>
+            <li><a href="https://books.apple.com/fr/book/les-fractures-daetherlume/id6747992079" target="_blank" rel="noopener noreferrer">Apple Books — Les Fractures d’Aetherlume</a><br><span class="creator-note">Publication du livre sur Apple Books.</span></li>
+            <li><a href="https://www.poemes.co/obed-gelly-ousmane-tassango.html" target="_blank" rel="me noopener noreferrer">Poèmes.co — profil auteur</a><br><span class="creator-note">Page auteur publique associée au même nom.</span></li>
+        </ul>
+
+        <div class="content-actions">
+            <a class="primary-button" href="{{ url_for('home') }}#games">Découvrir PlayBed</a>
+            <a class="secondary-button" href="{{ url_for('platform_contact') }}">Contact</a>
+        </div>
+    </article>
+</main>
+{% endblock %}
