@@ -24,11 +24,12 @@
         <p>PlayBed est un projet vivant : son contenu, son interface, ses questions et ses fonctionnalités peuvent être enrichis au fil du temps. L'objectif est de continuer à améliorer la qualité de l'expérience tout en conservant une utilisation gratuite et facile d'accès.</p>
 
         <h2>Le créateur</h2>
-        <p>PlayBed a été créé et développé par <strong>Obed Gelly Ousmane Tassango</strong> dans le cadre de son apprentissage et de ses projets en informatique. La mise en ligne publique du site permet aussi de confronter le projet à de vrais usages : déploiement, sécurité, référencement, compatibilité mobile, persistance des données et évolution continue.</p>
+        <p>PlayBed a été créé et développé par <strong><a href="{{ url_for('creator_page') }}">Obed Gelly Ousmane Tassango</a></strong> dans le cadre de son apprentissage et de ses projets en informatique. La mise en ligne publique du site permet aussi de confronter le projet à de vrais usages : déploiement, sécurité, référencement, compatibilité mobile, persistance des données et évolution continue.</p>
+        <p>Une <a href="{{ url_for('creator_page') }}">page officielle du créateur</a> rassemble son profil, ses projets et plusieurs références publiques associées à son nom.</p>
 
         <div class="content-actions">
             <a class="primary-button" href="{{ url_for('home') }}#games">Voir les jeux</a>
-            <a class="secondary-button" href="{{ url_for('how_to_play_page') }}">Lire les règles</a>
+            <a class="secondary-button" href="{{ url_for('creator_page') }}">Voir le profil du créateur</a>
         </div>
     </article>
 </main>
