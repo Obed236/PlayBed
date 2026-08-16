@@ -33,7 +33,7 @@
     <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script defer src="{{ url_for('static', filename='js/platform.js') }}"></script>
     <script defer src="{{ url_for('static', filename='js/pwa.js') }}"></script>
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"PlayBed","url":"https://playbed.fr/","inLanguage":"fr","description":"Plateforme gratuite de mini-jeux en ligne : Pendu, Plus ou Moins, Vrai ou Faux, Quiz Express et Memory."}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","@id":"https://playbed.fr/#website","name":"PlayBed","url":"https://playbed.fr/","inLanguage":"fr","description":"Plateforme gratuite de mini-jeux en ligne : Pendu, Plus ou Moins, Vrai ou Faux, Quiz Express et Memory.","creator":{"@id":"https://playbed.fr/createur#person"}}</script>
     {% block head_extra %}{% endblock %}
 </head>
 
@@ -54,9 +54,9 @@
     </header>
     <div id="main-content" tabindex="-1">{% block content %}{% endblock %}</div>
     <footer>
-        <div class="footer-copy"><span>© 2026 PlayBed · Créé et développé par Obed Gelly Ousmane Tassango.</span><span>Mini-jeux gratuits · Mobile et ordinateur · Aucun compte obligatoire</span></div>
+        <div class="footer-copy"><span>© 2026 PlayBed · Créé et développé par <a href="{{ url_for('creator_page') }}">Obed Gelly Ousmane Tassango</a>.</span><span>Mini-jeux gratuits · Mobile et ordinateur · Aucun compte obligatoire</span></div>
         <nav class="footer-links" aria-label="Informations et mentions">
-            <a href="{{ url_for('about_page') }}">À propos</a><a href="{{ url_for('how_to_play_page') }}">Comment jouer</a><a href="{{ url_for('platform_guides') }}">Guides</a><a href="{{ url_for('platform_news') }}">Nouveautés</a><a href="{{ url_for('faq_page') }}">FAQ</a><a href="{{ url_for('platform_contact') }}">Contact</a><a href="{{ url_for('platform_legal') }}">Mentions légales</a><a href="{{ url_for('privacy_page') }}">Confidentialité</a><a href="{{ url_for('terms_page') }}">Conditions d’utilisation</a><button class="footer-link-button pwa-install-button" data-pwa-install type="button" hidden>Installer PlayBed</button><button class="footer-link-button" id="openPrivacyPreferences" type="button">Gérer les cookies</button>
+            <a href="{{ url_for('about_page') }}">À propos</a><a href="{{ url_for('creator_page') }}">Créateur</a><a href="{{ url_for('how_to_play_page') }}">Comment jouer</a><a href="{{ url_for('platform_guides') }}">Guides</a><a href="{{ url_for('platform_news') }}">Nouveautés</a><a href="{{ url_for('faq_page') }}">FAQ</a><a href="{{ url_for('platform_contact') }}">Contact</a><a href="{{ url_for('platform_legal') }}">Mentions légales</a><a href="{{ url_for('privacy_page') }}">Confidentialité</a><a href="{{ url_for('terms_page') }}">Conditions d’utilisation</a><button class="footer-link-button pwa-install-button" data-pwa-install type="button" hidden>Installer PlayBed</button><button class="footer-link-button" id="openPrivacyPreferences" type="button">Gérer les cookies</button>
         </nav>
     </footer>
     <section class="consent-panel" id="consentPanel" hidden aria-labelledby="consentTitle" aria-modal="true" role="dialog">
