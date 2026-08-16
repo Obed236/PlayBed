@@ -31,13 +31,22 @@
         "name": "République centrafricaine"
       },
       "jobTitle": "Créateur et développeur de PlayBed",
-      "description": "Créateur et développeur centrafricain de PlayBed, une plateforme gratuite de mini-jeux en ligne, et auteur de Les Fractures d’Aetherlume.",
-      "knowsAbout": ["Python", "Flask", "développement web", "développement logiciel"],
+      "description": "Créateur et développeur centrafricain de PlayBed, une plateforme gratuite de mini-jeux en ligne, auteur de Les Fractures d’Aetherlume et créateur d’un blog consacré à la poésie.",
+      "knowsAbout": ["Python", "Flask", "développement web", "développement logiciel", "poésie", "écriture"],
       "sameAs": [
         "https://github.com/Obed236",
         "https://www.poemes.co/obed-gelly-ousmane-tassango.html",
         "https://fable.co/author/obed-gelly-ousmane-tassango"
       ]
+    },
+    {
+      "@type": "Blog",
+      "@id": "https://poeme-ma-vie.blogspot.com/#blog",
+      "url": "https://poeme-ma-vie.blogspot.com/",
+      "name": "Poème Ma Vie",
+      "inLanguage": "fr",
+      "description": "Blog consacré à la poésie créé par Obed Gelly Ousmane Tassango.",
+      "creator": {"@id": "https://playbed.fr/createur#person"}
     }
   ]
 }
@@ -59,6 +68,7 @@
                 <a href="https://github.com/Obed236" target="_blank" rel="me noopener noreferrer">GitHub</a>
                 <a href="https://www.poemes.co/obed-gelly-ousmane-tassango.html" target="_blank" rel="me noopener noreferrer">Poèmes.co</a>
                 <a href="https://fable.co/author/obed-gelly-ousmane-tassango" target="_blank" rel="me noopener noreferrer">Fable</a>
+                <a href="https://poeme-ma-vie.blogspot.com/?m=1" target="_blank" rel="noopener noreferrer">Blog poésie</a>
             </div>
         </div>
 
@@ -67,7 +77,7 @@
             <p><strong>Nom :</strong><br>Obed Gelly Ousmane Tassango</p>
             <p><strong>Date de naissance :</strong><br>25 juin 2004</p>
             <p><strong>Nationalité :</strong><br>Centrafricaine 🇨🇫</p>
-            <p><strong>Activité :</strong><br>Développement informatique et création de projets web</p>
+            <p><strong>Activité :</strong><br>Développement informatique, création de projets web et écriture</p>
             <p><strong>Projet :</strong><br><a href="{{ url_for('home') }}">PlayBed</a></p>
         </aside>
     </section>
@@ -80,10 +90,15 @@
         <p>PlayBed s’appuie notamment sur Python et Flask côté serveur ainsi que sur HTML, CSS et JavaScript côté interface. Le projet est déployé en ligne et évolue régulièrement avec de nouvelles améliorations techniques et fonctionnelles.</p>
         <p><a href="{{ url_for('about_page') }}">En savoir plus sur l’histoire de PlayBed</a></p>
 
+        <h2>Écriture et poésie</h2>
+        <p>En parallèle de ses projets informatiques, Obed Gelly Ousmane Tassango écrit et publie également des textes. Il est le créateur du blog <strong>Poème Ma Vie</strong>, un espace consacré à la poésie et à ses créations littéraires.</p>
+        <p><a href="https://poeme-ma-vie.blogspot.com/?m=1" target="_blank" rel="noopener noreferrer">Découvrir le blog Poème Ma Vie</a></p>
+
         <h2>Publications et présence publique</h2>
         <p>Obed Gelly Ousmane Tassango est également l’auteur du roman <em>Les Fractures d’Aetherlume</em>, publié en 2025. Plusieurs pages publiques indépendantes permettent de relier son nom à ses projets et publications.</p>
         <ul class="creator-source-list">
             <li><a href="https://github.com/Obed236" target="_blank" rel="me noopener noreferrer">GitHub — Obed236</a><br><span class="creator-note">Projets et dépôts de développement.</span></li>
+            <li><a href="https://poeme-ma-vie.blogspot.com/?m=1" target="_blank" rel="noopener noreferrer">Poème Ma Vie — blog de poésie</a><br><span class="creator-note">Projet littéraire et espace de publication consacré à la poésie.</span></li>
             <li><a href="https://www.fnac.com/livre-numerique/a21801954/Obed-Gelly-Ousmane-Tassango-Les-Fractures-d-Aetherlume" target="_blank" rel="noopener noreferrer">Fnac — Les Fractures d’Aetherlume</a><br><span class="creator-note">Page publique du livre attribuée à Obed Gelly Ousmane Tassango.</span></li>
             <li><a href="https://books.apple.com/fr/book/les-fractures-daetherlume/id6747992079" target="_blank" rel="noopener noreferrer">Apple Books — Les Fractures d’Aetherlume</a><br><span class="creator-note">Publication du livre sur Apple Books.</span></li>
             <li><a href="https://www.poemes.co/obed-gelly-ousmane-tassango.html" target="_blank" rel="me noopener noreferrer">Poèmes.co — profil auteur</a><br><span class="creator-note">Page auteur publique associée au même nom.</span></li>
