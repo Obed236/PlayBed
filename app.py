@@ -4,10 +4,12 @@ from core import app, GAMES, db_connection, current_pseudo, init_db
 from engagement import register_engagement
 from platform_routes import register_platform_routes
 from creator_routes import register_creator_routes
+from sitemap_routes import register_sitemap_route
 
 register_platform_routes(app, GAMES, db_connection, current_pseudo)
 register_engagement(app, GAMES, db_connection, current_pseudo)
 register_creator_routes(app, current_pseudo)
+register_sitemap_route(app, GAMES, current_pseudo)
 
 if __name__ == "__main__":
     init_db()
