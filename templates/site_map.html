@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Plan du site | PlayBed{% endblock %}
+{% block description %}Retrouve rapidement toutes les pages, les jeux, les guides et les informations utiles de PlayBed.{% endblock %}
+
+{% block content %}
+<main class="content-page site-map-page">
+    <section class="content-card">
+        <span class="eyebrow">NAVIGATION</span>
+        <h1>Plan du site</h1>
+        <p>Retrouve ici les principales pages de PlayBed, les jeux disponibles et les ressources pour mieux profiter de la plateforme.</p>
+
+        <div class="site-map-grid">
+            <section>
+                <h2>PlayBed</h2>
+                <ul>
+                    <li><a href="{{ url_for('home') }}">Accueil</a></li>
+                    <li><a href="{{ url_for('about_page') }}">À propos</a></li>
+                    <li><a href="{{ url_for('creator_page') }}">Créateur</a></li>
+                    <li><a href="{{ url_for('how_to_play_page') }}">Comment jouer</a></li>
+                    <li><a href="{{ url_for('leaderboard') }}">Classement</a></li>
+                    <li><a href="{{ url_for('platform_daily_challenge') }}">Défi du jour</a></li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Jeux</h2>
+                <ul>
+                    {% for slug, game in games.items() %}
+                    <li><a href="{{ url_for('platform_game_detail', game=slug) }}">{{ game.emoji }} {{ game.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </section>
+
+            <section>
+                <h2>Ressources</h2>
+                <ul>
+                    <li><a href="{{ url_for('platform_guides') }}">Guides</a></li>
+                    <li><a href="{{ url_for('platform_news') }}">Nouveautés</a></li>
+                    <li><a href="{{ url_for('faq_page') }}">FAQ</a></li>
+                    <li><a href="{{ url_for('platform_contact') }}">Contact</a></li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Informations légales</h2>
+                <ul>
+                    <li><a href="{{ url_for('platform_legal') }}">Mentions légales</a></li>
+                    <li><a href="{{ url_for('privacy_page') }}">Politique de confidentialité</a></li>
+                    <li><a href="{{ url_for('terms_page') }}">Conditions d’utilisation</a></li>
+                </ul>
+            </section>
+        </div>
+    </section>
+</main>
+{% endblock %}
