@@ -98,6 +98,19 @@ def register_duels(app, db_connection, current_pseudo, load_quiz_questions):
                     "duel.html", duel=duel, state=None, current_question=None, pseudo=pseudo,
                     share_url=share_url, full=True, finished=bool(duel["creator_score"] is not None and duel["opponent_score"] is not None),
                 )
+            if not duel["opponent"]:
+                with db_connection() as conn:
+                    conn.execute(
+                        "UPDATE duels SET opponent = ? WHERE id = ? AND opponent IS NULL",
+                        (pseudo, duel_id),
+                    )
+                    conn.commit()
+                duel = get_duel(duel_id)
+                if duel["opponent"] != pseudo:
+                    return render_template(
+                        "duel.html", duel=duel, state=None, current_question=None, pseudo=pseudo,
+                        share_url=share_url, full=True, finished=bool(duel["creator_score"] is not None and duel["opponent_score"] is not None),
+                    )
             state = {"role": "opponent", "index": 0, "score": 0, "finished": False}
             session[state_key] = state
 
@@ -128,10 +141,10 @@ def register_duels(app, db_connection, current_pseudo, load_quiz_questions):
                     else:
                         conn.execute(
                             """
-                            UPDATE duels SET opponent = ?, opponent_score = ?, opponent_finished_at = ?
-                            WHERE id = ? AND opponent_score IS NULL
+                            UPDATE duels SET opponent_score = ?, opponent_finished_at = ?
+                            WHERE id = ? AND opponent = ? AND opponent_score IS NULL
                             """,
-                            (pseudo, final_score, now, duel_id),
+                            (final_score, now, duel_id, pseudo),
                         )
                     conn.commit()
                 duel = get_duel(duel_id)
