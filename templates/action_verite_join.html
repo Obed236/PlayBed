@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block robots %}noindex,follow{% endblock %}
+{% block title %}Rejoindre une classe Action ou Vérité | PlayBed{% endblock %}
+{% block description %}Entre le code à 4 chiffres d’une classe privée Action ou Vérité pour rejoindre la partie.{% endblock %}
+{% block head_extra %}<link rel="stylesheet" href="{{ url_for('static', filename='css/action-verite.css') }}">{% endblock %}
+{% block content %}
+<main class="content-shell av-shell"><nav class="breadcrumb"><a href="{{ url_for('av_home') }}">Action ou Vérité</a><span>›</span><span>Rejoindre</span></nav><section class="content-card av-form-card"><span class="eyebrow">🔐 REJOINDRE</span><h1>Entre le code de la classe</h1><p>Demande au créateur de la classe son code privé à 4 chiffres.</p>{% if error %}<p class="av-error">{{ error }}</p>{% endif %}<form method="post" class="av-simple-form"><label for="roomCode">Code</label><input id="roomCode" class="av-code-input" name="code" type="text" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required value="{{ code_value }}" placeholder="1234"><label for="joinName">Ton pseudo</label><input id="joinName" name="name" type="text" minlength="2" maxlength="20" required value="{{ pseudo or '' }}" placeholder="Ex. Alex"><label for="joinAge">Ton âge</label><input id="joinAge" name="age" type="number" min="13" max="100" required placeholder="Ex. 19"><p class="av-note">L’âge exact n’est pas stocké dans la classe. Il sert uniquement à déterminer si le groupe peut activer les propositions 18+.</p><button class="primary-button" type="submit">Rejoindre la classe</button></form></section></main>
+{% endblock %}
