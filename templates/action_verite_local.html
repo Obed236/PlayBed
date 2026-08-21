@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block robots %}noindex,follow{% endblock %}
+{% block title %}Action ou Vérité — Partie locale | PlayBed{% endblock %}
+{% block description %}Configure 2 à 5 joueurs et joue à Action ou Vérité sur un seul téléphone.{% endblock %}
+{% block head_extra %}<link rel="stylesheet" href="{{ url_for('static', filename='css/action-verite.css') }}"><script defer src="{{ url_for('static', filename='js/action-verite.js') }}"></script>{% endblock %}
+{% block content %}
+<main class="content-shell av-shell">
+    <nav class="breadcrumb"><a href="{{ url_for('av_home') }}">Action ou Vérité</a><span>›</span><span>Partie locale</span></nav>
+    {% if not state %}
+    <section class="content-card av-setup-card"><span class="eyebrow">📱 PARTIE LOCALE</span><h1>Qui joue ?</h1><p>Ajoute entre 2 et 5 joueurs. L’âge exact reste dans la session de ce navigateur et sert uniquement à activer le bon niveau de contenu.</p>{% if error %}<p class="av-error">{{ error }}</p>{% endif %}
+        <form method="post" class="av-setup-form" data-av-local-form>
+            <input type="hidden" name="action" value="setup">
+            <label for="playerCount">Nombre de joueurs</label>
+            <select id="playerCount" name="player_count" data-player-count><option value="2">2 joueurs</option><option value="3">3 joueurs</option><option value="4">4 joueurs</option><option value="5">5 joueurs</option></select>
+            <div class="av-player-fields" data-player-fields>
+                {% for index in range(5) %}<div class="av-player-row" data-player-row="{{ index }}" {% if index >= 2 %}hidden{% endif %}><strong>Joueur {{ index + 1 }}</strong><input type="text" name="player_name" minlength="2" maxlength="20" placeholder="Pseudo" {% if index < 2 %}required{% endif %}><input type="number" name="player_age" min="13" max="100" placeholder="Âge" {% if index < 2 %}required{% endif %}></div>{% endfor %}
+            </div>
+            <p class="av-note">13 ans minimum. Si au moins un joueur a moins de 18 ans, PlayBed verrouille automatiquement le mode grand public.</p><button class="primary-button" type="submit">Commencer</button>
+        </form>
+    </section>
+    {% else %}
+    <section class="av-game-card">
+        <div class="av-game-top"><div><span class="eyebrow">TOUR {{ state.round }}</span><h1>{{ current_player.name }}</h1><p>C’est à toi de choisir.</p></div><span class="av-mode-pill {% if state.adult_mode %}adult{% endif %}">{% if state.adult_mode %}🔞 Groupe 18+{% else %}🛡️ Grand public{% endif %}</span></div>
+        <div class="av-players-strip">{% for player in state.players %}<span class="{% if loop.index0 == state.turn_index %}active{% endif %}">{{ player.name }} {% if player.is_adult %}<small>18+</small>{% else %}<small>-18</small>{% endif %}</span>{% endfor %}</div>
+        {% if not state.prompt %}<div class="av-choice"><h2>Action ou Vérité ?</h2><form method="post"><input type="hidden" name="action" value="choose"><button class="av-choice-button action" name="kind" value="action" type="submit">🔥 Action</button><button class="av-choice-button truth" name="kind" value="verite" type="submit">💬 Vérité</button></form></div>{% else %}
+        <div class="av-prompt"><span class="eyebrow">{% if state.kind == 'action' %}🔥 ACTION{% else %}💬 VÉRITÉ{% endif %}</span><p>{{ state.prompt }}</p></div><form method="post" class="av-next-form"><input type="hidden" name="action" value="next"><button class="primary-button" type="submit">Joueur suivant →</button></form>{% endif %}
+        <form method="post" class="av-reset-form"><input type="hidden" name="action" value="reset"><button class="danger-link" type="submit">Recommencer avec d’autres joueurs</button></form>
+    </section>
+    {% endif %}
+</main>
+{% endblock %}
