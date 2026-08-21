@@ -7,7 +7,7 @@
 <main class="content-shell av-shell">
     <nav class="breadcrumb"><a href="{{ url_for('av_home') }}">Action ou Vérité</a><span>›</span><span>Partie locale</span></nav>
     {% if not state %}
-    <section class="content-card av-setup-card"><span class="eyebrow">📱 PARTIE LOCALE</span><h1>Qui joue ?</h1><p>Ajoute entre 2 et 5 joueurs. L’âge exact reste dans la session de ce navigateur et sert uniquement à activer le bon niveau de contenu.</p>{% if error %}<p class="av-error">{{ error }}</p>{% endif %}
+    <section class="content-card av-setup-card"><span class="eyebrow">📱 PARTIE LOCALE</span><h1>Qui joue ?</h1><p>Ajoute entre 2 et 5 joueurs. Après la configuration, PlayBed ne garde dans l’état temporaire de la partie que l’information « mineur / majeur », pas l’âge exact.</p>{% if error %}<p class="av-error">{{ error }}</p>{% endif %}
         <form method="post" class="av-setup-form" data-av-local-form>
             <input type="hidden" name="action" value="setup">
             <label for="playerCount">Nombre de joueurs</label>
