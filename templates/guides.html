@@ -1,6 +1,30 @@
 {% extends "base.html" %}
 {% block title %}Guides & astuces de jeux | PlayBed{% endblock %}
-{% block description %}Guides PlayBed pour progresser au Pendu, Memory, Plus ou Moins, Quiz Express et mieux comprendre les scores et stratégies de jeu.{% endblock %}
+{% block description %}Guides PlayBed pour progresser aux mini-jeux, comprendre les stratégies, découvrir la logique algorithmique, travailler la mémoire et mieux raisonner dans les quiz.{% endblock %}
 {% block content %}
-<main class="content-shell"><header class="content-hero"><span class="eyebrow">GUIDES & ASTUCES</span><h1>Jouer, comprendre et progresser.</h1><p>Ces guides expliquent les stratégies derrière les mini-jeux de PlayBed. Ils sont pensés pour t’aider à améliorer tes performances tout en découvrant quelques notions de logique, de mémoire et de culture générale.</p></header><section class="guide-grid" aria-label="Guides disponibles">{% for slug, guide in guides.items() %}<article class="guide-card"><span class="guide-meta">{{ guide.read_time }} de lecture</span><h2>{{ guide.title }}</h2><p>{{ guide.description }}</p><a href="{{ url_for('platform_guide_detail', slug=slug) }}">Lire le guide <span>→</span></a></article>{% endfor %}</section><section class="content-card prose editorial-note"><h2>Pourquoi des guides sur PlayBed ?</h2><p>Une plateforme de jeu ne sert pas seulement à afficher des boutons. PlayBed veut aussi expliquer les mécaniques utilisées dans ses jeux : recherche dichotomique, mémorisation visuelle, choix de lettres ou calcul des points.</p><p>Les contenus sont liés directement aux jeux disponibles et sont mis à jour en même temps que la plateforme.</p></section></main>
+<main class="content-shell">
+<header class="content-hero">
+    <span class="eyebrow">GUIDES & ASTUCES</span>
+    <h1>Jouer, comprendre et progresser.</h1>
+    <p>PlayBed propose actuellement {{ guides|length }} guides originaux liés aux jeux et aux mécanismes de la plateforme. Ils ne servent pas seulement à obtenir un meilleur score : ils expliquent aussi les idées derrière les mini-jeux, comme la recherche dichotomique, la mémorisation visuelle, la déduction ou le fonctionnement d’une application web.</p>
+</header>
+<section class="guide-grid" aria-label="Guides disponibles">
+    {% for slug, guide in guides.items() %}
+    <article class="guide-card">
+        <span class="guide-meta">{{ guide.read_time }} de lecture</span>
+        <h2>{{ guide.title }}</h2>
+        <p>{{ guide.description }}</p>
+        <a href="{{ url_for('platform_guide_detail', slug=slug) }}">Lire le guide <span>→</span></a>
+    </article>
+    {% endfor %}
+</section>
+<section class="content-card prose editorial-note">
+    <h2>Pourquoi des guides sur PlayBed ?</h2>
+    <p>Une plateforme de jeu peut faire plus qu’afficher une partie et un score. Les jeux reposent sur des choix, des règles et parfois de vraies notions de logique. Les expliquer permet de mieux comprendre ce que l’on fait lorsque l’on joue et donne aussi une raison de revenir pour progresser.</p>
+    <p>Le guide consacré à Plus ou Moins montre par exemple comment une stratégie de jeu devient une introduction à la recherche dichotomique, une notion très utilisée en algorithmique. Les contenus sur Memory s’intéressent aux repères visuels et à l’organisation de l’information, tandis que les articles autour des quiz parlent de déduction, de lecture attentive et d’esprit critique.</p>
+    <h2>Des contenus reliés directement aux jeux</h2>
+    <p>Les guides sont écrits pour correspondre au fonctionnement réel de PlayBed. Lorsqu’un système de score, une règle ou une fonctionnalité importante évolue, le contenu associé peut être mis à jour en même temps que la plateforme.</p>
+    <p>Cette approche permet de garder des explications utiles et cohérentes avec l’expérience proposée aux joueurs, plutôt que d’ajouter des textes sans rapport avec le service.</p>
+</section>
+</main>
 {% endblock %}
