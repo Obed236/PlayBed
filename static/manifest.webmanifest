@@ -17,6 +17,7 @@
   ],
   "shortcuts": [
     {"name": "Jouer", "short_name": "Jeux", "url": "/#games"},
+    {"name": "Quiz Duel", "short_name": "Duel", "url": "/duel/nouveau"},
     {"name": "Défi du jour", "short_name": "Défi", "url": "/defi-du-jour"},
     {"name": "Classement", "short_name": "Classement", "url": "/classement"},
     {"name": "Guides", "short_name": "Guides", "url": "/guides"}
