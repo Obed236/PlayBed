@@ -1,10 +1,11 @@
 import os
 
-from core import app, GAMES, db_connection, current_pseudo, init_db, save_score, load_words
+from core import app, GAMES, db_connection, current_pseudo, init_db, save_score, load_words, load_quiz_questions
 from engagement import register_engagement
 from platform_routes import register_platform_routes, GUIDES, GAME_CONTENT
 from editorial_guides import EDITORIAL_GUIDES
 from extra_games import EXTRA_GAMES, EXTRA_GAME_CONTENT, register_extra_games
+from duels import register_duels
 from creator_routes import register_creator_routes
 from sitemap_routes import register_sitemap_route
 from growth import register_growth
@@ -24,6 +25,7 @@ platform_games = PlatformGames(GAMES)
 
 register_platform_routes(app, platform_games, db_connection, current_pseudo)
 register_extra_games(app, GAMES, current_pseudo, save_score, load_words)
+register_duels(app, db_connection, current_pseudo, load_quiz_questions)
 register_engagement(app, GAMES, db_connection, current_pseudo)
 register_growth(app, GAMES, db_connection, current_pseudo)
 register_creator_routes(app, current_pseudo)
