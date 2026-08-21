@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Explorer les jeux | PlayBed{% endblock %}
+{% block description %}Explore les jeux PlayBed par catégorie, retrouve tes favoris et découvre rapidement le prochain jeu à lancer.{% endblock %}
+{% block content %}
+<main class="content-shell">
+    <header class="content-hero"><span class="eyebrow">EXPLORER</span><h1>Trouve ton prochain jeu.</h1><p>Recherche un jeu, filtre par catégorie et garde tes préférés à portée de clic. Tes favoris restent enregistrés sur cet appareil.</p></header>
+    <section class="discover-toolbar" data-discovery-toolbar>
+        <label class="search-box"><span class="sr-only">Rechercher un jeu</span><input type="search" placeholder="Rechercher un jeu…" data-game-search autocomplete="off"></label>
+        <div class="filter-row" role="group" aria-label="Filtrer les jeux"><button class="filter-chip active" type="button" data-game-filter="all">Tous</button>{% for tag, label in category_labels.items() %}<button class="filter-chip" type="button" data-game-filter="{{ tag }}">{{ label }}</button>{% endfor %}<button class="filter-chip" type="button" data-game-filter="favorites">★ Favoris</button></div>
+    </section>
+    <section class="game-grid discover-grid" data-game-grid>{% for slug, game in games.items() %}<article class="game-card discover-card" data-game-card data-game-slug="{{ slug }}" data-game-category="{{ game.tag }}" data-game-name="{{ game.name|lower }} {{ game.description|lower }}"><div class="card-top"><div class="game-icon">{{ game.emoji }}</div><button class="favorite-button" type="button" data-favorite-game="{{ slug }}" aria-label="Ajouter {{ game.name }} aux favoris" aria-pressed="false">☆</button></div><span class="game-tag">{{ category_labels.get(game.tag, game.tag) }}</span><h2>{{ game.name }}</h2><p>{{ game.description }}</p><div class="card-actions"><a class="text-action" href="{{ url_for('platform_game_detail', game=slug) }}">Règles & astuces</a><a class="text-action strong" data-game-start="{{ slug }}" href="{{ url_for('start_game', game=slug) }}">Jouer →</a></div></article>{% endfor %}</section>
+    <p class="empty discovery-empty" data-discovery-empty hidden>Aucun jeu ne correspond à ta recherche.</p>
+</main>
+{% endblock %}
