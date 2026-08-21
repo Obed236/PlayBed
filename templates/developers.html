@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}PlayBed Developer — Créer pour la plateforme{% endblock %}
+{% block description %}Découvre la direction PlayBed Developer : intégration de jeux web, exigences de qualité et futur SDK pour les créateurs.{% endblock %}
+{% block content %}
+<main class="content-shell">
+    <header class="content-hero">
+        <span class="eyebrow">PLAYBED DEVELOPER</span>
+        <h1>Construire les prochains jeux de PlayBed.</h1>
+        <p>PlayBed prépare une couche développeur pour accueillir à terme des jeux web externes tout en gardant une expérience rapide, sûre et cohérente pour les joueurs.</p>
+    </header>
+
+    <section class="developer-grid">
+        <article class="developer-card"><h2>⚡ Web d’abord</h2><p>Les jeux doivent démarrer rapidement dans un navigateur moderne, fonctionner sur mobile et éviter les téléchargements lourds.</p></article>
+        <article class="developer-card"><h2>🏆 Scores vérifiables</h2><p>Les scores destinés aux classements devront être validés côté serveur ou via une intégration approuvée afin de limiter la triche.</p></article>
+        <article class="developer-card"><h2>🧩 Intégration simple</h2><p>Le futur SDK exposera des événements standardisés pour le démarrage, la fin de partie, les succès et la communication avec la plateforme.</p></article>
+    </section>
+
+    <section class="content-card prose">
+        <h2>Aperçu de l’API prévue</h2>
+        <p>Ce contrat sert aujourd’hui de direction technique. L’envoi public de scores n’est volontairement pas ouvert tant qu’un mécanisme d’authentification des jeux n’est pas en place.</p>
+        <pre class="code-sample"><code>PlayBed.startGame({ game: "mon-jeu" });
+PlayBed.track("level_complete", { level: 3 });
+PlayBed.gameOver({ score: 1250 });</code></pre>
+        <h2>Critères de qualité</h2>
+        <ul><li>interface responsive et jouable au tactile ;</li><li>chargement rapide et ressources optimisées ;</li><li>aucun contenu trompeur ou mécanisme forçant un clic publicitaire ;</li><li>règles compréhensibles et score cohérent ;</li><li>respect de la vie privée et des règles de la plateforme.</li></ul>
+        <h2>État actuel</h2>
+        <p>Le programme est en phase de préparation. PlayBed continue d’abord à renforcer son catalogue interne, son système de progression et ses outils de mesure avant d’ouvrir une intégration externe.</p>
+        <div class="content-actions"><a class="primary-button" href="{{ url_for('platform_contact') }}">Proposer un projet</a><a class="secondary-button" href="{{ url_for('home') }}#games">Voir les jeux actuels</a></div>
+    </section>
+</main>
+{% endblock %}
