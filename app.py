@@ -13,7 +13,16 @@ GUIDES.update(EDITORIAL_GUIDES)
 GAMES.update(EXTRA_GAMES)
 GAME_CONTENT.update(EXTRA_GAME_CONTENT)
 
-register_platform_routes(app, GAMES, db_connection, current_pseudo)
+
+class PlatformGames(dict):
+    """Expose the full catalog while keeping legacy daily-challenge rotation on its supported games."""
+    def keys(self):
+        return [slug for slug in super().keys() if slug not in EXTRA_GAMES]
+
+
+platform_games = PlatformGames(GAMES)
+
+register_platform_routes(app, platform_games, db_connection, current_pseudo)
 register_extra_games(app, GAMES, current_pseudo, save_score, load_words)
 register_engagement(app, GAMES, db_connection, current_pseudo)
 register_growth(app, GAMES, db_connection, current_pseudo)
