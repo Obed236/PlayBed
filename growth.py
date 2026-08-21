@@ -9,6 +9,7 @@ MONTHS_FR = (
     "janvier", "février", "mars", "avril", "mai", "juin",
     "juillet", "août", "septembre", "octobre", "novembre", "décembre",
 )
+NON_SCORED_GAMES = {"action-verite"}
 
 
 def _period_start(period):
@@ -181,7 +182,7 @@ def register_growth(app, games, db_connection, current_pseudo):
         pseudo = current_pseudo()
         if not pseudo:
             return redirect(url_for("home", need_pseudo=1) + "#player")
-        if game not in games:
+        if game not in games or game in NON_SCORED_GAMES:
             abort(404)
         with db_connection() as conn:
             row = conn.execute(
@@ -205,7 +206,7 @@ def register_growth(app, games, db_connection, current_pseudo):
         except (BadSignature, SignatureExpired):
             abort(404)
         game = challenge.get("game")
-        if game not in games:
+        if game not in games or game in NON_SCORED_GAMES:
             abort(404)
         share_url = url_for("growth_challenge", token=token, _external=True, _scheme="https")
         return render_template(
