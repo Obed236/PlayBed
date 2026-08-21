@@ -6,11 +6,13 @@ from platform_routes import register_platform_routes, GUIDES
 from editorial_guides import EDITORIAL_GUIDES
 from creator_routes import register_creator_routes
 from sitemap_routes import register_sitemap_route
+from growth import register_growth
 
 GUIDES.update(EDITORIAL_GUIDES)
 
 register_platform_routes(app, GAMES, db_connection, current_pseudo)
 register_engagement(app, GAMES, db_connection, current_pseudo)
+register_growth(app, GAMES, db_connection, current_pseudo)
 register_creator_routes(app, current_pseudo)
 register_sitemap_route(app, GAMES, current_pseudo)
 
