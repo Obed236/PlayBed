@@ -1,34 +1,89 @@
 {% extends "base.html" %}
-{% block title %}PlayBed — Mini-jeux gratuits en ligne{% endblock %}
-{% block description %}PlayBed propose cinq mini-jeux gratuits en ligne : Pendu, Plus ou Moins, Vrai ou Faux, Quiz Express et Memory. Joue sans compte, relève le défi du jour, construis ta série et compare tes scores.{% endblock %}
+{% block title %}PlayBed — Mini-jeux gratuits, niveaux et défis{% endblock %}
+{% block description %}PlayBed propose cinq mini-jeux gratuits avec niveaux, missions, défis quotidiens, favoris, statistiques et classements. Joue sans compte depuis ton navigateur.{% endblock %}
 {% block content %}
 <main>
 <section class="hero">
     <div class="hero-copy">
-        <span class="eyebrow">PLAYBED V2</span>
-        <h1>Joue.<br>Progresse.<br><span>Bats ton record.</span></h1>
-        <p>PlayBed rassemble des mini-jeux gratuits, rapides et accessibles directement depuis ton navigateur. Choisis un pseudo, relève le défi du jour, construis ta série quotidienne et grimpe dans les classements.</p>
+        <span class="eyebrow">PLAYBED V3</span>
+        <h1>Joue.<br>Progresse.<br><span>Défie tes amis.</span></h1>
+        <p>PlayBed rassemble des mini-jeux gratuits et rapides avec niveaux, missions, séries quotidiennes, profils publics et classements. Aucun téléchargement ni compte obligatoire.</p>
         <div class="hero-actions"><a class="primary-button" href="#games">Choisir un jeu</a><a class="secondary-button" href="{{ url_for('platform_daily_challenge') }}">🔥 Défi du jour</a><a class="secondary-button" href="{{ url_for('leaderboard') }}">🏆 Classement</a></div>
     </div>
-    <div class="hero-card"><div class="orb">🕹️</div><strong>{{ games|length }} jeux disponibles</strong><span>{{ total_scores }} score(s) enregistré(s)</span><div class="mini-stats"><span>⚡ Rapide</span><span>💸 Gratuit</span><span>📱 PWA</span><span>🔥 Séries</span></div></div>
+    <div class="hero-card"><div class="orb">🕹️</div><strong>{{ games|length }} jeux disponibles</strong><span>{{ total_scores }} score(s) enregistré(s)</span><div class="mini-stats"><span>⭐ Niveaux</span><span>🎯 Missions</span><span>📱 PWA</span><span>⚔️ Défis</span></div></div>
 </section>
+
 <section class="section player-panel" id="player">
-    <div><span class="eyebrow">JOUEUR</span>{% if pseudo %}<h2>Salut {{ pseudo }} 👋</h2><p>Ton pseudo est actif. Retrouve tes statistiques, tes succès, ta série, tes rangs et tes dernières parties dans ton profil.</p>{% else %}<h2>Choisis ton pseudo</h2><p>Aucun compte n'est nécessaire. Ton pseudo sert à identifier tes scores dans le classement et à afficher tes statistiques sur cet appareil.</p>{% endif %}</div>
-    {% if pseudo %}<div class="player-actions"><a class="primary-button" href="{{ url_for('platform_profile') }}">Voir mon profil</a><a class="secondary-button" href="{{ url_for('leaderboard') }}">Voir le classement</a><a class="danger-link" href="{{ url_for('clear_pseudo') }}">Changer de joueur</a></div>{% else %}<form class="pseudo-form" action="{{ url_for('set_pseudo') }}" method="post"><label class="sr-only" for="pseudoInput">Choisir un pseudo</label><input id="pseudoInput" type="text" name="pseudo" minlength="2" maxlength="20" required placeholder="Ex. Obed" autocomplete="nickname"><button class="primary-button" type="submit">Commencer</button></form>{% endif %}
+    <div><span class="eyebrow">JOUEUR</span>{% if pseudo %}<h2>Salut {{ pseudo }} 👋</h2><p>Ton pseudo est actif. {% if growth_progress %}Tu es niveau {{ growth_progress.level }} avec {{ growth_progress.xp }} XP.{% endif %} Retrouve toutes tes statistiques et missions dans ton profil.</p>{% else %}<h2>Choisis ton pseudo</h2><p>Aucun compte n'est nécessaire. Ton pseudo sert à identifier tes scores, ta progression et ton profil public.</p>{% endif %}</div>
+    {% if pseudo %}<div class="player-actions"><a class="primary-button" href="{{ url_for('platform_profile') }}">Voir mon profil</a><a class="secondary-button" href="{{ url_for('growth_public_profile', pseudo=pseudo) }}">Profil public</a><a class="danger-link" href="{{ url_for('clear_pseudo') }}">Changer de joueur</a></div>{% else %}<form class="pseudo-form" action="{{ url_for('set_pseudo') }}" method="post"><label class="sr-only" for="pseudoInput">Choisir un pseudo</label><input id="pseudoInput" type="text" name="pseudo" minlength="2" maxlength="20" required placeholder="Ex. Obed" autocomplete="nickname"><button class="primary-button" type="submit">Commencer</button></form>{% endif %}
 </section>
-{% if pseudo and engagement_streak %}
-<section class="section engagement-section">
-    <div class="section-heading compact"><span class="eyebrow">TA PROGRESSION</span><h2>Reviens, garde ta série et monte au classement.</h2></div>
-    <div class="engagement-grid">
-        <article class="engagement-card streak-card"><span class="engagement-icon">🔥</span><span class="engagement-label">Série actuelle</span><strong>{{ engagement_streak.current }} jour{% if engagement_streak.current != 1 %}s{% endif %}</strong>{% if engagement_streak.played_today %}<p>Journée validée ✅ Prochain objectif : {{ engagement_streak.next_goal }} jours.</p>{% elif engagement_streak.at_risk %}<p>Ta série est encore active. Termine une partie aujourd’hui pour la conserver.</p>{% else %}<p>Termine une partie aujourd’hui pour lancer une nouvelle série.</p>{% endif %}</article>
-        <article class="engagement-card"><span class="engagement-icon">🏆</span><span class="engagement-label">Cette semaine</span><strong>{% if engagement_ranks.semaine %}#{{ engagement_ranks.semaine }}{% else %}—{% endif %}</strong><p>Ton rang parmi les joueurs ayant marqué des points cette semaine.</p><a class="text-action strong" href="{{ url_for('platform_period_leaderboard', period='semaine') }}">Voir le classement →</a></article>
-        <article class="engagement-card"><span class="engagement-icon">📅</span><span class="engagement-label">Ce mois</span><strong>{% if engagement_ranks.mois %}#{{ engagement_ranks.mois }}{% else %}—{% endif %}</strong><p>Continue à jouer pour améliorer ton rang mensuel.</p><a class="text-action strong" href="{{ url_for('platform_period_leaderboard', period='mois') }}">Voir le classement →</a></article>
+
+{% if pseudo and growth_progress %}
+<section class="section">
+    <div class="section-heading compact"><span class="eyebrow">PROGRESSION</span><h2>Monte de niveau à chaque partie.</h2><p>Ton XP est calculée à partir de tes points, de ton activité et du nombre de jeux explorés.</p></div>
+    <div class="growth-dashboard">
+        <article class="level-card">
+            <span class="eyebrow">NIVEAU JOUEUR</span>
+            <div class="level-line"><strong>Niveau {{ growth_progress.level }}</strong><span>{{ growth_progress.xp }} XP au total</span></div>
+            <div class="growth-bar" aria-label="Progression vers le niveau suivant"><span style="width: {{ growth_progress.percent }}%"></span></div>
+            <div class="level-meta"><span>{{ growth_progress.current }} / {{ growth_progress.needed }} XP</span><span>Prochain : niveau {{ growth_progress.next_level }}</span></div>
+            <div class="trending-strip"><span class="season-pill">🏁 {{ growth_season.name }}</span>{% if engagement_streak %}<span class="season-pill">🔥 Série {{ engagement_streak.current }} j</span>{% endif %}</div>
+        </article>
+        <article class="missions-card">
+            <span class="eyebrow">MISSIONS DU JOUR</span>
+            <div class="mission-list">
+                {% for mission in growth_missions.daily %}
+                <div class="mission-item {% if mission.completed %}done{% endif %}" data-mission-complete="{{ 'true' if mission.completed else 'false' }}" data-mission-name="{{ mission.title }}">
+                    <div class="mission-head"><strong>{% if mission.completed %}✅{% else %}🎯{% endif %} {{ mission.title }}</strong><span>{{ mission.current }}/{{ mission.target }}</span></div>
+                    <p>{{ mission.description }}</p><div class="mission-mini"><span style="width: {{ mission.percent }}%"></span></div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="content-actions" style="margin-top:16px"><a class="secondary-button" href="{{ url_for('platform_profile') }}">Voir aussi les missions de la semaine</a></div>
+        </article>
     </div>
 </section>
 {% endif %}
-<section class="section pwa-banner"><div><span class="eyebrow">PLAYBED SUR TON ÉCRAN D’ACCUEIL</span><h2>Installe PlayBed comme une application.</h2><p>Accède plus vite aux jeux, au défi du jour, à ta série et aux classements depuis ton téléphone ou ton ordinateur compatible.</p></div><button class="primary-button pwa-install-button" data-pwa-install type="button" hidden>📱 Installer PlayBed</button></section>
-<section class="section" id="games"><div class="section-heading"><span class="eyebrow">JEUX</span><h2>Choisis ton prochain défi.</h2><p>Chaque jeu possède sa propre page avec les règles complètes, le calcul des points et des conseils.</p></div><div class="game-grid">{% for slug, game in games.items() %}<article class="game-card"><div class="card-top"><div class="game-icon">{{ game.emoji }}</div><span class="game-tag">{{ game.tag }}</span></div><h3>{{ game.name }}</h3><p>{{ game.description }}</p><div class="card-actions"><a class="text-action" href="{{ url_for('platform_game_detail', game=slug) }}">Règles & astuces</a><a class="text-action strong" href="{{ url_for('start_game', game=slug) }}">Jouer <span>→</span></a></div></article>{% endfor %}</div></section>
-<section class="section feature-section"><div class="section-heading"><span class="eyebrow">PLUS QU’UN JEU</span><h2>Une plateforme pensée pour revenir et progresser.</h2><p>PlayBed associe les mini-jeux à des statistiques, des contenus d’aide, des objectifs quotidiens, des séries et des classements temporels.</p></div><div class="info-grid"><article class="info-card"><span class="eyebrow">PROFIL</span><h3>Statistiques et succès</h3><p>Retrouve tes parties, points, meilleurs scores, série et succès débloqués.</p></article><article class="info-card"><span class="eyebrow">QUOTIDIEN</span><h3>Défi et série</h3><p>Termine au moins une partie par jour pour garder ta série, puis tente l’objectif spécial du défi quotidien.</p></article><article class="info-card"><span class="eyebrow">COMPÉTITION</span><h3>Classements dynamiques</h3><p>Compare tes performances aujourd’hui, cette semaine, ce mois ou sur toute l’histoire de PlayBed.</p></article></div><div class="section-cta"><a class="primary-button" href="{{ url_for('platform_guides') }}">Découvrir les guides</a><a class="secondary-button" href="{{ url_for('platform_news') }}">Voir les nouveautés</a></div></section>
+
+{% if pseudo and engagement_streak %}
+<section class="section engagement-section">
+    <div class="section-heading compact"><span class="eyebrow">COMPÉTITION</span><h2>Garde ta série et monte au classement.</h2></div>
+    <div class="engagement-grid">
+        <article class="engagement-card streak-card"><span class="engagement-icon">🔥</span><span class="engagement-label">Série actuelle</span><strong>{{ engagement_streak.current }} jour{% if engagement_streak.current != 1 %}s{% endif %}</strong>{% if engagement_streak.played_today %}<p>Journée validée ✅ Prochain objectif : {{ engagement_streak.next_goal }} jours.</p>{% elif engagement_streak.at_risk %}<p>Ta série est encore active. Termine une partie aujourd’hui pour la conserver.</p>{% else %}<p>Termine une partie aujourd’hui pour lancer une nouvelle série.</p>{% endif %}</article>
+        <article class="engagement-card"><span class="engagement-icon">🏆</span><span class="engagement-label">Cette semaine</span><strong>{% if engagement_ranks.semaine %}#{{ engagement_ranks.semaine }}{% else %}—{% endif %}</strong><p>Ton rang parmi les joueurs ayant marqué des points cette semaine.</p><a class="text-action strong" href="{{ url_for('platform_period_leaderboard', period='semaine') }}">Voir le classement →</a></article>
+        <article class="engagement-card"><span class="engagement-icon">📅</span><span class="engagement-label">Ce mois</span><strong>{% if engagement_ranks.mois %}#{{ engagement_ranks.mois }}{% else %}—{% endif %}</strong><p>{{ growth_season.name }} : continue à jouer pour améliorer ton rang.</p><a class="text-action strong" href="{{ url_for('platform_period_leaderboard', period='mois') }}">Voir la saison →</a></article>
+    </div>
+</section>
+{% endif %}
+
+<section class="section pwa-banner"><div><span class="eyebrow">PLAYBED SUR TON ÉCRAN D’ACCUEIL</span><h2>Installe PlayBed comme une application.</h2><p>Accède plus vite aux jeux, aux missions, au défi du jour et aux classements depuis ton téléphone ou ton ordinateur compatible.</p></div><button class="primary-button pwa-install-button" data-pwa-install type="button" hidden>📱 Installer PlayBed</button></section>
+
+<section class="section" id="games">
+    <div class="section-heading"><span class="eyebrow">EXPLORER</span><h2>Trouve ton prochain jeu.</h2><p>Recherche un jeu, filtre par catégorie ou retrouve rapidement tes favoris et tes dernières parties.</p></div>
+    <div class="discovery-tools">
+        <input id="gameSearch" type="search" placeholder="Rechercher un jeu…" aria-label="Rechercher un jeu">
+        <select id="gameCategory" aria-label="Filtrer par catégorie"><option value="all">Toutes les catégories</option><option value="Lettres">Lettres</option><option value="Logique">Logique</option><option value="Culture">Culture</option><option value="Quiz">Quiz</option><option value="Mémoire">Mémoire</option></select>
+        <label><input id="favoritesOnly" type="checkbox"> Favoris seulement</label>
+    </div>
+    {% if growth_trending %}<div class="trending-strip" aria-label="Jeux populaires"><span class="season-pill">🔥 Populaires :</span>{% for item in growth_trending %}<a class="trending-chip" href="{{ url_for('start_game', game=item.slug) }}" data-game-start="{{ item.slug }}" data-source="trending">{{ item.emoji }} {{ item.name }}</a>{% endfor %}</div>{% endif %}
+    <div class="game-grid" style="margin-top:24px">
+        {% for slug, game in games.items() %}
+        <article class="game-card" data-game-card data-game-slug="{{ slug }}" data-game-name="{{ game.name }}" data-game-tag="{{ game.tag }}" data-game-emoji="{{ game.emoji }}" data-game-start-url="{{ url_for('start_game', game=slug) }}">
+            <div class="card-top"><div class="game-icon">{{ game.emoji }}</div><div style="display:flex;gap:8px;align-items:center"><span class="game-tag">{{ game.tag }}</span><button class="favorite-button" type="button" data-favorite-game="{{ slug }}" aria-pressed="false" title="Ajouter aux favoris">☆</button></div></div>
+            <h3>{{ game.name }}</h3><p>{{ game.description }}</p>
+            <div class="card-actions"><a class="text-action" href="{{ url_for('platform_game_detail', game=slug) }}">Règles & astuces</a><a class="text-action strong" href="{{ url_for('start_game', game=slug) }}" data-game-start="{{ slug }}" data-source="catalog">Jouer <span>→</span></a></div>
+        </article>
+        {% endfor %}
+    </div>
+    <div id="gameFilterEmpty" class="filter-empty" hidden>Aucun jeu ne correspond à ce filtre.</div>
+    <div class="quick-panels">
+        <article class="quick-panel"><h3>🕘 Joués récemment</h3><div class="quick-game-list" id="recentGames"></div></article>
+        <article class="quick-panel"><h3>⭐ Mes favoris</h3><div class="quick-game-list" id="favoriteGames"></div></article>
+    </div>
+</section>
+
+<section class="section feature-section"><div class="section-heading"><span class="eyebrow">UNE VRAIE PLATEFORME</span><h2>Progresse, partage et reviens.</h2><p>PlayBed associe les mini-jeux à une progression globale, des objectifs quotidiens, des profils publics et des défis que tu peux envoyer à d’autres joueurs.</p></div><div class="info-grid"><article class="info-card"><span class="eyebrow">PROGRESSION</span><h3>XP et niveaux</h3><p>Chaque partie contribue à ton niveau global et met en valeur ta régularité.</p></article><article class="info-card"><span class="eyebrow">MISSIONS</span><h3>Objectifs quotidiens et hebdomadaires</h3><p>Des objectifs concrets t’encouragent à explorer plusieurs jeux et à progresser.</p></article><article class="info-card"><span class="eyebrow">SOCIAL</span><h3>Profils et défis</h3><p>Partage ton profil et crée un lien avec un score à battre sur tes jeux préférés.</p></article></div><div class="section-cta"><a class="primary-button" href="{{ url_for('platform_guides') }}">Découvrir les guides</a><a class="secondary-button" href="{{ url_for('growth_developers') }}">PlayBed Developer</a></div></section>
+
 <section class="section about"><span class="eyebrow">PLAYBED</span><h2>Un projet informatique devenu une plateforme publique.</h2><p>PlayBed a été créé et développé par Obed Gelly Ousmane Tassango dans le cadre d'un projet autour du web, du réseau et de la programmation. Le projet est désormais accessible gratuitement au public et continue d’évoluer avec de nouvelles fonctionnalités.</p><p>L’objectif reste simple : proposer une expérience rapide et agréable, sans inscription obligatoire, tout en donnant suffisamment d’informations aux joueurs pour comprendre les règles, les scores et la manière dont leurs données sont utilisées.</p><a class="secondary-button" href="{{ url_for('about_page') }}">En savoir plus sur PlayBed</a></section>
 </main>
 {% endblock %}
