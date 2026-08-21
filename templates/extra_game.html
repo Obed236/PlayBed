@@ -21,9 +21,27 @@
             {% if not state.finished %}
                 <form method="post" class="game-form"><label for="guess">Quel est le mot ?</label><input id="guess" name="guess" type="text" required autofocus autocomplete="off"><button class="primary-button" type="submit">Proposer</button></form>
             {% endif %}
+        {% elif game == 'suite' %}
+            <div class="stat-row"><div><span>Suite</span><strong>{{ state.index + 1 if not state.finished else 10 }}/10</strong></div><div><span>Bonnes réponses</span><strong>{{ state.correct }}</strong></div></div>
+            {% if not state.finished %}
+                <div class="question-box">{{ current_question.label }}</div>
+                <form method="post" class="game-form"><label for="answer">Nombre suivant</label><input id="answer" name="answer" type="number" required autofocus autocomplete="off"><button class="primary-button" type="submit">Valider</button></form>
+            {% endif %}
+        {% elif game == 'pair' %}
+            <div class="stat-row"><div><span>Nombre</span><strong>{{ state.index + 1 if not state.finished else 15 }}/15</strong></div><div><span>Bonnes réponses</span><strong>{{ state.correct }}</strong></div></div>
+            {% if not state.finished %}
+                <div class="question-box">{{ current_question.number }}</div>
+                <form method="post" class="choice-grid"><button class="choice-button positive" type="submit" name="answer" value="pair">Pair</button><button class="choice-button" type="submit" name="answer" value="impair">Impair</button></form>
+            {% endif %}
+        {% elif game == 'chrono' %}
+            {% if not state.finished %}
+                <div class="chrono-zone"><div class="challenge-emoji">⏱️</div><p>Le temps tourne déjà. Compte mentalement jusqu’à 10 secondes puis appuie sur le bouton.</p><form method="post"><button class="primary-button chrono-stop" type="submit">STOP</button></form></div>
+            {% else %}
+                <div class="stat-row"><div><span>Ton temps</span><strong>{{ '%.2f'|format(state.elapsed) }}s</strong></div><div><span>Écart</span><strong>{{ '%.2f'|format(state.difference) }}s</strong></div></div>
+            {% endif %}
         {% endif %}
 
-        {% if state.finished and state.points is defined %}<div class="points-earned">+ {{ state.points }} points 🏆</div>{% endif %}
+        {% if state.finished and state.points is defined %}<div class="points-earned" data-game-complete="{{ game }}" data-game-score="{{ state.points }}">+ {{ state.points }} points 🏆</div>{% endif %}
         <div class="play-actions"><a class="secondary-button" href="{{ url_for('restart_game', game=game) }}" data-game-start="{{ game }}" data-source="restart">↻ Nouvelle partie</a><a class="secondary-button" href="{{ url_for('growth_create_challenge', game=game) }}">⚔️ Créer un défi</a><a class="secondary-button" href="{{ url_for('leaderboard') }}">🏆 Classement</a><a class="secondary-button" href="{{ url_for('home') }}#games">Changer de jeu</a></div>
     </section>
 </main>
