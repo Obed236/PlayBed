@@ -1,6 +1,6 @@
 import os
 
-from core import app, GAMES, db_connection, current_pseudo, init_db, save_score, load_words, load_quiz_questions
+from core import app, GAMES, db_connection, current_pseudo, init_db, save_score, load_words, load_quiz_questions, USE_POSTGRES
 from engagement import register_engagement
 from platform_routes import register_platform_routes, GUIDES, GAME_CONTENT
 from editorial_guides import EDITORIAL_GUIDES
@@ -24,6 +24,18 @@ class PlatformGames(dict):
 
 
 platform_games = PlatformGames(GAMES)
+
+
+def v3_health():
+    return {
+        "status": "ok",
+        "version": "3",
+        "games": len(GAMES),
+        "database": "postgresql" if USE_POSTGRES else "sqlite",
+    }
+
+
+app.view_functions["health"] = v3_health
 
 register_platform_routes(app, platform_games, db_connection, current_pseudo)
 register_extra_games(app, GAMES, current_pseudo, save_score, load_words)
