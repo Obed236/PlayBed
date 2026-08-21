@@ -89,6 +89,12 @@ def register_duels(app, db_connection, current_pseudo, load_quiz_questions):
                 share_url=share_url, waiting_for_pseudo=True, finished=False,
             )
 
+        if state:
+            expected_pseudo = duel["creator"] if state.get("role") == "creator" else duel["opponent"]
+            if expected_pseudo != pseudo:
+                state = None
+                session.pop(state_key, None)
+
         if not state:
             if pseudo == duel["creator"]:
                 return render_template(
