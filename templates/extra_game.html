@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}{{ meta.name }} — PlayBed{% endblock %}
+{% block description %}Joue gratuitement à {{ meta.name }} sur PlayBed.{% endblock %}
+{% block content %}
+<main class="play-shell" data-current-game="{{ game }}">
+    <a class="back-link" href="{{ url_for('home') }}#games">← Tous les jeux</a>
+    <section class="play-card">
+        <div class="play-title"><div class="game-icon big">{{ meta.emoji }}</div><div><span class="eyebrow">{{ meta.tag|upper }}</span><h1>{{ meta.name }}</h1><p>Joueur : <strong>{{ pseudo }}</strong></p></div></div>
+        <div class="message">{{ state.message }}</div>
+
+        {% if game == 'calcul' %}
+            <div class="stat-row"><div><span>Question</span><strong>{{ state.index + 1 if not state.finished else 10 }}/10</strong></div><div><span>Bonnes réponses</span><strong>{{ state.correct }}</strong></div></div>
+            {% if not state.finished %}
+                <div class="question-box">{{ current_question.label }} = ?</div>
+                <form method="post" class="game-form"><label for="answer">Ta réponse</label><input id="answer" name="answer" type="number" required autofocus autocomplete="off"><button class="primary-button" type="submit">Valider</button></form>
+            {% endif %}
+        {% elif game == 'melange' %}
+            <div class="word-display">{{ state.scrambled }}</div>
+            <div class="stat-row"><div><span>Essais</span><strong>{{ state.attempts }}/5</strong></div><div><span>Lettres</span><strong>{{ state.word|length }}</strong></div></div>
+            {% if not state.finished %}
+                <form method="post" class="game-form"><label for="guess">Quel est le mot ?</label><input id="guess" name="guess" type="text" required autofocus autocomplete="off"><button class="primary-button" type="submit">Proposer</button></form>
+            {% endif %}
+        {% endif %}
+
+        {% if state.finished and state.points is defined %}<div class="points-earned">+ {{ state.points }} points 🏆</div>{% endif %}
+        <div class="play-actions"><a class="secondary-button" href="{{ url_for('restart_game', game=game) }}" data-game-start="{{ game }}" data-source="restart">↻ Nouvelle partie</a><a class="secondary-button" href="{{ url_for('growth_create_challenge', game=game) }}">⚔️ Créer un défi</a><a class="secondary-button" href="{{ url_for('leaderboard') }}">🏆 Classement</a><a class="secondary-button" href="{{ url_for('home') }}#games">Changer de jeu</a></div>
+    </section>
+</main>
+{% endblock %}
