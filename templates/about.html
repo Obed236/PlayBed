@@ -16,9 +16,9 @@
         <p>Le projet a ensuite évolué au-delà de sa version initiale. L'idée n'était plus seulement de faire fonctionner quelques jeux localement, mais de construire une véritable plateforme capable d'accueillir des joueurs, d'enregistrer des scores et de proposer une expérience agréable sur ordinateur comme sur téléphone.</p>
 
         <h2>Ce que propose la plateforme</h2>
-        <p>PlayBed regroupe actuellement sept jeux : le Pendu, Plus ou Moins, Vrai ou Faux, Quiz Express, Memory, Calcul Mental et Mot Mélangé. Les mécaniques couvrent vocabulaire, logique, mémoire, rapidité et culture générale.</p>
+        <p>PlayBed regroupe actuellement dix jeux : le Pendu, Plus ou Moins, Vrai ou Faux, Quiz Express, Memory, Calcul Mental, Mot Mélangé, Code Secret, Suites Logiques et Mot Mystère. Les mécaniques couvrent vocabulaire, logique, mémoire, rapidité et culture générale.</p>
         <p>Aucun compte traditionnel n'est nécessaire pour jouer. Le visiteur choisit un pseudo et peut ensuite construire sa progression : scores, niveau et XP, missions quotidiennes ou hebdomadaires, série de jours joués, succès et classements par période.</p>
-        <p>Les joueurs peuvent également partager leur profil public et créer des défis avec un score à battre. Les favoris et jeux récents sont conservés localement dans le navigateur afin de retrouver plus vite ce que l'on aime.</p>
+        <p>Les joueurs peuvent également partager leur profil public, créer des défis avec un score à battre et utiliser Quiz Duel pour affronter un autre joueur sur la même série de questions. Les favoris, jeux récents et joueurs suivis sont conservés localement dans le navigateur.</p>
 
         <h2>Une plateforme développée et améliorée progressivement</h2>
         <p>La version actuelle repose sur Flask et Python pour la partie serveur, avec une interface web en HTML, CSS et JavaScript. Les scores sont conservés dans une base de données afin d'alimenter les profils, la progression et les classements.</p>
@@ -34,8 +34,8 @@
 
         <div class="content-actions">
             <a class="primary-button" href="{{ url_for('home') }}#games">Voir les jeux</a>
+            <a class="secondary-button" href="{{ url_for('duel_create') }}">Quiz Duel</a>
             <a class="secondary-button" href="{{ url_for('growth_developers') }}">PlayBed Developer</a>
-            <a class="secondary-button" href="{{ url_for('creator_page') }}">Voir le profil du créateur</a>
         </div>
     </article>
 </main>
