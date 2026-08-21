@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 {% block title %}PlayBed — Mini-jeux gratuits, niveaux et défis{% endblock %}
-{% block description %}PlayBed propose dix mini-jeux gratuits, Quiz Duel multijoueur, niveaux, missions, défis, favoris, statistiques et classements. Joue sans compte depuis ton navigateur.{% endblock %}
+{% block description %}PlayBed propose onze mini-jeux gratuits, Quiz Duel multijoueur, Action ou Vérité en classe privée, niveaux, missions, défis, favoris, statistiques et classements. Joue sans compte depuis ton navigateur.{% endblock %}
 {% block content %}
 <main>
 <section class="hero">
     <div class="hero-copy">
         <span class="eyebrow">PLAYBED V3</span>
         <h1>Joue.<br>Progresse.<br><span>Défie tes amis.</span></h1>
-        <p>PlayBed rassemble dix mini-jeux gratuits et rapides avec niveaux, missions, séries quotidiennes, profils publics, Quiz Duel et classements. Aucun téléchargement ni compte obligatoire.</p>
-        <div class="hero-actions"><a class="primary-button" href="#games">Choisir un jeu</a><a class="secondary-button" href="{{ url_for('duel_create') }}">⚔️ Quiz Duel</a><a class="secondary-button" href="{{ url_for('platform_daily_challenge') }}">🔥 Défi du jour</a><a class="secondary-button" href="{{ url_for('leaderboard') }}">🏆 Classement</a></div>
+        <p>PlayBed rassemble onze mini-jeux gratuits et rapides avec niveaux, missions, séries quotidiennes, profils publics, Quiz Duel, Action ou Vérité et classements. Aucun téléchargement ni compte obligatoire.</p>
+        <div class="hero-actions"><a class="primary-button" href="#games">Choisir un jeu</a><a class="secondary-button" href="{{ url_for('av_home') }}">🎭 Action ou Vérité</a><a class="secondary-button" href="{{ url_for('duel_create') }}">⚔️ Quiz Duel</a><a class="secondary-button" href="{{ url_for('platform_daily_challenge') }}">🔥 Défi du jour</a><a class="secondary-button" href="{{ url_for('leaderboard') }}">🏆 Classement</a></div>
     </div>
-    <div class="hero-card"><div class="orb">🕹️</div><strong>{{ games|length }} jeux disponibles</strong><span>{{ total_scores }} score(s) enregistré(s)</span><div class="mini-stats"><span>⭐ Niveaux</span><span>🎯 Missions</span><span>👥 Quiz Duel</span><span>📱 PWA</span></div></div>
+    <div class="hero-card"><div class="orb">🕹️</div><strong>{{ games|length }} jeux disponibles</strong><span>{{ total_scores }} score(s) enregistré(s)</span><div class="mini-stats"><span>⭐ Niveaux</span><span>🎯 Missions</span><span>👥 Multijoueur</span><span>📱 PWA</span></div></div>
 </section>
 
 <section class="section player-panel" id="player">
@@ -62,7 +62,7 @@
     <div class="section-heading"><span class="eyebrow">EXPLORER</span><h2>Trouve ton prochain jeu.</h2><p>Recherche un jeu, filtre par catégorie ou retrouve rapidement tes favoris et tes dernières parties.</p></div>
     <div class="discovery-tools">
         <input id="gameSearch" type="search" placeholder="Rechercher un jeu…" aria-label="Rechercher un jeu">
-        <select id="gameCategory" aria-label="Filtrer par catégorie"><option value="all">Toutes les catégories</option><option value="Lettres">Lettres</option><option value="Logique">Logique</option><option value="Culture">Culture</option><option value="Quiz">Quiz</option><option value="Mémoire">Mémoire</option><option value="Rapidité">Rapidité</option></select>
+        <select id="gameCategory" aria-label="Filtrer par catégorie"><option value="all">Toutes les catégories</option><option value="Lettres">Lettres</option><option value="Logique">Logique</option><option value="Culture">Culture</option><option value="Quiz">Quiz</option><option value="Mémoire">Mémoire</option><option value="Rapidité">Rapidité</option><option value="Groupe">Groupe</option></select>
         <label><input id="favoritesOnly" type="checkbox"> Favoris seulement</label>
     </div>
     {% if growth_trending %}<div class="trending-strip" aria-label="Jeux populaires"><span class="season-pill">🔥 Populaires :</span>{% for item in growth_trending %}<a class="trending-chip" href="{{ url_for('start_game', game=item.slug) }}" data-game-start="{{ item.slug }}" data-source="trending">{{ item.emoji }} {{ item.name }}</a>{% endfor %}</div>{% endif %}
@@ -83,7 +83,7 @@
     </div>
 </section>
 
-<section class="section feature-section"><div class="section-heading"><span class="eyebrow">UNE VRAIE PLATEFORME</span><h2>Progresse, partage et reviens.</h2><p>PlayBed associe les mini-jeux à une progression globale, des objectifs quotidiens, des profils publics et du multijoueur asynchrone.</p></div><div class="info-grid"><article class="info-card"><span class="eyebrow">PROGRESSION</span><h3>XP et niveaux</h3><p>Chaque partie contribue à ton niveau global et met en valeur ta régularité.</p></article><article class="info-card"><span class="eyebrow">MISSIONS</span><h3>Objectifs quotidiens et hebdomadaires</h3><p>Des objectifs concrets t’encouragent à explorer plusieurs jeux et à progresser.</p></article><article class="info-card"><span class="eyebrow">SOCIAL</span><h3>Profils, défis et Quiz Duel</h3><p>Partage ton profil, suis localement des joueurs, crée un score à battre ou affronte un autre joueur sur les mêmes questions.</p></article></div><div class="section-cta"><a class="primary-button" href="{{ url_for('duel_create') }}">⚔️ Créer un Quiz Duel</a><a class="secondary-button" href="{{ url_for('platform_guides') }}">Découvrir les guides</a><a class="secondary-button" href="{{ url_for('growth_developers') }}">PlayBed Developer</a></div></section>
+<section class="section feature-section"><div class="section-heading"><span class="eyebrow">UNE VRAIE PLATEFORME</span><h2>Progresse, partage et reviens.</h2><p>PlayBed associe les mini-jeux à une progression globale, des objectifs quotidiens, des profils publics et plusieurs expériences multijoueurs.</p></div><div class="info-grid"><article class="info-card"><span class="eyebrow">PROGRESSION</span><h3>XP et niveaux</h3><p>Chaque partie scorée contribue à ton niveau global et met en valeur ta régularité.</p></article><article class="info-card"><span class="eyebrow">MISSIONS</span><h3>Objectifs quotidiens et hebdomadaires</h3><p>Des objectifs concrets t’encouragent à explorer plusieurs jeux et à progresser.</p></article><article class="info-card"><span class="eyebrow">SOCIAL</span><h3>Profils, défis, Quiz Duel et classes privées</h3><p>Partage ton profil, suis des joueurs, crée un score à battre, lance un Quiz Duel ou ouvre une classe Action ou Vérité à distance.</p></article></div><div class="section-cta"><a class="primary-button" href="{{ url_for('av_home') }}">🎭 Action ou Vérité</a><a class="secondary-button" href="{{ url_for('duel_create') }}">⚔️ Créer un Quiz Duel</a><a class="secondary-button" href="{{ url_for('platform_guides') }}">Découvrir les guides</a><a class="secondary-button" href="{{ url_for('growth_developers') }}">PlayBed Developer</a></div></section>
 
 <section class="section about"><span class="eyebrow">PLAYBED</span><h2>Un projet informatique devenu une plateforme publique.</h2><p>PlayBed a été créé et développé par Obed Gelly Ousmane Tassango dans le cadre d'un projet autour du web, du réseau et de la programmation. Le projet est désormais accessible gratuitement au public et continue d’évoluer avec de nouvelles fonctionnalités.</p><p>L’objectif reste simple : proposer une expérience rapide et agréable, sans inscription obligatoire, tout en donnant suffisamment d’informations aux joueurs pour comprendre les règles, les scores et la manière dont leurs données sont utilisées.</p><a class="secondary-button" href="{{ url_for('about_page') }}">En savoir plus sur PlayBed</a></section>
 </main>
