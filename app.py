@@ -2,9 +2,12 @@ import os
 
 from core import app, GAMES, db_connection, current_pseudo, init_db
 from engagement import register_engagement
-from platform_routes import register_platform_routes
+from platform_routes import register_platform_routes, GUIDES
+from editorial_guides import EDITORIAL_GUIDES
 from creator_routes import register_creator_routes
 from sitemap_routes import register_sitemap_route
+
+GUIDES.update(EDITORIAL_GUIDES)
 
 register_platform_routes(app, GAMES, db_connection, current_pseudo)
 register_engagement(app, GAMES, db_connection, current_pseudo)
