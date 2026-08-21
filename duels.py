@@ -27,6 +27,8 @@ def register_duels(app, db_connection, current_pseudo, load_quiz_questions):
                     created_at TEXT NOT NULL
                 )
             """)
+            cutoff = (datetime.now(timezone.utc) - timedelta(days=30)).isoformat()
+            conn.execute("DELETE FROM duels WHERE created_at < ?", (cutoff,))
             conn.commit()
         _TABLE_READY = True
 
