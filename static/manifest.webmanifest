@@ -1,8 +1,8 @@
 {
   "id": "/",
-  "name": "PlayBed — Mini-jeux gratuits",
+  "name": "PlayBed — Mini-jeux, niveaux et défis",
   "short_name": "PlayBed",
-  "description": "Mini-jeux gratuits, défis quotidiens, séries et classements.",
+  "description": "Mini-jeux gratuits avec niveaux, missions, profils, défis, séries et classements.",
   "lang": "fr-FR",
   "start_url": "/",
   "scope": "/",
@@ -16,7 +16,9 @@
     {"src": "/static/icons/playbed-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
   ],
   "shortcuts": [
+    {"name": "Jouer", "short_name": "Jeux", "url": "/#games"},
     {"name": "Défi du jour", "short_name": "Défi", "url": "/defi-du-jour"},
-    {"name": "Classement", "short_name": "Classement", "url": "/classement"}
+    {"name": "Classement", "short_name": "Classement", "url": "/classement"},
+    {"name": "Guides", "short_name": "Guides", "url": "/guides"}
   ]
 }
