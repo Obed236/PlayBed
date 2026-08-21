@@ -11,6 +11,7 @@
         <div class="share-inline">
             <span class="season-pill">⭐ Niveau {{ progression.level }}</span>
             <span class="season-pill">🏆 Rang {% if rank %}#{{ rank }}{% else %}—{% endif %}</span>
+            {% if pseudo != viewed_pseudo %}<button class="secondary-button" type="button" data-follow-player="{{ viewed_pseudo }}" aria-pressed="false">☆ Suivre ce joueur</button>{% endif %}
             <button class="secondary-button" type="button" data-share-url="{{ request.url }}" data-share-title="Profil de {{ viewed_pseudo }} sur PlayBed">Partager le profil</button>
         </div>
     </header>
