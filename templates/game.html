@@ -2,7 +2,7 @@
 {% block title %}{{ meta.name }} — PlayBed{% endblock %}
 {% block description %}Joue gratuitement à {{ meta.name }} sur PlayBed.{% endblock %}
 {% block content %}
-<main class="play-shell">
+<main class="play-shell" data-current-game="{{ game }}">
     <a class="back-link" href="{{ url_for('home') }}#games">← Tous les jeux</a>
 
     <section class="play-card">
@@ -18,74 +18,32 @@
         <div class="message">{{ state.message }}</div>
 
         {% if game == 'pom' %}
-            <div class="stat-row">
-                <div><span>Essais</span><strong>{{ state.attempts }}</strong></div>
-                <div><span>Intervalle</span><strong>0 — 100</strong></div>
-            </div>
-            {% if not state.finished %}
-            <form method="post" class="game-form">
-                <label for="guess">Ton nombre</label>
-                <input id="guess" name="guess" type="number" min="0" max="100" required autofocus placeholder="Ex. 42">
-                <button class="primary-button" type="submit">Valider</button>
-            </form>
-            {% endif %}
+            <div class="stat-row"><div><span>Essais</span><strong>{{ state.attempts }}</strong></div><div><span>Intervalle</span><strong>0 — 100</strong></div></div>
+            {% if not state.finished %}<form method="post" class="game-form"><label for="guess">Ton nombre</label><input id="guess" name="guess" type="number" min="0" max="100" required autofocus placeholder="Ex. 42"><button class="primary-button" type="submit">Valider</button></form>{% endif %}
 
         {% elif game == 'pendu' %}
             <div class="word-display">{{ visible_word }}</div>
-            <div class="stat-row">
-                <div><span>Vies restantes</span><strong>{{ state.lives }}</strong></div>
-                <div><span>Lettres testées</span><strong>{{ state.guessed|join(', ') if state.guessed else '—' }}</strong></div>
-            </div>
-            {% if not state.finished %}
-            <form method="post" class="game-form">
-                <label for="letter">Propose une lettre</label>
-                <input id="letter" name="letter" type="text" maxlength="1" autocomplete="off" required autofocus placeholder="A">
-                <button class="primary-button" type="submit">Essayer</button>
-            </form>
-            {% endif %}
+            <div class="stat-row"><div><span>Vies restantes</span><strong>{{ state.lives }}</strong></div><div><span>Lettres testées</span><strong>{{ state.guessed|join(', ') if state.guessed else '—' }}</strong></div></div>
+            {% if not state.finished %}<form method="post" class="game-form"><label for="letter">Propose une lettre</label><input id="letter" name="letter" type="text" maxlength="1" autocomplete="off" required autofocus placeholder="A"><button class="primary-button" type="submit">Essayer</button></form>{% endif %}
 
         {% elif game == 'vof' %}
-            <div class="stat-row">
-                <div><span>Question</span><strong>{{ state.index + 1 if not state.finished else state.questions|length }}/{{ state.questions|length }}</strong></div>
-                <div><span>Score</span><strong>{{ state.score }}</strong></div>
-            </div>
-            {% if not state.finished %}
-                <div class="question-box">{{ current_question.question }}</div>
-                <form method="post" class="choice-grid">
-                    <button class="choice-button positive" type="submit" name="answer" value="vrai">✓ Vrai</button>
-                    <button class="choice-button negative" type="submit" name="answer" value="faux">✕ Faux</button>
-                </form>
-            {% endif %}
+            <div class="stat-row"><div><span>Question</span><strong>{{ state.index + 1 if not state.finished else state.questions|length }}/{{ state.questions|length }}</strong></div><div><span>Score</span><strong>{{ state.score }}</strong></div></div>
+            {% if not state.finished %}<div class="question-box">{{ current_question.question }}</div><form method="post" class="choice-grid"><button class="choice-button positive" type="submit" name="answer" value="vrai">✓ Vrai</button><button class="choice-button negative" type="submit" name="answer" value="faux">✕ Faux</button></form>{% endif %}
 
         {% elif game == 'quiz' %}
-            <div class="stat-row">
-                <div><span>Question</span><strong>{{ state.index + 1 if not state.finished else state.questions|length }}/{{ state.questions|length }}</strong></div>
-                <div><span>Score</span><strong>{{ state.score }}</strong></div>
-            </div>
-            {% if not state.finished %}
-                <div class="question-box">{{ current_question.question }}</div>
-                <form method="post" class="quiz-grid">
-                    {% for option in current_question.options %}
-                        <button class="choice-button" type="submit" name="answer" value="{{ option }}">{{ option }}</button>
-                    {% endfor %}
-                </form>
-            {% endif %}
+            <div class="stat-row"><div><span>Question</span><strong>{{ state.index + 1 if not state.finished else state.questions|length }}/{{ state.questions|length }}</strong></div><div><span>Score</span><strong>{{ state.score }}</strong></div></div>
+            {% if not state.finished %}<div class="question-box">{{ current_question.question }}</div><form method="post" class="quiz-grid">{% for option in current_question.options %}<button class="choice-button" type="submit" name="answer" value="{{ option }}">{{ option }}</button>{% endfor %}</form>{% endif %}
 
         {% elif game == 'memory' %}
-            <div class="memory-toolbar">
-                <div><span>Coups</span><strong id="memoryMoves">0</strong></div>
-                <div><span>Temps</span><strong><span id="memoryTime">0</span>s</strong></div>
-            </div>
-            <div id="memoryGame" class="memory-grid" data-score-url="{{ url_for('memory_score') }}"></div>
-            <div id="memoryResult" class="memory-result" hidden></div>
+            <div class="memory-toolbar"><div><span>Coups</span><strong id="memoryMoves">0</strong></div><div><span>Temps</span><strong><span id="memoryTime">0</span>s</strong></div></div>
+            <div id="memoryGame" class="memory-grid" data-score-url="{{ url_for('memory_score') }}"></div><div id="memoryResult" class="memory-result" hidden></div>
         {% endif %}
 
-        {% if state.finished and state.points is defined %}
-            <div class="points-earned">+ {{ state.points }} points 🏆</div>
-        {% endif %}
+        {% if state.finished and state.points is defined %}<div class="points-earned">+ {{ state.points }} points 🏆</div>{% endif %}
 
         <div class="play-actions">
-            <a class="secondary-button" href="{{ url_for('restart_game', game=game) }}">↻ Nouvelle partie</a>
+            <a class="secondary-button" href="{{ url_for('restart_game', game=game) }}" data-game-start="{{ game }}" data-source="restart">↻ Nouvelle partie</a>
+            <a class="secondary-button" href="{{ url_for('growth_create_challenge', game=game) }}">⚔️ Créer un défi</a>
             <a class="secondary-button" href="{{ url_for('leaderboard') }}">🏆 Classement</a>
             <a class="secondary-button" href="{{ url_for('home') }}#games">Changer de jeu</a>
         </div>
