@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block robots %}noindex,nofollow{% endblock %}
+{% block title %}Classe {{ room.code }} — Action ou Vérité | PlayBed{% endblock %}
+{% block description %}Classe privée Action ou Vérité PlayBed.{% endblock %}
+{% block head_extra %}<link rel="stylesheet" href="{{ url_for('static', filename='css/action-verite.css') }}"><script defer src="{{ url_for('static', filename='js/action-verite.js') }}"></script>{% endblock %}
+{% block content %}
+<main class="content-shell av-shell" data-av-room data-state-url="{{ url_for('av_room_state', code=room.code) }}" data-room-version="{{ room.updated_at }}">
+    <nav class="breadcrumb"><a href="{{ url_for('av_home') }}">Action ou Vérité</a><span>›</span><span>Classe {{ room.code }}</span></nav>
+    <section class="av-room-header"><div><span class="eyebrow">CLASSE PRIVÉE</span><h1>Code <button class="av-code-button" type="button" data-copy-code="{{ room.code }}">{{ room.code }}</button></h1><p>Partage uniquement ce code avec les personnes que tu veux inviter.</p></div><span class="av-mode-pill {% if adult_mode %}adult{% endif %}">{% if adult_mode %}🔞 Groupe 18+{% else %}🛡️ Grand public{% endif %}</span></section>
+    <section class="av-room-layout">
+        <aside class="content-card av-room-players"><div class="av-side-title"><h2>Joueurs</h2><span>{{ players|length }}/5</span></div><div class="av-player-list">{% for player in players %}<div class="av-player-chip {% if current_player and current_player.player_token == player.player_token %}current{% endif %}"><span>👤</span><strong>{{ player.name }}</strong><small>{% if player.is_adult %}18+{% else %}-18{% endif %}</small>{% if player.player_token == room.creator_token %}<em>Créateur</em>{% endif %}</div>{% endfor %}</div>{% if room.status == 'waiting' %}<p class="av-note">La partie peut démarrer dès que vous êtes au moins 2.</p>{% endif %}</aside>
+        <section class="av-game-card av-remote-game">
+            {% if room.status == 'waiting' %}
+                <span class="eyebrow">SALLE D’ATTENTE</span><h2>En attente des autres joueurs…</h2><p>Les téléphones se synchronisent automatiquement. Dès qu’un joueur rejoint, la liste se met à jour.</p>{% if is_creator %}<form method="post" action="{{ url_for('av_room_start', code=room.code) }}"><button class="primary-button" type="submit" {% if players|length < 2 %}disabled{% endif %}>Démarrer la partie</button></form>{% else %}<p class="av-waiting">Le créateur lancera la partie.</p>{% endif %}
+            {% else %}
+                <div class="av-game-top"><div><span class="eyebrow">C’EST AU TOUR DE</span><h2>{{ current_player.name }}</h2></div>{% if is_current %}<span class="season-pill">Ton tour</span>{% endif %}</div>
+                {% if not room.current_prompt %}
+                    {% if is_current %}<div class="av-choice"><h3>Action ou Vérité ?</h3><form method="post" action="{{ url_for('av_room_choose', code=room.code) }}"><button class="av-choice-button action" name="kind" value="action" type="submit">🔥 Action</button><button class="av-choice-button truth" name="kind" value="verite" type="submit">💬 Vérité</button></form></div>{% else %}<div class="av-waiting"><strong>{{ current_player.name }}</strong> choisit Action ou Vérité sur son téléphone.</div>{% endif %}
+                {% else %}
+                    <div class="av-prompt"><span class="eyebrow">{% if room.current_kind == 'action' %}🔥 ACTION{% else %}💬 VÉRITÉ{% endif %}</span><p>{{ room.current_prompt }}</p></div>{% if is_current or is_creator %}<form method="post" action="{{ url_for('av_room_next', code=room.code) }}" class="av-next-form"><button class="primary-button" type="submit">Tour suivant →</button></form>{% else %}<div class="av-waiting">En attente de {{ current_player.name }}…</div>{% endif %}
+                {% endif %}
+            {% endif %}
+        </section>
+    </section>
+    {% if is_creator %}<form method="post" action="{{ url_for('av_room_close', code=room.code) }}" class="av-close-room" onsubmit="return confirm('Fermer cette classe pour tout le monde ?');"><button class="danger-link" type="submit">Fermer la classe</button></form>{% endif %}
+</main>
+{% endblock %}

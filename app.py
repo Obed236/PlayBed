@@ -5,6 +5,7 @@ from engagement import register_engagement
 from platform_routes import register_platform_routes, GUIDES, GAME_CONTENT
 from editorial_guides import EDITORIAL_GUIDES
 from extra_games import EXTRA_GAMES, EXTRA_GAME_CONTENT, register_extra_games
+from action_verite import ACTION_GAME, ACTION_GAME_CONTENT, register_action_verite
 from duels import register_duels
 from creator_routes import register_creator_routes
 from sitemap_routes import register_sitemap_route
@@ -12,19 +13,23 @@ from growth import register_growth
 
 GUIDES.update(EDITORIAL_GUIDES)
 GAMES.update(EXTRA_GAMES)
+GAMES.update(ACTION_GAME)
 GAME_CONTENT.update(EXTRA_GAME_CONTENT)
+GAME_CONTENT.update(ACTION_GAME_CONTENT)
 
 
 class PlatformGames(dict):
-    """Expose the full catalog while keeping legacy daily-challenge rotation on its supported games."""
+    """Expose le catalogue complet tout en limitant le défi quotidien aux jeux scorés compatibles."""
     def keys(self):
-        return [slug for slug in super().keys() if slug not in EXTRA_GAMES]
+        excluded = set(EXTRA_GAMES) | set(ACTION_GAME)
+        return [slug for slug in super().keys() if slug not in excluded]
 
 
 platform_games = PlatformGames(GAMES)
 
 register_platform_routes(app, platform_games, db_connection, current_pseudo)
 register_extra_games(app, GAMES, current_pseudo, save_score, load_words)
+register_action_verite(app, GAMES, GAME_CONTENT, db_connection, current_pseudo)
 register_duels(app, db_connection, current_pseudo, load_quiz_questions)
 register_engagement(app, GAMES, db_connection, current_pseudo)
 register_growth(app, GAMES, db_connection, current_pseudo)
