@@ -25,8 +25,8 @@
     <meta name="apple-mobile-web-app-title" content="PlayBed">
     <meta name="google-adsense-account" content="ca-pub-8115913863262508">
     <meta name="robots" content="{% block robots %}index,follow,max-image-preview:large{% endblock %}">
-    <meta property="og:title" content="{% block og_title %}PlayBed V2{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}Joue gratuitement à des mini-jeux rapides sur PlayBed.{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}PlayBed V3{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Joue, progresse, relève des missions et défie tes amis gratuitement sur PlayBed.{% endblock %}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://playbed.fr{{ request.path }}">
     <title>{% block title %}PlayBed{% endblock %}</title>
@@ -40,7 +40,7 @@
     <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script defer src="{{ url_for('static', filename='js/platform.js') }}"></script>
     <script defer src="{{ url_for('static', filename='js/pwa.js') }}"></script>
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","@id":"https://playbed.fr/#website","name":"PlayBed","url":"https://playbed.fr/","inLanguage":"fr","description":"Plateforme gratuite de mini-jeux en ligne : Pendu, Plus ou Moins, Vrai ou Faux, Quiz Express et Memory.","creator":{"@id":"https://playbed.fr/createur#person"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","@id":"https://playbed.fr/#website","name":"PlayBed","url":"https://playbed.fr/","inLanguage":"fr","description":"Plateforme gratuite de mini-jeux en ligne avec progression, missions, défis et classements.","creator":{"@id":"https://playbed.fr/createur#person"}}</script>
     {% block head_extra %}{% endblock %}
 </head>
 
@@ -54,7 +54,7 @@
         <a class="brand" href="{{ url_for('home') }}" aria-label="Accueil PlayBed"><span aria-hidden="true">🎮</span> PlayBed</a>
         <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-expanded="false" aria-controls="mainNavigation" aria-label="Ouvrir le menu">☰</button>
         <nav class="nav-links" id="mainNavigation" aria-label="Navigation principale">
-            <a href="{{ url_for('home') }}#games">Jeux</a>
+            <a href="{{ url_for('platform_explore') }}">Explorer</a>
             <a href="{{ url_for('platform_guides') }}">Guides</a>
             <a href="{{ url_for('platform_daily_challenge') }}">Défi du jour</a>
             <a href="{{ url_for('leaderboard') }}">Classement</a>
@@ -67,7 +67,7 @@
     <footer>
         <div class="footer-copy"><span>© 2026 PlayBed · Créé et développé par <a href="{{ url_for('creator_page') }}">Obed Gelly Ousmane Tassango</a>.</span><span>Mini-jeux gratuits · Mobile et ordinateur · Aucun compte obligatoire</span></div>
         <nav class="footer-links" aria-label="Informations et mentions">
-            <a href="{{ url_for('about_page') }}">À propos</a><a href="{{ url_for('creator_page') }}">Créateur</a><a href="{{ url_for('how_to_play_page') }}">Comment jouer</a><a href="{{ url_for('platform_guides') }}">Guides</a><a href="{{ url_for('platform_news') }}">Nouveautés</a><a href="{{ url_for('faq_page') }}">FAQ</a><a href="{{ url_for('site_map_page') }}">Plan du site</a><a href="{{ url_for('platform_contact') }}">Contact</a><a href="{{ url_for('platform_legal') }}">Mentions légales</a><a href="{{ url_for('privacy_page') }}">Confidentialité</a><a href="{{ url_for('terms_page') }}">Conditions d’utilisation</a><button class="footer-link-button pwa-install-button" data-pwa-install type="button" hidden>Installer PlayBed</button><button class="footer-link-button" id="openPrivacyPreferences" type="button">Gérer les cookies</button>
+            <a href="{{ url_for('platform_explore') }}">Explorer</a><a href="{{ url_for('about_page') }}">À propos</a><a href="{{ url_for('creator_page') }}">Créateur</a><a href="{{ url_for('how_to_play_page') }}">Comment jouer</a><a href="{{ url_for('platform_guides') }}">Guides</a><a href="{{ url_for('platform_developers') }}">Developers</a><a href="{{ url_for('platform_news') }}">Nouveautés</a><a href="{{ url_for('faq_page') }}">FAQ</a><a href="{{ url_for('site_map_page') }}">Plan du site</a><a href="{{ url_for('platform_contact') }}">Contact</a><a href="{{ url_for('platform_legal') }}">Mentions légales</a><a href="{{ url_for('privacy_page') }}">Confidentialité</a><a href="{{ url_for('terms_page') }}">Conditions d’utilisation</a><button class="footer-link-button pwa-install-button" data-pwa-install type="button" hidden>Installer PlayBed</button><button class="footer-link-button" id="openPrivacyPreferences" type="button">Gérer les cookies</button>
         </nav>
     </footer>
     <section class="consent-panel" id="consentPanel" hidden aria-labelledby="consentTitle" aria-modal="true" role="dialog">
