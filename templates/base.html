@@ -46,7 +46,8 @@
     {% block head_extra %}{% endblock %}
 </head>
 
-<body data-ads-page="{{ 'false' if request.path.startswith('/play/') else 'true' }}">
+{% set no_ads_page = request.path.startswith('/play/') or request.path.startswith('/arcade/') or request.path.startswith('/profil') or request.path.startswith('/joueur/') or request.path.startswith('/defi/') or request.path.startswith('/classement') %}
+<body data-ads-page="{{ 'false' if no_ads_page else 'true' }}">
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-THGHCD6K"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
