@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="{{ copy.html_lang }}" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ copy.description }}">
+    <meta name="robots" content="index,follow,max-image-preview:large">
+    <meta name="theme-color" content="#08111f">
+    <title>{{ copy.title }}</title>
+    <link rel="canonical" href="https://playbed.fr/{{ lang }}">
+    <link rel="alternate" hreflang="fr" href="https://playbed.fr/">
+    <link rel="alternate" hreflang="en" href="https://playbed.fr/en">
+    <link rel="alternate" hreflang="es" href="https://playbed.fr/es">
+    <link rel="alternate" hreflang="x-default" href="https://playbed.fr/">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static', filename='icons/playbed-192.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/platform.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/growth.css') }}">
+</head>
+<body>
+    <header class="navbar">
+        <a class="brand" href="{{ url_for('home') }}"><span aria-hidden="true">🎮</span> PlayBed</a>
+        <nav class="nav-links" aria-label="Language navigation">
+            <a href="{{ url_for('home') }}">FR</a>
+            <a href="{{ url_for('international_en') }}">EN</a>
+            <a href="{{ url_for('international_es') }}">ES</a>
+        </nav>
+    </header>
+    <main>
+        <section class="hero">
+            <div class="hero-copy">
+                <span class="eyebrow">{{ copy.eyebrow }}</span>
+                <h1>{{ copy.heading }}</h1>
+                <p>{{ copy.intro }}</p>
+                <div class="hero-actions"><a class="primary-button" href="#games">{{ copy.catalog_title }}</a><a class="secondary-button" href="{{ url_for('home') }}">{{ copy.cta }}</a></div>
+            </div>
+            <div class="hero-card"><div class="orb">🌍</div><strong>{{ localized_games|length }} games / juegos</strong><span>French · English beta · Español beta</span><div class="mini-stats"><span>🎮 Browser</span><span>⭐ XP</span><span>⚔️ Duel</span><span>📱 PWA</span></div></div>
+        </section>
+
+        <section class="section" id="games">
+            <div class="section-heading"><span class="eyebrow">CATALOG</span><h2>{{ copy.catalog_title }}</h2><p>{{ copy.catalog_intro }}</p></div>
+            <div class="game-grid">
+                {% for game in localized_games %}
+                <article class="game-card">
+                    <div class="card-top"><div class="game-icon">{{ game.emoji }}</div><span class="game-tag">{{ game.tag }}</span></div>
+                    <h3>{{ game.name }}</h3><p>{{ game.description }}</p>
+                    <div class="card-actions"><a class="text-action" href="{{ url_for('platform_game_detail', game=game.slug) }}">{{ copy.rules }}</a><a class="text-action strong" href="{{ url_for('start_game', game=game.slug) }}">{{ copy.play }} →</a></div>
+                </article>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="section feature-section">
+            <div class="section-heading"><span class="eyebrow">PLAYBED</span><h2>{{ copy.features_title }}</h2></div>
+            <div class="info-grid">{% for title, text in copy.features %}<article class="info-card"><h3>{{ title }}</h3><p>{{ text }}</p></article>{% endfor %}</div>
+            <div class="content-card prose" style="margin-top:24px"><p>{{ copy.language_note }}</p><div class="content-actions"><a class="primary-button" href="{{ url_for('home') }}">{{ copy.cta }}</a><a class="secondary-button" href="{{ url_for('growth_developers') }}">PlayBed Developer</a></div></div>
+        </section>
+    </main>
+    <footer><div class="footer-copy"><span>© 2026 PlayBed</span><span>FR · EN beta · ES beta</span></div></footer>
+</body>
+</html>
