@@ -2,7 +2,7 @@
   "id": "/",
   "name": "PlayBed — Mini-jeux, niveaux et défis",
   "short_name": "PlayBed",
-  "description": "Mini-jeux gratuits avec niveaux, missions, profils, défis, séries et classements.",
+  "description": "Mini-jeux gratuits avec niveaux, missions, profils, défis, séries, classes privées et classements.",
   "lang": "fr-FR",
   "start_url": "/",
   "scope": "/",
@@ -17,6 +17,7 @@
   ],
   "shortcuts": [
     {"name": "Jouer", "short_name": "Jeux", "url": "/#games"},
+    {"name": "Action ou Vérité", "short_name": "Action/Vérité", "url": "/action-verite"},
     {"name": "Quiz Duel", "short_name": "Duel", "url": "/duel/nouveau"},
     {"name": "Défi du jour", "short_name": "Défi", "url": "/defi-du-jour"},
     {"name": "Classement", "short_name": "Classement", "url": "/classement"},
