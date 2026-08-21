@@ -18,7 +18,7 @@
             <a class="primary-button" href="{{ url_for('home') }}#player">Choisir un pseudo pour jouer</a>
             {% endif %}
             <button class="secondary-button" type="button" data-share-url="{{ share_url }}" data-share-title="Défi {{ meta.name }} sur PlayBed">Partager</button>
-            <a class="secondary-button" href="{{ url_for('growth_public_profile', pseudo=challenge.challenger) }}">Voir le profil du challenger</a>
+            <a class="secondary-button" href="{{ url_for('home') }}#games">Explorer les jeux</a>
         </div>
     </section>
 </main>
