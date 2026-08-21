@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block robots %}noindex,follow{% endblock %}
+{% block title %}Profil de {{ viewed_pseudo }} — PlayBed{% endblock %}
+{% block description %}Profil public PlayBed de {{ viewed_pseudo }} : niveau, points, classement et meilleurs scores.{% endblock %}
+{% block content %}
+<main class="content-shell">
+    <header class="content-hero">
+        <span class="eyebrow">PROFIL PUBLIC</span>
+        <h1>👤 {{ viewed_pseudo }}</h1>
+        <p>Un aperçu public des performances enregistrées sous ce pseudo sur PlayBed.</p>
+        <div class="share-inline">
+            <span class="season-pill">⭐ Niveau {{ progression.level }}</span>
+            <span class="season-pill">🏆 Rang {% if rank %}#{{ rank }}{% else %}—{% endif %}</span>
+            <button class="secondary-button" type="button" data-share-url="{{ request.url }}" data-share-title="Profil de {{ viewed_pseudo }} sur PlayBed">Partager le profil</button>
+        </div>
+    </header>
+
+    <section class="public-profile-grid">
+        <div><span>Points</span><strong>{{ stats.total_points }}</strong></div>
+        <div><span>Parties</span><strong>{{ stats.games_played }}</strong></div>
+        <div><span>Meilleur score</span><strong>{{ stats.best_score }}</strong></div>
+        <div><span>Jeux explorés</span><strong>{{ stats.distinct_games }}/{{ games|length }}</strong></div>
+    </section>
+
+    <section class="content-card prose">
+        <h2>Progression</h2>
+        <div class="level-line"><strong>Niveau {{ progression.level }}</strong><span>{{ progression.current }} / {{ progression.needed }} XP</span></div>
+        <div class="growth-bar"><span style="width: {{ progression.percent }}%"></span></div>
+    </section>
+
+    <section class="profile-section">
+        <div class="section-heading compact"><span class="eyebrow">PAR JEU</span><h2>Meilleures performances</h2></div>
+        <div class="profile-game-grid">
+            {% for slug, game in games.items() %}
+            {% set item = by_game.get(slug) %}
+            {% if item %}
+            <article class="profile-game-card">
+                <div class="card-top"><span class="game-icon">{{ game.emoji }}</span><span class="game-tag">{{ game.tag }}</span></div>
+                <h3>{{ game.name }}</h3>
+                <dl><div><dt>Parties</dt><dd>{{ item.games_played }}</dd></div><div><dt>Meilleur</dt><dd>{{ item.best_points }} pts</dd></div><div><dt>Total</dt><dd>{{ item.total_points }} pts</dd></div></dl>
+                {% if pseudo == viewed_pseudo %}<a href="{{ url_for('growth_create_challenge', game=slug) }}">Créer un défi →</a>{% else %}<a href="{{ url_for('start_game', game=slug) }}" data-game-start="{{ slug }}" data-source="public-profile">Jouer à {{ game.name }} →</a>{% endif %}
+            </article>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="profile-section">
+        <div class="section-heading compact"><span class="eyebrow">HISTORIQUE</span><h2>Dernières parties</h2></div>
+        <div class="content-card table-wrap">
+            <table><thead><tr><th>Jeu</th><th>Score</th><th>Date</th></tr></thead><tbody>
+            {% for row in recent %}<tr><td>{{ games[row.game].emoji }} {{ games[row.game].name }}</td><td><strong>{{ row.points }} pts</strong></td><td>{{ row.created_at[:10] }}</td></tr>{% endfor %}
+            </tbody></table>
+        </div>
+    </section>
+</main>
+{% endblock %}
