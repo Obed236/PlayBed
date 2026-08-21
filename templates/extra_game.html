@@ -11,16 +11,30 @@
 
         {% if game == 'calcul' %}
             <div class="stat-row"><div><span>Question</span><strong>{{ state.index + 1 if not state.finished else 10 }}/10</strong></div><div><span>Bonnes réponses</span><strong>{{ state.correct }}</strong></div></div>
-            {% if not state.finished %}
-                <div class="question-box">{{ current_question.label }} = ?</div>
-                <form method="post" class="game-form"><label for="answer">Ta réponse</label><input id="answer" name="answer" type="number" required autofocus autocomplete="off"><button class="primary-button" type="submit">Valider</button></form>
-            {% endif %}
+            {% if not state.finished %}<div class="question-box">{{ current_question.label }} = ?</div><form method="post" class="game-form"><label for="answer">Ta réponse</label><input id="answer" name="answer" type="number" required autofocus autocomplete="off"><button class="primary-button" type="submit">Valider</button></form>{% endif %}
+
         {% elif game == 'melange' %}
             <div class="word-display">{{ state.scrambled }}</div>
             <div class="stat-row"><div><span>Essais</span><strong>{{ state.attempts }}/5</strong></div><div><span>Lettres</span><strong>{{ state.word|length }}</strong></div></div>
-            {% if not state.finished %}
-                <form method="post" class="game-form"><label for="guess">Quel est le mot ?</label><input id="guess" name="guess" type="text" required autofocus autocomplete="off"><button class="primary-button" type="submit">Proposer</button></form>
-            {% endif %}
+            {% if not state.finished %}<form method="post" class="game-form"><label for="guess">Quel est le mot ?</label><input id="guess" name="guess" type="text" required autofocus autocomplete="off"><button class="primary-button" type="submit">Proposer</button></form>{% endif %}
+
+        {% elif game == 'code' %}
+            <div class="stat-row"><div><span>Essais</span><strong>{{ state.attempts }}/10</strong></div><div><span>Code</span><strong>4 chiffres</strong></div></div>
+            {% if state.history %}<div class="code-history" aria-label="Historique des tentatives">{% for item in state.history|reverse %}<div><strong>{{ item.guess }}</strong><span>✅ {{ item.exact }} bien placé{% if item.exact != 1 %}s{% endif %}</span><span>↔️ {{ item.misplaced }} mal placé{% if item.misplaced != 1 %}s{% endif %}</span></div>{% endfor %}</div>{% endif %}
+            {% if not state.finished %}<form method="post" class="game-form"><label for="guess">Propose quatre chiffres</label><input id="guess" name="guess" type="text" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required autofocus autocomplete="off" placeholder="Ex. 5072"><button class="primary-button" type="submit">Tester le code</button></form>{% endif %}
+
+        {% elif game == 'suite' %}
+            <div class="stat-row"><div><span>Question</span><strong>{{ state.index + 1 if not state.finished else 10 }}/10</strong></div><div><span>Bonnes réponses</span><strong>{{ state.correct }}</strong></div></div>
+            {% if not state.finished %}<div class="question-box">{{ current_question.label }}</div><form method="post" class="game-form"><label for="answer">Nombre suivant</label><input id="answer" name="answer" type="number" required autofocus autocomplete="off"><button class="primary-button" type="submit">Valider</button></form>{% endif %}
+
+        {% elif game == 'mot5' %}
+            <div class="stat-row"><div><span>Essais</span><strong>{{ state.attempts }}/6</strong></div><div><span>Mot</span><strong>5 lettres</strong></div></div>
+            <div class="wordle-board" aria-label="Tentatives Mot Mystère">
+                {% for item in state.history %}<div class="wordle-row">{% for letter in item.guess %}<span class="wordle-cell {{ item.feedback[loop.index0] }}">{{ letter }}</span>{% endfor %}</div>{% endfor %}
+                {% for _ in range(6 - state.history|length) %}<div class="wordle-row">{% for _ in range(5) %}<span class="wordle-cell"></span>{% endfor %}</div>{% endfor %}
+            </div>
+            <p class="muted"><strong>Vert</strong> : bonne place · <strong>Jaune</strong> : présent ailleurs · Gris : absent</p>
+            {% if not state.finished %}<form method="post" class="game-form"><label for="guess">Ton mot de cinq lettres</label><input id="guess" name="guess" type="text" minlength="5" maxlength="5" required autofocus autocomplete="off"><button class="primary-button" type="submit">Proposer</button></form>{% endif %}
         {% endif %}
 
         {% if state.finished and state.points is defined %}<div class="points-earned">+ {{ state.points }} points 🏆</div>{% endif %}
