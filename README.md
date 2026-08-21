@@ -23,7 +23,6 @@ PlayBed est une plateforme gratuite de mini-jeux web, accessible depuis un navig
 - analytics d’interaction et suivi des Core Web Vitals
 - pages éditoriales, guides, FAQ, mentions légales et politique de confidentialité
 - `robots.txt`, `sitemap.xml`, canonical et données structurées
-- base expérimentale PlayBed Developer / SDK
 - endpoint de santé `/health`
 
 ## Jeux disponibles
@@ -88,7 +87,7 @@ Variables recommandées :
 - `growth.py` : XP, niveaux, missions, profils publics et défis ;
 - `duels.py` : Quiz Duel ;
 - `editorial_guides.py` : contenus éditoriaux longs ;
-- `static/` : CSS, JavaScript, PWA et SDK ;
+- `static/` : CSS, JavaScript et PWA ;
 - `templates/` : interfaces Jinja.
 
 ## Objectif

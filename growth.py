@@ -217,7 +217,3 @@ def register_growth(app, games, db_connection, current_pseudo):
             pseudo=current_pseudo(),
             share_url=share_url,
         )
-
-    @app.route("/developpeurs")
-    def growth_developers():
-        return render_template("developers.html", pseudo=current_pseudo(), games=games)
