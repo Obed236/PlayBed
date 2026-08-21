@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% block robots %}noindex,follow{% endblock %}
 {% block title %}Défi {{ meta.name }} — {{ target }} points | PlayBed{% endblock %}
 {% block description %}Un joueur te défie d’atteindre {{ target }} points sur {{ meta.name }}. Relève le défi gratuitement sur PlayBed.{% endblock %}
 {% block content %}
