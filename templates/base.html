@@ -41,12 +41,13 @@
     <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script defer src="{{ url_for('static', filename='js/platform.js') }}"></script>
     <script defer src="{{ url_for('static', filename='js/pwa.js') }}"></script>
+    <script defer src="{{ url_for('static', filename='js/playbed-sdk.js') }}"></script>
     <script defer src="{{ url_for('static', filename='js/growth.js') }}"></script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","@id":"https://playbed.fr/#website","name":"PlayBed","url":"https://playbed.fr/","inLanguage":"fr","description":"Plateforme gratuite de mini-jeux en ligne avec niveaux, missions, défis, classements et profils joueurs.","creator":{"@id":"https://playbed.fr/createur#person"}}</script>
     {% block head_extra %}{% endblock %}
 </head>
 
-{% set no_ads_page = request.path.startswith('/play/') or request.path.startswith('/arcade/') or request.path.startswith('/profil') or request.path.startswith('/joueur/') or request.path.startswith('/defi/') or request.path.startswith('/classement') %}
+{% set no_ads_page = request.path.startswith('/play/') or request.path.startswith('/arcade/') or request.path.startswith('/profil') or request.path.startswith('/joueur/') or request.path.startswith('/defi/') or request.path.startswith('/duel/') or request.path.startswith('/classement') %}
 <body data-ads-page="{{ 'false' if no_ads_page else 'true' }}">
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-THGHCD6K"
