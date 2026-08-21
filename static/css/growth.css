@@ -44,6 +44,16 @@
 .duel-scoreboard span, .duel-scoreboard small { display: block; color: var(--muted); }
 .duel-scoreboard strong { display: block; font-size: clamp(2.4rem, 7vw, 4.5rem); letter-spacing: -.05em; margin: 7px 0; }
 .duel-vs { font-weight: 950; color: #9f8cff; }
+.code-history { display: grid; gap: 8px; margin: 20px 0; }
+.code-history > div { display: grid; grid-template-columns: 80px 1fr 1fr; gap: 10px; align-items: center; padding: 11px 13px; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--border); }
+.code-history strong { letter-spacing: .18em; }
+.code-history span { color: var(--muted); font-size: .88rem; }
+.wordle-board { display: grid; gap: 7px; justify-content: center; margin: 24px auto; }
+.wordle-row { display: grid; grid-template-columns: repeat(5, 48px); gap: 7px; }
+.wordle-cell { display: grid; place-items: center; width: 48px; height: 48px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-2); font-weight: 950; font-size: 1.2rem; }
+.wordle-cell.correct { background: #257a4b; border-color: #3fa66c; color: #fff; }
+.wordle-cell.present { background: #9a7b1d; border-color: #c3a33b; color: #fff; }
+.wordle-cell.absent { background: #3d4652; color: #fff; }
 .public-profile-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 22px 0; }
 .public-profile-grid > div { padding: 18px; border: 1px solid var(--border); border-radius: 18px; background: var(--surface-2); }
 .public-profile-grid span { color: var(--muted); display: block; font-size: .82rem; }
@@ -61,6 +71,7 @@
     .discovery-tools { grid-template-columns: 1fr; }
     .developer-grid { grid-template-columns: 1fr; }
     .public-profile-grid { grid-template-columns: repeat(2, 1fr); }
+    .code-history > div { grid-template-columns: 1fr; }
 }
 @media (max-width: 520px) {
     .public-profile-grid { grid-template-columns: 1fr 1fr; }
@@ -68,4 +79,6 @@
     .quick-game-link small { display: none; }
     .duel-scoreboard { grid-template-columns: 1fr; }
     .duel-vs { padding: 2px 0; }
+    .wordle-row { grid-template-columns: repeat(5, 42px); }
+    .wordle-cell { width: 42px; height: 42px; }
 }
