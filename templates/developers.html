@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}PlayBed Developers | Intégrer un jeu web{% endblock %}
+{% block description %}Découvre la direction technique de PlayBed pour accueillir davantage de jeux web et une API publique de catalogue.{% endblock %}
+{% block content %}
+<main class="content-shell">
+    <header class="content-hero"><span class="eyebrow">PLAYBED DEVELOPERS</span><h1>Préparer PlayBed à accueillir plus de jeux.</h1><p>Cette première version pose les bases d’un futur écosystème développeur. L’objectif est de permettre à terme à des créateurs externes de proposer des jeux web compatibles avec PlayBed sans avoir accès au cœur de la plateforme.</p></header>
+    <section class="info-grid developer-grid"><article class="info-card"><span class="eyebrow">API</span><h2>Catalogue public</h2><p>L’endpoint <code>/api/v1/games</code> expose le catalogue actuel en JSON : nom, catégorie, description et liens de lancement.</p></article><article class="info-card"><span class="eyebrow">SCORES</span><h2>Contrat futur</h2><p>La prochaine étape du SDK consistera à fournir un contrat sécurisé pour démarrer une partie, enregistrer un score et associer des succès.</p></article><article class="info-card"><span class="eyebrow">VALIDATION</span><h2>Jeux contrôlés</h2><p>Les jeux externes devront respecter des critères de performance, sécurité, accessibilité mobile et compatibilité avec les règles PlayBed.</p></article></section>
+    <article class="content-card prose"><h2>Vision du SDK PlayBed</h2><p>Le SDK n’est pas encore ouvert aux soumissions publiques. Cette page documente la direction technique afin que l’architecture reste cohérente dès maintenant.</p><pre class="sdk-example"><code>PlayBed.startGame()
+PlayBed.submitScore(1250)
+PlayBed.unlockAchievement("expert")
+PlayBed.gameOver()</code></pre><p>Avant d’activer ces méthodes pour des jeux tiers, PlayBed devra ajouter l’authentification des applications, la validation côté serveur des scores et une procédure de modération.</p><p><strong>API disponible maintenant :</strong> <a class="text-action strong" href="{{ url_for('platform_games_api') }}">/api/v1/games</a></p></article>
+</main>
+{% endblock %}
