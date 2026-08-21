@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://playbed.fr/</loc><lastmod>2026-08-15</lastmod></url>
-  <url><loc>https://playbed.fr/a-propos</loc><lastmod>2026-08-16</lastmod></url>
+  <url><loc>https://playbed.fr/</loc><lastmod>2026-08-22</lastmod></url>
+  <url><loc>https://playbed.fr/a-propos</loc><lastmod>2026-08-22</lastmod></url>
   <url><loc>https://playbed.fr/createur</loc><lastmod>2026-08-16</lastmod></url>
   <url><loc>https://playbed.fr/comment-jouer</loc><lastmod>2026-08-15</lastmod></url>
   <url><loc>https://playbed.fr/faq</loc><lastmod>2026-08-15</lastmod></url>
-  <url><loc>https://playbed.fr/plan-du-site</loc><lastmod>2026-08-20</lastmod></url>
-  <url><loc>https://playbed.fr/classement</loc><lastmod>2026-08-15</lastmod></url>
+  <url><loc>https://playbed.fr/plan-du-site</loc><lastmod>2026-08-22</lastmod></url>
+  <url><loc>https://playbed.fr/classement</loc><lastmod>2026-08-22</lastmod></url>
   <url><loc>https://playbed.fr/defi-du-jour</loc><lastmod>2026-08-15</lastmod></url>
   <url><loc>https://playbed.fr/guides</loc><lastmod>2026-08-22</lastmod></url>
   <url><loc>https://playbed.fr/guides/mieux-jouer-au-pendu</loc><lastmod>2026-08-22</lastmod></url>
@@ -22,9 +22,12 @@
   <url><loc>https://playbed.fr/jeux/vof</loc><lastmod>2026-08-15</lastmod></url>
   <url><loc>https://playbed.fr/jeux/quiz</loc><lastmod>2026-08-15</lastmod></url>
   <url><loc>https://playbed.fr/jeux/memory</loc><lastmod>2026-08-15</lastmod></url>
+  <url><loc>https://playbed.fr/jeux/calcul</loc><lastmod>2026-08-22</lastmod></url>
+  <url><loc>https://playbed.fr/jeux/melange</loc><lastmod>2026-08-22</lastmod></url>
+  <url><loc>https://playbed.fr/developpeurs</loc><lastmod>2026-08-22</lastmod></url>
   <url><loc>https://playbed.fr/nouveautes</loc><lastmod>2026-08-15</lastmod></url>
   <url><loc>https://playbed.fr/contact</loc><lastmod>2026-08-15</lastmod></url>
   <url><loc>https://playbed.fr/mentions-legales</loc><lastmod>2026-08-15</lastmod></url>
-  <url><loc>https://playbed.fr/politique-confidentialite</loc><lastmod>2026-08-15</lastmod></url>
-  <url><loc>https://playbed.fr/conditions-utilisation</loc><lastmod>2026-08-15</lastmod></url>
+  <url><loc>https://playbed.fr/politique-confidentialite</loc><lastmod>2026-08-22</lastmod></url>
+  <url><loc>https://playbed.fr/conditions-utilisation</loc><lastmod>2026-08-22</lastmod></url>
 </urlset>

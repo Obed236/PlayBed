@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block robots %}noindex,follow{% endblock %}
+{% block title %}Défi {{ meta.name }} — PlayBed{% endblock %}
+{% block description %}Relève un défi PlayBed partagé par un joueur et essaie de battre son score sur {{ meta.name }}.{% endblock %}
+{% block content %}
+<main class="challenge-layout">
+    <section class="challenge-card">
+        <span class="eyebrow">DÉFI ENTRE JOUEURS</span>
+        <div class="challenge-emoji">{{ meta.emoji }}</div>
+        <h1>{{ challenge.challenger }} te défie sur {{ meta.name }}</h1>
+        <p>Ton objectif : battre son score de référence.</p>
+        <div class="challenge-score">{{ challenge.target }} pts</div>
+        <p class="muted">Le défi reste accessible pendant 30 jours à partir de sa création.</p>
+        <div class="challenge-actions">
+            {% if pseudo %}
+            <a class="primary-button" href="{{ url_for('start_game', game=game) }}" data-game-start="{{ game }}" data-source="challenge">⚔️ Relever le défi</a>
+            {% else %}
+            <a class="primary-button" href="{{ url_for('home') }}#player">Choisir un pseudo pour jouer</a>
+            {% endif %}
+            <button class="secondary-button" type="button" data-share-url="{{ share_url }}" data-share-title="Défi {{ meta.name }} sur PlayBed">Partager</button>
+            <a class="secondary-button" href="{{ url_for('home') }}#games">Explorer les jeux</a>
+        </div>
+    </section>
+</main>
+{% endblock %}

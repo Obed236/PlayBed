@@ -1,6 +1,6 @@
 {% extends "base.html" %}
-{% block title %}À propos de PlayBed — Projet de mini-jeux gratuits{% endblock %}
-{% block description %}Découvre l'histoire de PlayBed, un projet étudiant en informatique devenu une plateforme publique de mini-jeux gratuits accessible depuis un navigateur.{% endblock %}
+{% block title %}À propos de PlayBed — Plateforme de mini-jeux gratuits{% endblock %}
+{% block description %}Découvre l'histoire de PlayBed, un projet étudiant en informatique devenu une plateforme publique de mini-jeux avec niveaux, missions, défis et classements.{% endblock %}
 {% block og_description %}Découvre l'origine, les objectifs et le fonctionnement du projet PlayBed.{% endblock %}
 {% block content %}
 <main class="content-shell">
@@ -13,15 +13,20 @@
     <article class="content-card prose">
         <h2>Pourquoi PlayBed a été créé</h2>
         <p>À l'origine, PlayBed est né comme un projet informatique permettant de mettre en pratique plusieurs compétences : programmation Python, développement web, gestion des routes d'une application, création d'une interface en HTML et CSS, déploiement sur un serveur et mise en ligne d'un service accessible au public.</p>
-        <p>Le projet a ensuite évolué au-delà de sa version initiale. L'idée n'était plus seulement de faire fonctionner quelques jeux localement, mais de construire une véritable petite plateforme capable d'accueillir des joueurs, d'enregistrer des scores et de proposer une expérience agréable sur ordinateur comme sur téléphone.</p>
+        <p>Le projet a ensuite évolué au-delà de sa version initiale. L'idée n'était plus seulement de faire fonctionner quelques jeux localement, mais de construire une véritable plateforme capable d'accueillir des joueurs, d'enregistrer des scores et de proposer une expérience agréable sur ordinateur comme sur téléphone.</p>
 
         <h2>Ce que propose la plateforme</h2>
-        <p>PlayBed regroupe actuellement cinq jeux : le Pendu, Plus ou Moins, Vrai ou Faux, Quiz Express et Memory. Chaque jeu repose sur une mécanique différente afin de varier les défis entre vocabulaire, logique, mémoire et culture générale.</p>
-        <p>Aucun compte traditionnel n'est nécessaire pour jouer. Le visiteur choisit un pseudo, lance une partie et peut retrouver ses performances dans le classement. Ce choix permet de garder l'expérience simple et rapide.</p>
+        <p>PlayBed regroupe actuellement sept jeux : le Pendu, Plus ou Moins, Vrai ou Faux, Quiz Express, Memory, Calcul Mental et Mot Mélangé. Les mécaniques couvrent vocabulaire, logique, mémoire, rapidité et culture générale.</p>
+        <p>Aucun compte traditionnel n'est nécessaire pour jouer. Le visiteur choisit un pseudo et peut ensuite construire sa progression : scores, niveau et XP, missions quotidiennes ou hebdomadaires, série de jours joués, succès et classements par période.</p>
+        <p>Les joueurs peuvent également partager leur profil public et créer des défis avec un score à battre. Les favoris et jeux récents sont conservés localement dans le navigateur afin de retrouver plus vite ce que l'on aime.</p>
 
         <h2>Une plateforme développée et améliorée progressivement</h2>
-        <p>La version actuelle repose sur Flask et Python pour la partie serveur, avec une interface web en HTML, CSS et JavaScript. Les scores peuvent être conservés dans une base de données afin d'alimenter le classement général et les classements propres à chaque jeu.</p>
-        <p>PlayBed est un projet vivant : son contenu, son interface, ses questions et ses fonctionnalités peuvent être enrichis au fil du temps. L'objectif est de continuer à améliorer la qualité de l'expérience tout en conservant une utilisation gratuite et facile d'accès.</p>
+        <p>La version actuelle repose sur Flask et Python pour la partie serveur, avec une interface web en HTML, CSS et JavaScript. Les scores sont conservés dans une base de données afin d'alimenter les profils, la progression et les classements.</p>
+        <p>PlayBed fonctionne aussi comme une Progressive Web App : sur les appareils compatibles, la plateforme peut être installée depuis le navigateur et bénéficie d'un cache de ses ressources essentielles.</p>
+        <p>Le projet reste vivant. Les données d'usage des principales fonctionnalités peuvent aider à comprendre quels jeux sont lancés, quels parcours sont utilisés et quelles fonctions méritent d'être améliorées, dans le respect des choix de confidentialité applicables.</p>
+
+        <h2>Vers une plateforme ouverte</h2>
+        <p>PlayBed prépare également une direction « PlayBed Developer ». L'objectif à terme est de définir des règles et une interface permettant d'intégrer des jeux web supplémentaires sans sacrifier la rapidité, la sécurité ni la fiabilité des scores. Cette ouverture reste progressive : les intégrations externes ne sont pas encore publiées automatiquement.</p>
 
         <h2>Le créateur</h2>
         <p>PlayBed a été créé et développé par <strong><a href="{{ url_for('creator_page') }}">Obed Gelly Ousmane Tassango</a></strong> dans le cadre de son apprentissage et de ses projets en informatique. La mise en ligne publique du site permet aussi de confronter le projet à de vrais usages : déploiement, sécurité, référencement, compatibilité mobile, persistance des données et évolution continue.</p>
@@ -29,6 +34,7 @@
 
         <div class="content-actions">
             <a class="primary-button" href="{{ url_for('home') }}#games">Voir les jeux</a>
+            <a class="secondary-button" href="{{ url_for('growth_developers') }}">PlayBed Developer</a>
             <a class="secondary-button" href="{{ url_for('creator_page') }}">Voir le profil du créateur</a>
         </div>
     </article>
