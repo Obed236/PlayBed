@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Défi {{ meta.name }} — {{ target }} points | PlayBed{% endblock %}
+{% block description %}Un joueur te défie d’atteindre {{ target }} points sur {{ meta.name }}. Relève le défi gratuitement sur PlayBed.{% endblock %}
+{% block content %}
+<main class="content-shell">
+    <section class="challenge-hero shared-challenge"><span class="eyebrow">DÉFI ENTRE JOUEURS</span><div class="challenge-emoji">{{ meta.emoji }}</div><h1>{{ target }} points</h1><p>Objectif : atteindre ou dépasser <strong>{{ target }} points</strong> sur <strong>{{ meta.name }}</strong>.</p><div class="hero-actions centered"><a class="primary-button" data-game-start="{{ game }}" href="{{ url_for('start_game', game=game) }}">Relever le défi</a><button class="secondary-button" type="button" data-share-current data-share-title="Défi PlayBed — {{ meta.name }}" data-share-text="Arriveras-tu à battre {{ target }} points sur {{ meta.name }} ?">Partager le défi</button></div></section>
+    <article class="content-card prose"><h2>Comment ça marche ?</h2><p>Le lien du défi peut être envoyé à n’importe qui. Le joueur ouvre cette page, choisit son pseudo si nécessaire puis lance le même jeu. Le score reste enregistré normalement dans PlayBed et apparaît dans les classements.</p><p>Ce défi ne modifie pas les règles du jeu : il ajoute simplement un objectif clair à battre.</p><a class="text-action strong" href="{{ url_for('platform_game_detail', game=game) }}">Voir les règles de {{ meta.name }} →</a></article>
+</main>
+{% endblock %}
