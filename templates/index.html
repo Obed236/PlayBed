@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% block title %}PlayBed — Mini-jeux gratuits, niveaux et défis{% endblock %}
-{% block description %}PlayBed propose sept mini-jeux gratuits, Quiz Duel multijoueur, niveaux, missions, défis, favoris, statistiques et classements. Joue sans compte depuis ton navigateur.{% endblock %}
+{% block description %}PlayBed propose dix mini-jeux gratuits, Quiz Duel multijoueur, niveaux, missions, défis, favoris, statistiques et classements. Joue sans compte depuis ton navigateur.{% endblock %}
 {% block content %}
 <main>
 <section class="hero">
     <div class="hero-copy">
         <span class="eyebrow">PLAYBED V3</span>
         <h1>Joue.<br>Progresse.<br><span>Défie tes amis.</span></h1>
-        <p>PlayBed rassemble des mini-jeux gratuits et rapides avec niveaux, missions, séries quotidiennes, profils publics, Quiz Duel et classements. Aucun téléchargement ni compte obligatoire.</p>
+        <p>PlayBed rassemble dix mini-jeux gratuits et rapides avec niveaux, missions, séries quotidiennes, profils publics, Quiz Duel et classements. Aucun téléchargement ni compte obligatoire.</p>
         <div class="hero-actions"><a class="primary-button" href="#games">Choisir un jeu</a><a class="secondary-button" href="{{ url_for('duel_create') }}">⚔️ Quiz Duel</a><a class="secondary-button" href="{{ url_for('platform_daily_challenge') }}">🔥 Défi du jour</a><a class="secondary-button" href="{{ url_for('leaderboard') }}">🏆 Classement</a></div>
     </div>
     <div class="hero-card"><div class="orb">🕹️</div><strong>{{ games|length }} jeux disponibles</strong><span>{{ total_scores }} score(s) enregistré(s)</span><div class="mini-stats"><span>⭐ Niveaux</span><span>🎯 Missions</span><span>👥 Quiz Duel</span><span>📱 PWA</span></div></div>
@@ -62,7 +62,7 @@
     <div class="section-heading"><span class="eyebrow">EXPLORER</span><h2>Trouve ton prochain jeu.</h2><p>Recherche un jeu, filtre par catégorie ou retrouve rapidement tes favoris et tes dernières parties.</p></div>
     <div class="discovery-tools">
         <input id="gameSearch" type="search" placeholder="Rechercher un jeu…" aria-label="Rechercher un jeu">
-        <select id="gameCategory" aria-label="Filtrer par catégorie"><option value="all">Toutes les catégories</option><option value="Lettres">Lettres</option><option value="Logique">Logique</option><option value="Culture">Culture</option><option value="Quiz">Quiz</option><option value="Mémoire">Mémoire</option></select>
+        <select id="gameCategory" aria-label="Filtrer par catégorie"><option value="all">Toutes les catégories</option><option value="Lettres">Lettres</option><option value="Logique">Logique</option><option value="Culture">Culture</option><option value="Quiz">Quiz</option><option value="Mémoire">Mémoire</option><option value="Rapidité">Rapidité</option></select>
         <label><input id="favoritesOnly" type="checkbox"> Favoris seulement</label>
     </div>
     {% if growth_trending %}<div class="trending-strip" aria-label="Jeux populaires"><span class="season-pill">🔥 Populaires :</span>{% for item in growth_trending %}<a class="trending-chip" href="{{ url_for('start_game', game=item.slug) }}" data-game-start="{{ item.slug }}" data-source="trending">{{ item.emoji }} {{ item.name }}</a>{% endfor %}</div>{% endif %}
