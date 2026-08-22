@@ -35,9 +35,9 @@
             {% endif %}
         {% elif game == 'chrono' %}
             {% if not state.finished %}
-                <div class="chrono-zone"><div class="challenge-emoji">⏱️</div><p>Le temps tourne déjà. Compte mentalement jusqu’à 10 secondes puis appuie sur le bouton.</p><form method="post"><button class="primary-button chrono-stop" type="submit">STOP</button></form></div>
+                <div class="chrono-zone"><div class="challenge-emoji">⏱️</div><div class="question-box">Objectif : {{ state.target }} secondes</div><p>Le temps tourne déjà. Compte mentalement jusqu’à {{ state.target }} secondes puis appuie sur le bouton.</p><form method="post"><button class="primary-button chrono-stop" type="submit">STOP</button></form></div>
             {% else %}
-                <div class="stat-row"><div><span>Ton temps</span><strong>{{ '%.2f'|format(state.elapsed) }}s</strong></div><div><span>Écart</span><strong>{{ '%.2f'|format(state.difference) }}s</strong></div></div>
+                <div class="stat-row"><div><span>Cible</span><strong>{{ state.target }}s</strong></div><div><span>Ton temps</span><strong>{{ '%.2f'|format(state.elapsed) }}s</strong></div><div><span>Écart</span><strong>{{ '%.2f'|format(state.difference) }}s</strong></div></div>
             {% endif %}
         {% endif %}
 
