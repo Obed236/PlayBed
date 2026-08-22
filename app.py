@@ -79,6 +79,14 @@ def ensure_database_for_dynamic_routes():
     return None
 
 
+@app.after_request
+def isolate_adult_game_from_indexing(response):
+    path = request.path or ""
+    if path.startswith("/action-verite") or path.startswith("/jeux/action-verite"):
+        response.headers["X-Robots-Tag"] = "noindex, nofollow, noarchive"
+    return response
+
+
 # La page d'accueil affiche un compteur de scores, mais ce compteur ne doit
 # jamais rendre tout le site inaccessible si PostgreSQL répond mal.
 _original_home = app.view_functions.get("home")
