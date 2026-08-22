@@ -6,6 +6,7 @@ from platform_routes import register_platform_routes, GUIDES, GAME_CONTENT
 from editorial_guides import EDITORIAL_GUIDES
 from extra_games import EXTRA_GAMES, EXTRA_GAME_CONTENT, register_extra_games
 from action_verite import ACTION_GAME, ACTION_GAME_CONTENT, register_action_verite
+from action_verite_answers import register_action_verite_answers
 from duels import register_duels
 from creator_routes import register_creator_routes
 from sitemap_routes import register_sitemap_route
@@ -30,6 +31,7 @@ platform_games = PlatformGames(GAMES)
 register_platform_routes(app, platform_games, db_connection, current_pseudo)
 register_extra_games(app, GAMES, current_pseudo, save_score, load_words)
 register_action_verite(app, GAMES, GAME_CONTENT, db_connection, current_pseudo)
+register_action_verite_answers(app, db_connection)
 register_duels(app, db_connection, current_pseudo, load_quiz_questions)
 register_engagement(app, GAMES, db_connection, current_pseudo)
 register_growth(app, GAMES, db_connection, current_pseudo)
