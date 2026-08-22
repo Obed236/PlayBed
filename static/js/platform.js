@@ -20,22 +20,27 @@
 
     const privacyButton = document.getElementById("privacyCookieSettings");
 
-    // N'initialise le helper Funding Choices que sur les pages où le lien de
-    // révocation est réellement présent. La politique de confidentialité reste
-    // ainsi totalement dépourvue de balise ou helper de consentement Google.
     if (privacyButton) {
         window.googlefc = window.googlefc || {};
         window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
+
+        // Google recommande de n'afficher le point d'entrée qu'une fois l'API
+        // de consentement réellement chargée et appelable.
         window.googlefc.callbackQueue.push({
             CONSENT_API_READY: () => {
                 privacyButton.hidden = false;
             },
         });
 
-        privacyButton.addEventListener("click", () => {
-            if (typeof window.googlefc.showRevocationMessage === "function") {
-                window.googlefc.showRevocationMessage();
-            }
+        privacyButton.addEventListener("click", (event) => {
+            event.preventDefault();
+            window.googlefc.callbackQueue.push({
+                CONSENT_API_READY: () => {
+                    if (typeof window.googlefc.showRevocationMessage === "function") {
+                        window.googlefc.showRevocationMessage();
+                    }
+                },
+            });
         });
     }
 })();
