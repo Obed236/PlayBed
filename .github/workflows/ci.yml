@@ -1,0 +1,26 @@
+name: PlayBed checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  python-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Compile Python files
+        run: python -m py_compile app.py core.py admin_routes.py admin_complete.py admin_action_verite.py
+      - name: Import Flask application
+        env:
+          SECRET_KEY: ci-secret-key
+        run: python -c "import app; print('Routes:', len(app.app.url_map._rules))"

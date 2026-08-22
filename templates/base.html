@@ -2,7 +2,6 @@
 {% set no_ads_page = request.path.startswith('/play/') or request.path.startswith('/arcade/') or request.path.startswith('/action-verite') or request.path.startswith('/jeux/action-verite') or request.path.startswith('/profil') or request.path.startswith('/joueur/') or request.path.startswith('/defi/') or request.path.startswith('/affronter') or request.path.startswith('/classement') or privacy_policy_page or request.path.startswith('/mentions-legales') or request.path.startswith('/conditions-utilisation') or request.path.startswith('/contact') %}
 <!DOCTYPE html>
 <html lang="fr" data-theme="dark">
-
 <head>
     <meta charset="UTF-8">
     <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -15,72 +14,26 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="PlayBed">
     <meta name="google-adsense-account" content="ca-pub-8115913863262508">
-
-    {% if not no_ads_page %}
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8115913863262508" crossorigin="anonymous" data-playbed-adsense="true"></script>
-    {% endif %}
-
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('consent', 'default', {'ad_storage': 'denied','ad_user_data': 'denied','ad_personalization': 'denied','analytics_storage': 'denied','wait_for_update': 500});
-    </script>
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-THGHCD6K');</script>
-    <!-- End Google Tag Manager -->
-
+    {% if not no_ads_page %}<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8115913863262508" crossorigin="anonymous" data-playbed-adsense="true"></script>{% endif %}
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','analytics_storage':'denied','wait_for_update':500});</script>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-THGHCD6K');</script>
     <meta name="robots" content="{% block robots %}index,follow,max-image-preview:large{% endblock %}">
     <meta property="og:title" content="{% block og_title %}PlayBed V3{% endblock %}">
     <meta property="og:description" content="{% block og_description %}Joue, progresse et défie tes amis sur PlayBed.{% endblock %}">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://playbed.fr{{ request.path }}">
+    <meta property="og:type" content="website"><meta property="og:url" content="https://playbed.fr{{ request.path }}">
     <title>{% block title %}PlayBed{% endblock %}</title>
-    <link rel="canonical" href="https://playbed.fr{{ request.path }}">
-    <link rel="manifest" href="{{ url_for('pwa_manifest') }}">
-    <link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static', filename='icons/playbed-192.png') }}">
-    <link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/playbed-192.png') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/platform.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/engagement.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/growth.css') }}">
-    <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
-    <script defer src="{{ url_for('static', filename='js/platform.js') }}"></script>
-    <script defer src="{{ url_for('static', filename='js/pwa.js') }}"></script>
-    <script defer src="{{ url_for('static', filename='js/growth.js') }}"></script>
+    <link rel="canonical" href="https://playbed.fr{{ request.path }}"><link rel="manifest" href="{{ url_for('pwa_manifest') }}"><link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static', filename='icons/playbed-192.png') }}"><link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/playbed-192.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"><link rel="stylesheet" href="{{ url_for('static', filename='css/platform.css') }}"><link rel="stylesheet" href="{{ url_for('static', filename='css/engagement.css') }}"><link rel="stylesheet" href="{{ url_for('static', filename='css/growth.css') }}">
+    <style>.site-announcements{display:grid;gap:8px;padding:10px max(16px,calc((100vw - 1180px)/2));background:#07111f}.site-announcement{border:1px solid rgba(125,170,255,.35);border-radius:12px;padding:10px 14px;background:rgba(42,94,170,.13);font-size:14px}.site-announcement strong{margin-right:6px}.site-announcement[data-kind="success"]{border-color:rgba(68,201,138,.45);background:rgba(35,130,88,.12)}.site-announcement[data-kind="warning"]{border-color:rgba(255,200,87,.45);background:rgba(180,120,25,.12)}</style>
+    <script defer src="{{ url_for('static', filename='js/main.js') }}"></script><script defer src="{{ url_for('static', filename='js/platform.js') }}"></script><script defer src="{{ url_for('static', filename='js/pwa.js') }}"></script><script defer src="{{ url_for('static', filename='js/growth.js') }}"></script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","@id":"https://playbed.fr/#website","name":"PlayBed","url":"https://playbed.fr/","inLanguage":"fr","description":"Plateforme gratuite de mini-jeux en ligne avec niveaux, missions, défis, classements et profils joueurs.","creator":{"@id":"https://playbed.fr/createur#person"}}</script>
     {% block head_extra %}{% endblock %}
 </head>
-
 <body data-ads-page="{{ 'false' if no_ads_page else 'true' }}">
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-THGHCD6K"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-THGHCD6K" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <a class="skip-link" href="#main-content">Aller au contenu principal</a>
-    <header class="navbar">
-        <a class="brand" href="{{ url_for('home') }}" aria-label="Accueil PlayBed"><span aria-hidden="true">🎮</span> PlayBed</a>
-        <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-expanded="false" aria-controls="mainNavigation" aria-label="Ouvrir le menu">☰</button>
-        <nav class="nav-links" id="mainNavigation" aria-label="Navigation principale">
-            <a href="{{ url_for('home') }}#games">Jeux</a>
-            <a href="{{ url_for('versus_home') }}">Affronter</a>
-            <a href="{{ url_for('platform_guides') }}">Guides</a>
-            <a href="{{ url_for('platform_daily_challenge') }}">Défi du jour</a>
-            <a href="{{ url_for('leaderboard') }}">Classement</a>
-            {% if pseudo %}<a href="{{ url_for('platform_profile') }}">Mon profil</a>{% endif %}
-            <button class="theme-toggle" id="themeToggle" type="button" aria-label="Changer de thème">☀️</button>
-            {% if pseudo %}<span class="player-chip">👤 {{ pseudo }}</span>{% endif %}
-        </nav>
-    </header>
+    <header class="navbar"><a class="brand" href="{{ url_for('home') }}" aria-label="Accueil PlayBed"><span aria-hidden="true">🎮</span> PlayBed</a><button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-expanded="false" aria-controls="mainNavigation" aria-label="Ouvrir le menu">☰</button><nav class="nav-links" id="mainNavigation" aria-label="Navigation principale"><a href="{{ url_for('home') }}#games">Jeux</a><a href="{{ url_for('versus_home') }}">Affronter</a><a href="{{ url_for('platform_guides') }}">Guides</a><a href="{{ url_for('platform_daily_challenge') }}">Défi du jour</a><a href="{{ url_for('leaderboard') }}">Classement</a>{% if pseudo %}<a href="{{ url_for('platform_profile') }}">Mon profil</a>{% endif %}<button class="theme-toggle" id="themeToggle" type="button" aria-label="Changer de thème">☀️</button>{% if pseudo %}<span class="player-chip">👤 {{ pseudo }}</span>{% endif %}</nav></header>
+    {% if site_announcements %}<aside class="site-announcements" aria-label="Annonces PlayBed">{% for announcement in site_announcements %}<div class="site-announcement" data-kind="{{ announcement.kind }}"><strong>{{ announcement.title }}</strong>{{ announcement.message }}</div>{% endfor %}</aside>{% endif %}
     <div id="main-content" tabindex="-1">{% block content %}{% endblock %}</div>
-    <footer>
-        <div class="footer-copy"><span>© 2026 PlayBed · Créé et développé par <a href="{{ url_for('creator_page') }}">Obed Gelly Ousmane Tassango</a>.</span><span>Mini-jeux gratuits · Mobile et ordinateur · Aucun compte obligatoire</span></div>
-        <nav class="footer-links" aria-label="Informations et mentions">
-            <a href="{{ url_for('versus_home') }}">Affronter un joueur</a><a href="{{ url_for('av_home') }}">Action ou Vérité</a><a href="{{ url_for('about_page') }}">À propos</a><a href="{{ url_for('creator_page') }}">Créateur</a><a href="{{ url_for('how_to_play_page') }}">Comment jouer</a><a href="{{ url_for('platform_guides') }}">Guides</a><a href="{{ url_for('platform_news') }}">Nouveautés</a><a href="{{ url_for('faq_page') }}">FAQ</a><a href="{{ url_for('site_map_page') }}">Plan du site</a><a href="{{ url_for('platform_contact') }}">Contact</a><a href="{{ url_for('platform_legal') }}">Mentions légales</a><a href="{{ url_for('privacy_page') }}">Confidentialité</a><a href="{{ url_for('terms_page') }}">Conditions d’utilisation</a><button class="footer-link-button pwa-install-button" data-pwa-install type="button" hidden>Installer PlayBed</button>
-        </nav>
-    </footer>
-</body>
-</html>
+    <footer><div class="footer-copy"><span>© 2026 PlayBed · Créé et développé par <a href="{{ url_for('creator_page') }}">Obed Gelly Ousmane Tassango</a>.</span><span>Mini-jeux gratuits · Mobile et ordinateur · Aucun compte obligatoire</span></div><nav class="footer-links" aria-label="Informations et mentions"><a href="{{ url_for('versus_home') }}">Affronter un joueur</a><a href="{{ url_for('av_home') }}">Action ou Vérité</a><a href="{{ url_for('about_page') }}">À propos</a><a href="{{ url_for('creator_page') }}">Créateur</a><a href="{{ url_for('how_to_play_page') }}">Comment jouer</a><a href="{{ url_for('platform_guides') }}">Guides</a><a href="{{ url_for('platform_news') }}">Nouveautés</a><a href="{{ url_for('faq_page') }}">FAQ</a><a href="{{ url_for('site_map_page') }}">Plan du site</a><a href="{{ url_for('platform_contact') }}">Contact</a><a href="{{ url_for('platform_legal') }}">Mentions légales</a><a href="{{ url_for('privacy_page') }}">Confidentialité</a><a href="{{ url_for('terms_page') }}">Conditions d’utilisation</a><button class="footer-link-button pwa-install-button" data-pwa-install type="button" hidden>Installer PlayBed</button></nav></footer>
+</body></html>

@@ -1,0 +1,25 @@
+{% extends 'admin/base.html' %}
+{% block title %}Annonces{% endblock %}
+{% block content %}
+<div class="topbar"><div><h1>Annonces</h1><div class="muted">Publie un message visible sur PlayBed, immédiatement ou sur une période donnée.</div></div></div>
+<div class="grid-2">
+<section class="panel"><h2>Nouvelle annonce</h2><form id="announcementForm" method="post" action="{{ url_for('admin_announcement_add') }}"><input type="hidden" name="csrf_token" value="{{ admin_csrf_token() }}"><div class="field"><label for="title">Titre</label><input id="title" name="title" maxlength="100" required placeholder="Ex. Nouveau jeu disponible"></div><div class="field"><label for="message">Message</label><textarea id="message" name="message" maxlength="700" required></textarea></div><div class="field"><label for="kind">Type</label><select id="kind" name="kind"><option value="info">Information</option><option value="success">Nouveauté</option><option value="warning">Avertissement</option></select></div><div class="grid-2"><div class="field"><label for="starts_at">Début facultatif</label><input id="starts_at" name="starts_at" type="datetime-local"></div><div class="field"><label for="ends_at">Fin facultative</label><input id="ends_at" name="ends_at" type="datetime-local"></div></div><button class="btn primary" type="submit">Publier l’annonce</button></form></section>
+<section class="panel"><h2>À savoir</h2><p>Une annonce active est affichée sous la barre de navigation du site. Tu peux la désactiver ou la supprimer à tout moment.</p><div class="notice">Les dates sont facultatives. Sans date de début ni de fin, l’annonce reste visible tant qu’elle est active.</div><p class="muted">Tu peux t’en servir pour annoncer un nouveau jeu, une maintenance, un tournoi ou une nouveauté.</p></section>
+</div>
+<section class="panel"><h2>Annonces enregistrées</h2><div class="stack">{% for row in announcements %}<div class="question-row"><div class="actions" style="justify-content:space-between"><div><strong>{{ row.title }}</strong> <span class="badge {{ 'good' if row.active else 'bad' }}">{{ 'Active' if row.active else 'Désactivée' }}</span> <span class="badge">{{ row.kind }}</span><p>{{ row.message }}</p><div class="muted">Début : {{ row.starts_at or 'immédiat' }} · Fin : {{ row.ends_at or 'aucune' }}</div></div><div class="actions"><form method="post" action="{{ url_for('admin_announcement_status') }}"><input type="hidden" name="csrf_token" value="{{ admin_csrf_token() }}"><input type="hidden" name="id" value="{{ row.id }}"><input type="hidden" name="active" value="{{ '0' if row.active else '1' }}"><button class="btn small" type="submit">{{ 'Désactiver' if row.active else 'Activer' }}</button></form><form method="post" action="{{ url_for('admin_announcement_delete') }}" onsubmit="return confirm('Supprimer cette annonce ?')"><input type="hidden" name="csrf_token" value="{{ admin_csrf_token() }}"><input type="hidden" name="id" value="{{ row.id }}"><button class="btn small danger" type="submit">Supprimer</button></form></div></div></div>{% else %}<div class="empty">Aucune annonce.</div>{% endfor %}</div></section>
+<script>
+(function(){
+  const form=document.getElementById('announcementForm');
+  if(!form)return;
+  form.addEventListener('submit',function(){
+    ['starts_at','ends_at'].forEach(function(id){
+      const input=document.getElementById(id);
+      if(input&&input.value){
+        const date=new Date(input.value);
+        if(!Number.isNaN(date.getTime())) input.value=date.toISOString();
+      }
+    });
+  });
+})();
+</script>
+{% endblock %}
