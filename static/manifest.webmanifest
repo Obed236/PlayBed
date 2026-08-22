@@ -18,7 +18,7 @@
   "shortcuts": [
     {"name": "Jouer", "short_name": "Jeux", "url": "/#games"},
     {"name": "Action ou Vérité", "short_name": "Action/Vérité", "url": "/action-verite"},
-    {"name": "Quiz Duel", "short_name": "Duel", "url": "/duel/nouveau"},
+    {"name": "Affronter un joueur", "short_name": "Affronter", "url": "/affronter"},
     {"name": "Défi du jour", "short_name": "Défi", "url": "/defi-du-jour"},
     {"name": "Classement", "short_name": "Classement", "url": "/classement"},
     {"name": "Guides", "short_name": "Guides", "url": "/guides"}

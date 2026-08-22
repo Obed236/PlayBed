@@ -1,10 +1,11 @@
-const CACHE_NAME = "playbed-static-v3-5";
+const CACHE_NAME = "playbed-static-v3-6";
 const STATIC_ASSETS = [
   "/static/css/style.css",
   "/static/css/platform.css",
   "/static/css/engagement.css",
   "/static/css/growth.css",
   "/static/css/action-verite.css",
+  "/static/css/versus.css",
   "/static/js/main.js",
   "/static/js/platform.js",
   "/static/js/pwa.js",

@@ -15,11 +15,14 @@ PlayBed est une plateforme gratuite de mini-jeux web, accessible depuis un navig
 - profils joueurs et profils publics
 - favoris, jeux récents et découverte par recherche/catégorie
 - défis de score partageables
-- Quiz Duel asynchrone entre deux joueurs
+- affrontements 1 contre 1 avec mise de points virtuels sur tous les jeux à score
+- solde de défi lié à la session du navigateur pour éviter qu’un simple pseudo puisse prendre les points d’un autre joueur
+- une seule manche par joueur et comparaison automatique des scores
+- remboursement des mises en cas d’égalité ou d’annulation avant toute manche
 - Action ou Vérité local à 2–5 joueurs
 - classes privées Action ou Vérité à distance avec code à 4 chiffres, réponses et synchronisation des tours
-- choix individuel Classique/Osé pour chaque joueur majeur dans Action ou Vérité
-- verrouillage automatique du niveau Osé si un mineur est présent
+- choix individuel Classique/Osé/Très osé pour chaque joueur majeur dans Action ou Vérité
+- verrouillage automatique des niveaux adultes si un mineur est présent
 - PWA installable
 - analytics d’interaction et suivi des Core Web Vitals
 - pages éditoriales, guides, FAQ, mentions légales et politique de confidentialité
@@ -42,13 +45,21 @@ PlayBed est une plateforme gratuite de mini-jeux web, accessible depuis un navig
 | Chrono 10 | Rapidité |
 | Action ou Vérité | Groupe |
 
+### Affrontements 1 contre 1
+
+Le mode `/affronter` permet de choisir un jeu à score et une mise de points virtuels. Le créateur partage ensuite le lien du défi à un adversaire.
+
+Chaque navigateur possède un solde de défi séparé du simple texte du pseudo. Le solde commence avec 1 000 points virtuels et les parties terminées dans les jeux à score peuvent le créditer. Quand un défi est accepté, la même mise est retirée aux deux joueurs. Le meilleur score reçoit les deux mises, soit un gain net égal à la mise de l’adversaire. Une égalité rembourse les deux mises.
+
+Les points de défi n’ont aucune valeur monétaire : ils ne peuvent pas être achetés, retirés, convertis en argent ou échangés contre un bien réel. Action ou Vérité est exclu des affrontements car il n’a pas de score permettant de désigner un gagnant.
+
 ### Action ou Vérité
 
 Deux modes sont disponibles :
 - **local** : 2 à 5 personnes jouent sur un seul téléphone ;
 - **classe privée** : le créateur obtient un code à 4 chiffres et les autres joueurs rejoignent depuis leur propre appareil.
 
-Le jeu demande l’âge au démarrage uniquement pour adapter le contenu. Chaque joueur majeur choisit individuellement entre **Classique** et **Osé**. Le niveau Osé contient des propositions plus gênantes, romantiques ou suggestives, mais reste non explicite et non dangereux. Un joueur ayant choisi Classique ne reçoit pas de proposition Osée. Si au moins une personne a moins de 18 ans, le niveau Osé est désactivé pour toute la partie afin qu’aucun contenu 18+ ne soit affiché devant un mineur. Action ou Vérité ne produit pas de score et n’influence pas les classements.
+Le jeu demande l’âge au démarrage uniquement pour adapter le contenu. Chaque joueur majeur choisit individuellement entre **Classique**, **Osé** et **Très osé**. Un joueur ayant choisi Classique ne reçoit pas de proposition d’un niveau supérieur. Si au moins une personne a moins de 18 ans, les niveaux adultes sont désactivés pour toute la partie afin qu’aucun contenu 18+ ne soit affiché devant un mineur. Un joueur peut toujours passer une question ou une action. Action ou Vérité ne produit pas de score et n’influence pas les classements.
 
 ## Lancer en local
 
@@ -82,13 +93,13 @@ Variables recommandées :
 
 - `core.py` : application Flask, jeux historiques, scores et base de données ;
 - `extra_games.py` : jeux additionnels ;
+- `versus.py` : solde de défi et affrontements 1 contre 1 avec mise de points virtuels ;
 - `action_verite.py` : jeu Action ou Vérité, mode local et classes privées ;
-- `action_verite_preferences.py` : préférences individuelles Classique/Osé et sélection des propositions ;
+- `action_verite_preferences.py` : préférences individuelles et sélection des propositions ;
 - `action_verite_answers.py` : réponses synchronisées des classes privées ;
 - `platform_routes.py` : pages publiques, guides et profils ;
 - `engagement.py` : séries et classements temporels ;
 - `growth.py` : XP, niveaux, missions, profils publics et défis ;
-- `duels.py` : Quiz Duel ;
 - `editorial_guides.py` : contenus éditoriaux longs ;
 - `static/` : CSS, JavaScript et PWA ;
 - `templates/` : interfaces Jinja.

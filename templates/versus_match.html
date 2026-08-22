@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block robots %}noindex,nofollow{% endblock %}
+{% block title %}Défi {{ meta.name or 'PlayBed' }} — PlayBed{% endblock %}
+{% block description %}Défi privé 1 contre 1 sur PlayBed.{% endblock %}
+{% block head_extra %}<link rel="stylesheet" href="{{ url_for('static', filename='css/versus.css') }}">{% endblock %}
+{% block content %}
+<main class="content-shell versus-shell">
+    <nav class="breadcrumb"><a href="{{ url_for('versus_home') }}">Défis</a><span>›</span><span>{{ match.id }}</span></nav>
+
+    <section class="content-card versus-match-card">
+        <div class="versus-match-top">
+            <div><span class="eyebrow">⚔️ DÉFI PRIVÉ</span><h1>{{ meta.emoji }} {{ meta.name }}</h1><p>Code du défi : <strong>{{ match.id }}</strong></p></div>
+            <div class="versus-pot"><span>Pot total</span><strong>{{ match.stake * 2 }} pts</strong><small>{{ match.stake }} pts par joueur</small></div>
+        </div>
+
+        <div class="versus-versus">
+            <article class="versus-player {% if role == 'creator' %}you{% endif %}"><span>Joueur 1</span><strong>{{ match.creator_name }}</strong><small>{% if match.creator_score is not none %}Score : {{ match.creator_score }}{% elif match.status == 'playing' %}Pas encore terminé{% else %}Créateur{% endif %}</small></article>
+            <div class="versus-vs">VS</div>
+            <article class="versus-player {% if role == 'opponent' %}you{% endif %}"><span>Joueur 2</span><strong>{{ match.opponent_name or 'En attente…' }}</strong><small>{% if match.opponent_score is not none %}Score : {{ match.opponent_score }}{% elif match.opponent_name %}Pas encore terminé{% else %}Partage le lien pour inviter quelqu’un{% endif %}</small></article>
+        </div>
+
+        {% if request.args.get('solde') %}<p class="versus-error">Ton solde de défi est trop faible pour accepter cette mise.</p>{% endif %}
+
+        {% if match.status == 'waiting' %}
+            {% if role == 'creator' %}
+                <div class="versus-share"><h2>Invite ton adversaire</h2><p>Envoie-lui ce lien. Il devra avoir au moins {{ match.stake }} points de défi pour accepter.</p><div class="share-row"><input id="versusShareUrl" value="{{ share_url }}" readonly><button class="secondary-button" type="button" onclick="navigator.clipboard.writeText(document.getElementById('versusShareUrl').value);this.textContent='Copié ✓'">Copier le lien</button></div></div>
+                <form method="post" action="{{ url_for('versus_cancel', match_id=match.id) }}"><button class="danger-link" type="submit">Annuler et récupérer mes {{ match.stake }} points</button></form>
+            {% elif pseudo %}
+                <div class="versus-callout"><h2>{{ match.creator_name }} te défie.</h2><p>Si tu acceptes, {{ match.stake }} points seront retirés de ton solde. Le gagnant recevra le pot de {{ match.stake * 2 }} points.</p>{% if wallet %}<p>Ton solde : <strong>{{ wallet.balance }} pts</strong></p>{% endif %}<form method="post" action="{{ url_for('versus_accept', match_id=match.id) }}"><button class="primary-button" type="submit" {% if wallet and wallet.balance < match.stake %}disabled{% endif %}>Accepter le défi</button></form></div>
+            {% else %}
+                <div class="versus-callout"><h2>{{ match.creator_name }} te défie.</h2><p>Choisis d’abord un pseudo pour rejoindre ce défi.</p><a class="primary-button" href="{{ url_for('home', need_pseudo=1) }}#player">Choisir un pseudo</a></div>
+            {% endif %}
+
+        {% elif match.status == 'playing' %}
+            {% if role %}
+                {% set my_score = match.creator_score if role == 'creator' else match.opponent_score %}
+                {% set other_score = match.opponent_score if role == 'creator' else match.creator_score %}
+                {% if my_score is none %}
+                    <div class="versus-callout"><h2>À toi de jouer.</h2><p>Tu as droit à une seule manche. Dès que ton score est enregistré, il devient définitif pour ce défi.</p><a class="primary-button" href="{{ url_for('versus_play', match_id=match.id) }}">Jouer ma manche</a></div>
+                {% elif other_score is none %}
+                    <div class="versus-callout"><h2>Ton score est enregistré : {{ my_score }}.</h2><p>En attente de la manche de ton adversaire…</p></div>
+                {% endif %}
+                {% if match.creator_score is none and match.opponent_score is none %}<form method="post" action="{{ url_for('versus_cancel', match_id=match.id) }}"><button class="danger-link" type="submit">Annuler le défi avant de jouer</button></form>{% endif %}
+            {% else %}
+                <div class="versus-callout"><h2>Ce défi a déjà ses deux joueurs.</h2><p>Les manches sont en cours.</p></div>
+            {% endif %}
+
+        {% elif match.status == 'finished' %}
+            {% if match.winner_name %}
+                <div class="versus-result winner"><span>🏆</span><h2>{{ match.winner_name }} gagne le défi !</h2><p>Le gagnant reçoit les {{ match.stake * 2 }} points du pot, soit un gain net de {{ match.stake }} points.</p></div>
+            {% else %}
+                <div class="versus-result"><span>🤝</span><h2>Égalité.</h2><p>Les deux joueurs récupèrent leur mise de {{ match.stake }} points.</p></div>
+            {% endif %}
+            {% if role and wallet %}<p class="versus-balance-inline">Ton nouveau solde : <strong>{{ wallet.balance }} pts</strong></p>{% endif %}
+            <a class="primary-button" href="{{ url_for('versus_home', jeu=match.game) }}">Créer un autre défi</a>
+        {% else %}
+            <div class="versus-result"><span>↩️</span><h2>Défi annulé.</h2><p>Les mises ont été rendues aux joueurs concernés.</p></div>
+            <a class="primary-button" href="{{ url_for('versus_home') }}">Retour aux défis</a>
+        {% endif %}
+    </section>
+
+    <section class="content-card versus-safety"><h2>Points virtuels uniquement</h2><p>Les points de défi servent uniquement dans PlayBed. Ils ne peuvent pas être achetés, retirés, convertis en argent ou échangés contre un bien réel.</p></section>
+</main>
+{% endblock %}
