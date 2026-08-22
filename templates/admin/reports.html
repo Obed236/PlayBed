@@ -1,8 +1,76 @@
 {% extends 'admin/base.html' %}
 {% block title %}Signalements{% endblock %}
 {% block content %}
-<div class="topbar"><div><h1>Signalements & messages</h1><div class="muted">Les bugs, suggestions et questions envoyés depuis PlayBed arrivent directement ici.</div></div></div>
+<div class="topbar">
+  <div>
+    <h1>Signalements & messages</h1>
+    <div class="muted">Les bugs, suggestions et questions envoyés depuis PlayBed arrivent directement ici.</div>
+  </div>
+</div>
+
+{% if request.args.get('error') == 'rejection_reason_required' %}
 <section class="panel">
-{% if not reports %}<div class="empty">Aucun signalement ou message pour le moment.</div>{% else %}<div class="table-wrap"><table><thead><tr><th>Date</th><th>Auteur</th><th>Cible</th><th>Message</th><th>État</th><th>Action</th></tr></thead><tbody>{% for r in reports %}<tr><td>{{ r['created_at'][:19].replace('T',' ') }}</td><td>{{ r['reporter_pseudo'] or 'Anonyme' }}</td><td>{{ r['target_type'] or '—' }}{% if r['target_value'] %}<div class="muted">{{ r['target_value'] }}</div>{% endif %}</td><td>{{ r['reason'] }}</td><td><span class="badge {{ 'warn' if r['status']=='open' else 'good' if r['status']=='resolved' else '' }}">{{ r['status'] }}</span></td><td><form class="actions" method="post" action="{{ url_for('admin_report_status') }}"><input type="hidden" name="csrf_token" value="{{ admin_csrf_token() }}"><input type="hidden" name="id" value="{{ r['id'] }}"><button class="btn small good" name="status" value="resolved" type="submit">Résoudre</button><button class="btn small" name="status" value="dismissed" type="submit">Ignorer</button>{% if r['status']!='open' %}<button class="btn small" name="status" value="open" type="submit">Rouvrir</button>{% endif %}</form></td></tr>{% endfor %}</tbody></table></div>{% endif %}
+  <div class="empty">⚠️ Pour rejeter une demande, indique obligatoirement la cause du rejet.</div>
+</section>
+{% endif %}
+
+<section class="panel">
+{% if not reports %}
+  <div class="empty">Aucun signalement ou message pour le moment.</div>
+{% else %}
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Auteur</th>
+          <th>Cible</th>
+          <th>Message</th>
+          <th>État</th>
+          <th>Décision administrateur</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for r in reports %}
+        <tr>
+          <td>{{ r['created_at'][:19].replace('T',' ') }}</td>
+          <td>{{ r['reporter_pseudo'] or 'Anonyme' }}</td>
+          <td>
+            {{ r['target_type'] or '—' }}
+            {% if r['target_value'] %}<div class="muted">{{ r['target_value'] }}</div>{% endif %}
+          </td>
+          <td>{{ r['reason'] }}</td>
+          <td>
+            {% if r['status'] == 'open' %}
+              <span class="badge warn">En cours</span>
+            {% elif r['status'] == 'resolved' %}
+              <span class="badge good">Résolu</span>
+            {% else %}
+              <span class="badge">Rejeté</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if r['admin_message'] %}
+              <div class="muted" style="margin-bottom:8px;"><strong>Message actuel :</strong> {{ r['admin_message'] }}</div>
+            {% endif %}
+            <form method="post" action="{{ url_for('admin_report_status') }}">
+              <input type="hidden" name="csrf_token" value="{{ admin_csrf_token() }}">
+              <input type="hidden" name="id" value="{{ r['id'] }}">
+              <textarea name="admin_message" rows="3" maxlength="1000" placeholder="Réponse ou motif du rejet…">{{ r['admin_message'] or '' }}</textarea>
+              <div class="actions" style="margin-top:8px;">
+                <button class="btn small good" name="status" value="resolved" type="submit">Résoudre</button>
+                <button class="btn small" name="status" value="dismissed" type="submit">Rejeter</button>
+                {% if r['status'] != 'open' %}
+                  <button class="btn small" name="status" value="open" type="submit">Rouvrir</button>
+                {% endif %}
+              </div>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endif %}
 </section>
 {% endblock %}
