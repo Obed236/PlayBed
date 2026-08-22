@@ -20,6 +20,7 @@ from sitemap_routes import register_sitemap_route
 from growth import register_growth
 from admin_routes import register_admin_routes
 from admin_complete import register_admin_complete
+from admin_action_verite import register_admin_action_verite
 
 GUIDES.update(EDITORIAL_GUIDES)
 GAMES.update(EXTRA_GAMES)
@@ -131,6 +132,7 @@ register_creator_routes(app, current_pseudo)
 register_sitemap_route(app, GAMES, current_pseudo)
 register_admin_routes(app, GAMES, db_connection, current_pseudo, core_module)
 register_admin_complete(app, GAMES, db_connection, current_pseudo, core_module)
+register_admin_action_verite(app, db_connection)
 
 # Le module admin possède un garde générique. On le remplace ici par une
 # version plus légère qui ne recrée pas le schéma admin à chaque requête.
