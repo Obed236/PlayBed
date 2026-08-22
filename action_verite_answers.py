@@ -144,7 +144,7 @@ def register_action_verite_answers(app, db_connection):
 
     @app.after_request
     def clear_action_verite_answer(response):
-        if request.method != "POST":
+        if request.method != "POST" or response.status_code >= 400:
             return response
         match = re.fullmatch(
             r"/action-verite/classe/(\d{4})/(choisir|suivant|fermer)",
