@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block title %}{{ meta.get('name','Jeu') }} indisponible · PlayBed{% endblock %}
+{% block robots %}noindex,nofollow{% endblock %}
+{% block content %}
+<main style="min-height:60vh;display:grid;place-items:center;padding:32px 18px"><section style="max-width:620px;text-align:center;background:rgba(13,26,43,.92);border:1px solid #263a54;border-radius:20px;padding:30px"><div style="font-size:48px">{{ meta.get('emoji','🎮') }}</div><h1>{{ meta.get('name','Ce jeu') }} est temporairement indisponible</h1><p>Ce jeu a été désactivé depuis l’administration de PlayBed. Il pourra être réactivé sans perdre les scores déjà enregistrés.</p><a href="{{ url_for('home') }}#games" style="display:inline-block;margin-top:12px;padding:10px 16px;border-radius:10px;background:#195db6;color:white;text-decoration:none">Voir les autres jeux</a></section></main>
+{% endblock %}
