@@ -1,0 +1,8 @@
+{% extends 'admin/base.html' %}
+{% block title %}Signalements{% endblock %}
+{% block content %}
+<div class="topbar"><div><h1>Signalements</h1><div class="muted">File de modération prête pour les futurs boutons de signalement publics.</div></div></div>
+<section class="panel">
+{% if not reports %}<div class="empty">Aucun signalement pour le moment.</div>{% else %}<div class="table-wrap"><table><thead><tr><th>Date</th><th>Auteur</th><th>Cible</th><th>Motif</th><th>État</th><th>Action</th></tr></thead><tbody>{% for r in reports %}<tr><td>{{ r['created_at'][:19].replace('T',' ') }}</td><td>{{ r['reporter_pseudo'] or 'Anonyme' }}</td><td>{{ r['target_type'] or '—' }}{% if r['target_value'] %}<div class="muted">{{ r['target_value'] }}</div>{% endif %}</td><td>{{ r['reason'] }}</td><td><span class="badge {{ 'warn' if r['status']=='open' else 'good' if r['status']=='resolved' else '' }}">{{ r['status'] }}</span></td><td><form class="actions" method="post" action="{{ url_for('admin_report_status') }}"><input type="hidden" name="csrf_token" value="{{ admin_csrf_token() }}"><input type="hidden" name="id" value="{{ r['id'] }}"><button class="btn small good" name="status" value="resolved" type="submit">Résoudre</button><button class="btn small" name="status" value="dismissed" type="submit">Ignorer</button>{% if r['status']!='open' %}<button class="btn small" name="status" value="open" type="submit">Rouvrir</button>{% endif %}</form></td></tr>{% endfor %}</tbody></table></div>{% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'admin/base.html' %}
+{% block title %}Scores{% endblock %}
+{% block content %}
+<div class="topbar"><div><h1>Scores</h1><div class="muted">Consulte et supprime les scores suspects ou erronés.</div></div></div>
+<section class="panel">
+  <form class="inline-form" method="get">
+    <div class="field"><label for="pseudo">Pseudo</label><input id="pseudo" name="pseudo" value="{{ pseudo_filter }}" placeholder="Tous"></div>
+    <div class="field"><label for="game">Jeu</label><select id="game" name="game"><option value="">Tous les jeux</option>{% for slug, meta in games.items() %}<option value="{{ slug }}" {% if selected_game==slug %}selected{% endif %}>{{ meta.get('name', slug) }}</option>{% endfor %}</select></div>
+    <button class="btn primary" type="submit">Filtrer</button><a class="btn" href="{{ url_for('admin_scores') }}">Réinitialiser</a>
+  </form>
+</section>
+<section class="panel"><div class="table-wrap"><table><thead><tr><th>Pseudo</th><th>Jeu</th><th>Points</th><th>Date</th><th></th></tr></thead><tbody>
+{% for score in scores %}<tr><td>{{ score['pseudo'] }}</td><td>{{ games.get(score['game'],{}).get('name',score['game']) }}</td><td><strong>{{ score['points'] }}</strong></td><td>{{ score['created_at'][:19].replace('T',' ') }}</td><td><form method="post" action="{{ url_for('admin_score_delete') }}" onsubmit="return confirm('Supprimer ce score ?')"><input type="hidden" name="csrf_token" value="{{ admin_csrf_token() }}"><input type="hidden" name="pseudo" value="{{ score['pseudo'] }}"><input type="hidden" name="game" value="{{ score['game'] }}"><input type="hidden" name="points" value="{{ score['points'] }}"><input type="hidden" name="created_at" value="{{ score['created_at'] }}"><button class="btn small danger" type="submit">Supprimer</button></form></td></tr>{% else %}<tr><td colspan="5" class="empty">Aucun score trouvé.</td></tr>{% endfor %}
+</tbody></table></div></section>
+{% endblock %}

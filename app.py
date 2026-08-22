@@ -1,6 +1,6 @@
 import os
 
-from flask import render_template, request
+from flask import redirect, render_template, request, session, url_for
 
 import core as core_module
 from core import app, GAMES, db_connection, current_pseudo, init_db, save_score, load_words, load_quiz_questions
@@ -18,6 +18,7 @@ from versus import VersusManager
 from creator_routes import register_creator_routes
 from sitemap_routes import register_sitemap_route
 from growth import register_growth
+from admin_routes import register_admin_routes
 
 GUIDES.update(EDITORIAL_GUIDES)
 GAMES.update(EXTRA_GAMES)
@@ -127,6 +128,113 @@ register_engagement(app, GAMES, db_connection, current_pseudo)
 register_growth(app, GAMES, db_connection, current_pseudo)
 register_creator_routes(app, current_pseudo)
 register_sitemap_route(app, GAMES, current_pseudo)
+register_admin_routes(app, GAMES, db_connection, current_pseudo, core_module)
+
+# Le module admin possède un garde générique. On le remplace ici par une
+# version plus légère qui ne recrée pas le schéma admin à chaque requête.
+for scope, functions in list(app.before_request_funcs.items()):
+    app.before_request_funcs[scope] = [
+        function for function in functions
+        if getattr(function, "__name__", "") != "enforce_admin_controls"
+    ]
+
+
+@app.before_request
+def apply_admin_runtime_controls():
+    if request.path.startswith("/admin"):
+        return None
+
+    endpoint = request.endpoint
+    if endpoint in {
+        "static",
+        "health",
+        "robots_txt",
+        "ads_txt",
+        "sitemap_xml",
+        "pwa_manifest",
+        "pwa_service_worker",
+    }:
+        return None
+
+    # Les pages publiques historiquement indépendantes de PostgreSQL restent
+    # indépendantes. La page d'accueil est la seule exception, car elle lit
+    # déjà le compteur de scores avec une stratégie de repli.
+    if endpoint in DATABASE_OPTIONAL_ENDPOINTS and endpoint != "home":
+        return None
+
+    game_slug = None
+    if request.view_args:
+        game_slug = request.view_args.get("game")
+    if not game_slug:
+        game_slug = {
+            "/arcade/calcul": "calcul",
+            "/arcade/mot-melange": "melange",
+            "/arcade/suite-logique": "suite",
+            "/arcade/pair-impair": "pair",
+            "/arcade/chrono-10": "chrono",
+        }.get(request.path)
+    if not game_slug and (
+        request.path.startswith("/action-verite")
+        or request.path.startswith("/jeux/action-verite")
+    ):
+        game_slug = "action-verite"
+
+    try:
+        maintenance_enabled = False
+        maintenance_message = "PlayBed est momentanément en maintenance. Reviens dans quelques instants."
+        blocked = False
+        disabled_game = False
+        pseudo = current_pseudo()
+
+        with db_connection() as conn:
+            maintenance_row = conn.execute(
+                "SELECT value FROM admin_settings WHERE key = ?",
+                ("maintenance_mode",),
+            ).fetchone()
+            maintenance_enabled = bool(maintenance_row and maintenance_row["value"] == "1")
+
+            if maintenance_enabled:
+                message_row = conn.execute(
+                    "SELECT value FROM admin_settings WHERE key = ?",
+                    ("maintenance_message",),
+                ).fetchone()
+                if message_row and message_row["value"]:
+                    maintenance_message = message_row["value"]
+
+            if pseudo:
+                blocked = bool(conn.execute(
+                    "SELECT pseudo FROM admin_blocked_pseudos WHERE LOWER(pseudo) = LOWER(?)",
+                    (pseudo,),
+                ).fetchone())
+
+            if game_slug in GAMES:
+                game_row = conn.execute(
+                    "SELECT value FROM admin_settings WHERE key = ?",
+                    (f"game_enabled:{game_slug}",),
+                ).fetchone()
+                disabled_game = bool(game_row and game_row["value"] == "0")
+
+        if maintenance_enabled:
+            return render_template("maintenance.html", message=maintenance_message), 503
+
+        if blocked:
+            session.pop("pseudo", None)
+            session.pop("current_game", None)
+            return redirect(url_for("home", pseudo_blocked=1))
+
+        if disabled_game:
+            return render_template(
+                "game_disabled.html",
+                meta=GAMES[game_slug],
+                pseudo=current_pseudo(),
+            ), 503
+    except Exception:
+        # Si les tables admin n'existent pas encore ou si PostgreSQL répond mal,
+        # les contrôles admin ne doivent pas rendre PlayBed inaccessible.
+        app.logger.exception("Contrôles administrateur temporairement indisponibles")
+
+    return None
+
 
 if __name__ == "__main__":
     init_db()
