@@ -1,3 +1,4 @@
+{% set no_ads_page = request.path.startswith('/play/') or request.path.startswith('/arcade/') or request.path.startswith('/action-verite') or request.path.startswith('/profil') or request.path.startswith('/joueur/') or request.path.startswith('/defi/') or request.path.startswith('/affronter') or request.path.startswith('/classement') %}
 <!DOCTYPE html>
 <html lang="fr" data-theme="dark">
 
@@ -24,6 +25,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="PlayBed">
     <meta name="google-adsense-account" content="ca-pub-8115913863262508">
+    {% if not no_ads_page %}<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8115913863262508" crossorigin="anonymous" data-playbed-adsense="true"></script>{% endif %}
     <meta name="robots" content="{% block robots %}index,follow,max-image-preview:large{% endblock %}">
     <meta property="og:title" content="{% block og_title %}PlayBed V3{% endblock %}">
     <meta property="og:description" content="{% block og_description %}Joue, progresse et défie tes amis sur PlayBed.{% endblock %}">
@@ -46,7 +48,6 @@
     {% block head_extra %}{% endblock %}
 </head>
 
-{% set no_ads_page = request.path.startswith('/play/') or request.path.startswith('/arcade/') or request.path.startswith('/action-verite') or request.path.startswith('/profil') or request.path.startswith('/joueur/') or request.path.startswith('/defi/') or request.path.startswith('/affronter') or request.path.startswith('/classement') %}
 <body data-ads-page="{{ 'false' if no_ads_page else 'true' }}">
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-THGHCD6K"
@@ -77,9 +78,9 @@
     <section class="consent-panel" id="consentPanel" hidden aria-labelledby="consentTitle" aria-modal="true" role="dialog">
         <div class="consent-card">
             <span class="eyebrow">VIE PRIVÉE</span><h2 id="consentTitle">Tes choix de confidentialité</h2>
-            <p>PlayBed utilise un cookie de session nécessaire pour conserver ton pseudo pendant la navigation. Les technologies publicitaires Google ne sont chargées qu’en fonction de ton choix.</p>
+            <p>PlayBed utilise un cookie de session nécessaire pour conserver ton pseudo pendant la navigation. L’utilisation des technologies publicitaires Google dépend de ton choix de confidentialité.</p>
             <div class="consent-setting"><div><strong>Fonctionnement essentiel</strong><span>Session, sécurité et préférences indispensables.</span></div><span class="required-pill">Toujours actif</span></div>
-            <label class="consent-setting" for="adsConsent"><div><strong>Publicité</strong><span>Autoriser le chargement de Google AdSense et ses technologies associées.</span></div><input id="adsConsent" type="checkbox"></label>
+            <label class="consent-setting" for="adsConsent"><div><strong>Publicité</strong><span>Autoriser l’utilisation des technologies Google AdSense associées à la publicité.</span></div><input id="adsConsent" type="checkbox"></label>
             <p class="consent-note">Tu peux modifier ce choix à tout moment depuis « Gérer les cookies ». Consulte aussi notre <a href="{{ url_for('privacy_page') }}">politique de confidentialité</a>.</p>
             <div class="consent-actions"><button class="secondary-button" id="rejectAllConsent" type="button">Tout refuser</button><button class="secondary-button" id="saveConsent" type="button">Enregistrer mes choix</button><button class="primary-button" id="acceptAllConsent" type="button">Tout accepter</button></div>
         </div>
