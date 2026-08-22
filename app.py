@@ -18,6 +18,7 @@ from versus import VersusManager
 from creator_routes import register_creator_routes
 from sitemap_routes import register_sitemap_route
 from growth import register_growth
+from support_routes import register_support_routes
 from admin_routes import register_admin_routes
 from admin_complete import register_admin_complete
 from admin_action_verite import register_admin_action_verite
@@ -130,6 +131,7 @@ register_engagement(app, GAMES, db_connection, current_pseudo)
 register_growth(app, GAMES, db_connection, current_pseudo)
 register_creator_routes(app, current_pseudo)
 register_sitemap_route(app, GAMES, current_pseudo)
+register_support_routes(app, db_connection, current_pseudo)
 register_admin_routes(app, GAMES, db_connection, current_pseudo, core_module)
 register_admin_complete(app, GAMES, db_connection, current_pseudo, core_module)
 register_admin_action_verite(app, db_connection)
