@@ -18,6 +18,7 @@ from versus import VersusManager
 from creator_routes import register_creator_routes
 from sitemap_routes import register_sitemap_route
 from growth import register_growth
+from admin_routes import register_admin_routes
 
 GUIDES.update(EDITORIAL_GUIDES)
 GAMES.update(EXTRA_GAMES)
@@ -127,6 +128,9 @@ register_engagement(app, GAMES, db_connection, current_pseudo)
 register_growth(app, GAMES, db_connection, current_pseudo)
 register_creator_routes(app, current_pseudo)
 register_sitemap_route(app, GAMES, current_pseudo)
+# Le back-office est enregistré en dernier : ses contrôles s'appliquent aux
+# routes publiques finales, sans modifier leurs fonctions métier.
+register_admin_routes(app, GAMES, db_connection, current_pseudo, core_module)
 
 if __name__ == "__main__":
     init_db()
