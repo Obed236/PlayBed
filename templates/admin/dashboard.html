@@ -1,16 +1,80 @@
 {% extends 'admin/base.html' %}
 {% block title %}Tableau de bord{% endblock %}
 {% block content %}
-<div class="topbar"><div><h1>Tableau de bord</h1><div class="muted">Vue d’ensemble de PlayBed.</div></div></div>
+<div class="topbar">
+  <div>
+    <h1>Tableau de bord</h1>
+    <div class="muted">Vue d’ensemble et accès direct aux outils d’administration de PlayBed.</div>
+  </div>
+</div>
+
+<section class="panel admin-actions-panel">
+  <div class="section-heading">
+    <div>
+      <h2>Gérer PlayBed</h2>
+      <div class="muted">Les actions ci-dessous modifient réellement les données ou le fonctionnement de la plateforme.</div>
+    </div>
+  </div>
+  <div class="admin-action-grid">
+    <a class="admin-action-card" href="{{ url_for('admin_users') }}">
+      <span class="admin-action-icon">👥</span>
+      <strong>Utilisateurs</strong>
+      <span>Rechercher un pseudo, le bloquer ou débloquer et supprimer ses scores.</span>
+      <em>Gérer les utilisateurs →</em>
+    </a>
+    <a class="admin-action-card" href="{{ url_for('admin_games') }}">
+      <span class="admin-action-icon">🎮</span>
+      <strong>Jeux</strong>
+      <span>Activer ou désactiver immédiatement un jeu sur PlayBed.</span>
+      <em>Gérer les jeux →</em>
+    </a>
+    <a class="admin-action-card" href="{{ url_for('admin_scores') }}">
+      <span class="admin-action-icon">🏆</span>
+      <strong>Scores</strong>
+      <span>Filtrer les scores et supprimer un résultat suspect ou erroné.</span>
+      <em>Gérer les scores →</em>
+    </a>
+    <a class="admin-action-card" href="{{ url_for('admin_questions') }}">
+      <span class="admin-action-icon">❓</span>
+      <strong>Questions</strong>
+      <span>Ajouter des questions Vrai/Faux ou Quiz et gérer celles ajoutées depuis l’admin.</span>
+      <em>Gérer les questions →</em>
+    </a>
+    <a class="admin-action-card" href="{{ url_for('admin_reports') }}">
+      <span class="admin-action-icon">🚩</span>
+      <strong>Signalements</strong>
+      <span>Consulter et traiter les signalements enregistrés par la plateforme.</span>
+      <em>Voir les signalements →</em>
+    </a>
+    <a class="admin-action-card" href="{{ url_for('admin_settings') }}">
+      <span class="admin-action-icon">⚙️</span>
+      <strong>Paramètres</strong>
+      <span>Mettre PlayBed en maintenance et choisir le message affiché aux visiteurs.</span>
+      <em>Ouvrir les paramètres →</em>
+    </a>
+  </div>
+</section>
+
 <div class="cards">
   <div class="card"><span class="muted">Scores enregistrés</span><strong>{{ total_scores }}</strong></div>
   <div class="card"><span class="muted">Pseudos actifs</span><strong>{{ players }}</strong></div>
   <div class="card"><span class="muted">Scores sur 24 h</span><strong>{{ scores_24h }}</strong></div>
   <div class="card"><span class="muted">Pseudos bloqués</span><strong>{{ blocked }}</strong></div>
 </div>
+
 <div class="grid-2">
-  <section class="panel"><h2>Activité par jeu</h2><div class="table-wrap"><table><thead><tr><th>Jeu</th><th>Parties</th><th>Points cumulés</th></tr></thead><tbody>{% for row in game_stats %}<tr><td>{{ games.get(row['game'], {}).get('name', row['game']) }}</td><td>{{ row['plays'] }}</td><td>{{ row['points'] or 0 }}</td></tr>{% else %}<tr><td colspan="3" class="empty">Aucune activité.</td></tr>{% endfor %}</tbody></table></div></section>
-  <section class="panel"><h2>Journal administrateur</h2><div class="table-wrap"><table><thead><tr><th>Action</th><th>Détail</th></tr></thead><tbody>{% for row in recent_logs %}<tr><td><strong>{{ row['action'] }}</strong><div class="muted">{{ row['created_at'][:19].replace('T',' ') }}</div></td><td>{{ row['details'] or '—' }}</td></tr>{% else %}<tr><td colspan="2" class="empty">Aucune action.</td></tr>{% endfor %}</tbody></table></div></section>
+  <section class="panel">
+    <div class="section-heading"><h2>Activité par jeu</h2><a class="btn small" href="{{ url_for('admin_games') }}">Gérer les jeux</a></div>
+    <div class="table-wrap"><table><thead><tr><th>Jeu</th><th>Parties</th><th>Points cumulés</th></tr></thead><tbody>{% for row in game_stats %}<tr><td>{{ games.get(row['game'], {}).get('name', row['game']) }}</td><td>{{ row['plays'] }}</td><td>{{ row['points'] or 0 }}</td></tr>{% else %}<tr><td colspan="3" class="empty">Aucune activité.</td></tr>{% endfor %}</tbody></table></div>
+  </section>
+  <section class="panel">
+    <h2>Journal administrateur</h2>
+    <div class="table-wrap"><table><thead><tr><th>Action</th><th>Détail</th></tr></thead><tbody>{% for row in recent_logs %}<tr><td><strong>{{ row['action'] }}</strong><div class="muted">{{ row['created_at'][:19].replace('T',' ') }}</div></td><td>{{ row['details'] or '—' }}</td></tr>{% else %}<tr><td colspan="2" class="empty">Aucune action.</td></tr>{% endfor %}</tbody></table></div>
+  </section>
 </div>
-<section class="panel"><h2>Derniers scores</h2><div class="table-wrap"><table><thead><tr><th>Pseudo</th><th>Jeu</th><th>Score</th><th>Date</th></tr></thead><tbody>{% for row in recent_scores %}<tr><td>{{ row['pseudo'] }}</td><td>{{ games.get(row['game'], {}).get('name', row['game']) }}</td><td>{{ row['points'] }}</td><td>{{ row['created_at'][:19].replace('T',' ') }}</td></tr>{% else %}<tr><td colspan="4" class="empty">Aucun score.</td></tr>{% endfor %}</tbody></table></div></section>
+
+<section class="panel">
+  <div class="section-heading"><h2>Derniers scores</h2><a class="btn small" href="{{ url_for('admin_scores') }}">Gérer tous les scores</a></div>
+  <div class="table-wrap"><table><thead><tr><th>Pseudo</th><th>Jeu</th><th>Score</th><th>Date</th></tr></thead><tbody>{% for row in recent_scores %}<tr><td>{{ row['pseudo'] }}</td><td>{{ games.get(row['game'], {}).get('name', row['game']) }}</td><td>{{ row['points'] }}</td><td>{{ row['created_at'][:19].replace('T',' ') }}</td></tr>{% else %}<tr><td colspan="4" class="empty">Aucun score.</td></tr>{% endfor %}</tbody></table></div>
+</section>
 {% endblock %}
