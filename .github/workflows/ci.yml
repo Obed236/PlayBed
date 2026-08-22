@@ -19,7 +19,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Compile Python files
-        run: python -m py_compile app.py core.py admin_routes.py admin_complete.py
+        run: python -m py_compile app.py core.py admin_routes.py admin_complete.py admin_action_verite.py
       - name: Import Flask application
         env:
           SECRET_KEY: ci-secret-key
