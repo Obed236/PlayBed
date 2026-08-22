@@ -17,30 +17,4 @@
             }
         });
     }
-
-    const privacyButton = document.getElementById("privacyCookieSettings");
-
-    if (privacyButton) {
-        window.googlefc = window.googlefc || {};
-        window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
-
-        // Google recommande de n'afficher le point d'entrée qu'une fois l'API
-        // de consentement réellement chargée et appelable.
-        window.googlefc.callbackQueue.push({
-            CONSENT_API_READY: () => {
-                privacyButton.hidden = false;
-            },
-        });
-
-        privacyButton.addEventListener("click", (event) => {
-            event.preventDefault();
-            window.googlefc.callbackQueue.push({
-                CONSENT_API_READY: () => {
-                    if (typeof window.googlefc.showRevocationMessage === "function") {
-                        window.googlefc.showRevocationMessage();
-                    }
-                },
-            });
-        });
-    }
 })();
