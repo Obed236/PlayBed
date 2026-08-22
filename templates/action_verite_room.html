@@ -17,7 +17,37 @@
                 {% if not room.current_prompt %}
                     {% if is_current %}<div class="av-choice"><h3>Action ou Vérité ?</h3><form method="post" action="{{ url_for('av_room_choose', code=room.code) }}"><button class="av-choice-button action" name="kind" value="action" type="submit">🔥 Action</button><button class="av-choice-button truth" name="kind" value="verite" type="submit">💬 Vérité</button></form></div>{% else %}<div class="av-waiting"><strong>{{ current_player.name }}</strong> choisit Action ou Vérité sur son téléphone.</div>{% endif %}
                 {% else %}
-                    <div class="av-prompt"><span class="eyebrow">{% if room.current_kind == 'action' %}🔥 ACTION{% else %}💬 VÉRITÉ{% endif %}</span><p>{{ room.current_prompt }}</p></div>{% if is_current or is_creator %}<form method="post" action="{{ url_for('av_room_next', code=room.code) }}" class="av-next-form"><button class="primary-button" type="submit">Tour suivant →</button></form>{% else %}<div class="av-waiting">En attente de {{ current_player.name }}…</div>{% endif %}
+                    <div class="av-prompt"><span class="eyebrow">{% if room.current_kind == 'action' %}🔥 ACTION{% else %}💬 VÉRITÉ{% endif %}</span><p>{{ room.current_prompt }}</p></div>
+
+                    {% if av_response %}
+                        <section class="av-response-card">
+                            <span class="eyebrow">RÉPONSE DE {{ av_response.player_name|upper }}</span>
+                            {% if av_response.status == 'passed' %}
+                                <h3>⏭️ {{ av_response.player_name }} a préféré passer.</h3>
+                            {% elif av_response.kind == 'action' %}
+                                <h3>✅ Action réalisée</h3>
+                                {% if av_response.response_text %}<p>{{ av_response.response_text }}</p>{% else %}<p>{{ av_response.player_name }} indique avoir fait l’action.</p>{% endif %}
+                            {% else %}
+                                <p class="av-response-text">{{ av_response.response_text }}</p>
+                            {% endif %}
+                        </section>
+                        {% if is_current or is_creator %}<form method="post" action="{{ url_for('av_room_next', code=room.code) }}" class="av-next-form"><button class="primary-button" type="submit">Tour suivant →</button></form>{% else %}<div class="av-waiting">Réponse envoyée. En attente du tour suivant…</div>{% endif %}
+                    {% elif is_current %}
+                        <form method="post" action="{{ url_for('av_room_answer', code=room.code) }}" class="av-answer-form">
+                            {% if room.current_kind == 'verite' %}
+                                <label for="avAnswer">Ta réponse</label>
+                                <textarea id="avAnswer" name="answer_text" maxlength="500" required placeholder="Écris ta réponse ici…"></textarea>
+                                <div class="av-answer-actions"><button class="primary-button" name="mode" value="answer" type="submit">Envoyer ma réponse</button><button class="secondary-button" name="mode" value="pass" type="submit" formnovalidate>Je préfère passer</button></div>
+                            {% else %}
+                                <label for="avAnswer">Commentaire facultatif</label>
+                                <textarea id="avAnswer" name="answer_text" maxlength="500" placeholder="Ex. : fait 😅, c’était gênant, mission accomplie…"></textarea>
+                                <div class="av-answer-actions"><button class="primary-button" name="mode" value="done" type="submit">✅ J’ai fait l’action</button><button class="secondary-button" name="mode" value="pass" type="submit">Je préfère passer</button></div>
+                            {% endif %}
+                            <small>Ta réponse sera visible par les personnes présentes dans cette classe.</small>
+                        </form>
+                    {% else %}
+                        <div class="av-waiting">En attente de la réponse de <strong>{{ current_player.name }}</strong>…</div>
+                    {% endif %}
                 {% endif %}
             {% endif %}
         </section>
