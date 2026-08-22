@@ -9,9 +9,9 @@ from action_verite import NORMAL_DARES, NORMAL_TRUTHS
 
 PREFERENCE_TTL_HOURS = 24
 
-# Niveau « Osé » : des questions plus personnelles et plus gênantes,
-# avec des mots simples. Pas de contenu explicite, pas de danger,
-# pas d'humiliation forcée et pas de contact imposé.
+# 0 = Classique, 1 = Osé, 2 = Très osé.
+# Les niveaux adultes restent non graphiques : pas de description explicite
+# d'actes sexuels, pas de danger, pas d'humiliation forcée et pas de contact imposé.
 DARING_TRUTHS = [
     "Qui dans ce groupe te plaît le plus physiquement ?",
     "Avec qui dans ce groupe accepterais-tu le plus facilement un rendez-vous ?",
@@ -30,29 +30,13 @@ DARING_TRUTHS = [
     "As-tu déjà envoyé un message très gênant à une personne qui te plaisait puis regretté ?",
     "As-tu déjà supprimé un message juste après l’avoir envoyé parce que tu avais honte ?",
     "As-tu déjà relu plusieurs fois une discussion avec une personne qui te plaisait ?",
-    "As-tu déjà regardé très longtemps le profil d’une personne qui te plaisait sans lui parler ?",
-    "Quel est le plus gros mensonge que tu aies raconté pour éviter un rendez-vous ?",
     "Quel est le rendez-vous le plus gênant que tu aies vécu ?",
-    "Quelle personne présente ici pourrait le plus facilement te faire craquer ?",
-    "Quelle personne du groupe serait la plus dangereuse pour ton cœur ?",
     "Si tu devais sortir avec une personne de ce groupe, qui choisirais-tu ?",
-    "Si tu devais passer une soirée en tête-à-tête avec une personne du groupe, qui choisirais-tu ?",
-    "Qui du groupe serait, selon toi, le meilleur partenaire pour toi ?",
     "As-tu déjà pensé à sortir avec quelqu’un présent dans ce groupe ?",
     "As-tu déjà eu envie d’embrasser quelqu’un sans jamais lui dire ?",
-    "Quelle est la chose la plus folle que tu aies faite par amour ou par attirance ?",
     "Quel est ton plus gros secret amoureux que tu acceptes de raconter ?",
     "As-tu déjà menti à la personne avec qui tu étais en couple au sujet d’une autre personne ?",
-    "As-tu déjà parlé à quelqu’un juste parce que tu le trouvais très beau ou très belle ?",
-    "Qui est la dernière personne à laquelle tu as pensé avant de dormir hier soir ?",
-    "Quelle personne de ton passé pourrais-tu revoir si elle te le demandait aujourd’hui ?",
-    "As-tu déjà regretté d’avoir quitté quelqu’un ?",
     "As-tu déjà regretté de ne pas avoir tenté ta chance avec quelqu’un ?",
-    "Quelle est la première chose que tu regardes chez une personne qui te plaît ?",
-    "Quelle est ta plus grande faiblesse quand quelqu’un te plaît vraiment ?",
-    "Qu’est-ce qui peut te faire tomber amoureux très vite ?",
-    "As-tu déjà dit que tu ne voulais rien de sérieux alors que tu avais peur de t’attacher ?",
-    "Quelle personne du groupe serait la plus difficile à oublier après une relation ?",
 ]
 
 DARING_DARES = [
@@ -68,14 +52,58 @@ DARING_DARES = [
     "Improvise un message très direct que tu pourrais envoyer à une personne qui te plaît, sans l’envoyer.",
     "Fais une fausse déclaration d’amour à une personne volontaire pendant 20 secondes.",
     "Choisis une personne volontaire et dis-lui quel serait votre rendez-vous idéal.",
-    "Dis devant le groupe quel type de personne te fait le plus craquer.",
     "Choisis deux personnes du groupe et dis laquelle tu inviterais à un rendez-vous si tu devais choisir.",
-    "Fais semblant de rencontrer pour la première fois une personne volontaire qui te plaît beaucoup.",
-    "Choisis une personne volontaire et dis-lui le compliment le plus gênant que tu oses lui faire.",
     "Dis qui du groupe tu choisirais pour passer une soirée en tête-à-tête.",
-    "Choisis une personne volontaire et explique en 20 secondes pourquoi elle pourrait te plaire.",
     "Fais semblant d’avouer tes sentiments à une personne volontaire devant tout le groupe.",
-    "Dis quelle personne du groupe serait, selon toi, la plus difficile à oublier après une relation.",
+]
+
+VERY_DARING_TRUTHS = [
+    "As-tu déjà eu une relation d’un soir ?",
+    "As-tu déjà couché avec quelqu’un puis regretté le lendemain ?",
+    "As-tu déjà eu une relation seulement physique sans vouloir être en couple ?",
+    "As-tu déjà menti sur ton expérience sexuelle ?",
+    "As-tu déjà caché à quelqu’un que tu avais une relation intime avec une autre personne ?",
+    "As-tu déjà eu envie de coucher avec quelqu’un de ce groupe ?",
+    "Si tu devais choisir une personne du groupe pour passer une nuit avec elle, qui choisirais-tu ?",
+    "Qui dans ce groupe t’attire le plus sexuellement ?",
+    "As-tu déjà envoyé une photo intime à quelqu’un ?",
+    "As-tu déjà envoyé un message très chaud puis regretté ?",
+    "As-tu déjà eu une relation intime avec quelqu’un que personne autour de toi ne connaissait ?",
+    "As-tu déjà eu une relation intime avec quelqu’un puis coupé tout contact ?",
+    "As-tu déjà eu envie d’une relation uniquement physique avec quelqu’un qui voulait plus ?",
+    "As-tu déjà menti à ton partenaire sur ton attirance pour une autre personne ?",
+    "As-tu déjà eu une aventure avec un ami ou une amie ?",
+    "Quelle est la situation intime la plus gênante que tu aies vécue ?",
+    "As-tu déjà eu peur que quelqu’un découvre avec qui tu avais passé la nuit ?",
+    "As-tu déjà regretté d’avoir passé la nuit avec quelqu’un ?",
+    "As-tu déjà eu une relation intime avec l’ex d’un ami ou d’une amie ?",
+    "As-tu déjà caché une infidélité ?",
+    "As-tu déjà été infidèle sans l’avouer ?",
+    "As-tu déjà imaginé une nuit avec quelqu’un que tu connais bien ?",
+    "Quelle personne du groupe te mettrait le plus mal à l’aise si elle te disait vouloir coucher avec toi ?",
+    "Qui du groupe aurait le plus de chances de te faire craquer si vous étiez seuls tous les deux ?",
+    "Quel est le plus gros secret lié à ta vie sexuelle que tu acceptes de dire ?",
+    "Quelle question sur ta vie sexuelle te gênerait le plus si le groupe te la posait ?",
+    "As-tu déjà fait croire que tu avais moins d’expérience intime que tu en avais vraiment ?",
+    "As-tu déjà eu une relation avec quelqu’un que tu ne voulais surtout pas présenter à tes proches ?",
+]
+
+VERY_DARING_DARES = [
+    "Dis quelle personne du groupe t’attire le plus sexuellement.",
+    "Choisis une personne volontaire et dis-lui franchement si tu pourrais imaginer passer une nuit avec elle.",
+    "Dis quelle personne du groupe tu choisirais pour une relation seulement physique.",
+    "Choisis deux personnes du groupe et dis avec laquelle tu pourrais le plus facilement imaginer passer une nuit.",
+    "Raconte, sans donner de détails explicites, ton moment intime le plus gênant.",
+    "Dis ce qui te fait le plus craquer physiquement chez quelqu’un.",
+    "Dis si, en ce moment, tu préfères une relation sérieuse ou une relation seulement physique, et pourquoi.",
+    "Dis quelle personne du groupe te mettrait le plus mal à l’aise si elle t’avouait une attirance sexuelle.",
+    "Choisis une personne volontaire et dis-lui si elle correspond à ton type physiquement.",
+    "Dis devant le groupe quelle limite est la plus importante pour toi dans l’intimité.",
+    "Dis quelle question sur ta vie sexuelle te gêne le plus, sans être obligé d’y répondre.",
+    "Choisis une personne volontaire et dis-lui ce qui pourrait te faire accepter de passer une nuit avec elle.",
+    "Dis avec quelle personne du groupe tu serais le plus gêné de te retrouver seul toute une nuit.",
+    "Explique, sans détails explicites, ce qui rend un moment intime vraiment réussi pour toi.",
+    "Dis quelle personne du groupe tu ne voudrais surtout pas entendre te dire qu’elle est attirée sexuellement par toi.",
 ]
 
 
@@ -83,10 +111,19 @@ def _now():
     return datetime.now(timezone.utc).isoformat()
 
 
-def _pick_prompt(kind, daring):
+def _pick_prompt(kind, level):
+    level = 2 if level >= 2 else 1 if level == 1 else 0
     if kind == "verite":
-        return choice(DARING_TRUTHS if daring else NORMAL_TRUTHS)
-    return choice(DARING_DARES if daring else NORMAL_DARES)
+        if level == 2:
+            return choice(VERY_DARING_TRUTHS)
+        if level == 1:
+            return choice(DARING_TRUTHS)
+        return choice(NORMAL_TRUTHS)
+    if level == 2:
+        return choice(VERY_DARING_DARES)
+    if level == 1:
+        return choice(DARING_DARES)
+    return choice(NORMAL_DARES)
 
 
 def register_action_verite_preferences(app, db_connection, game_content):
@@ -124,43 +161,53 @@ def register_action_verite_preferences(app, db_connection, game_content):
             ).fetchall()
         return [dict(row) for row in rows]
 
-    def preference_for(token):
+    def preference_level(token):
         if not token:
-            return False
+            return 0
         with db_connection() as conn:
             row = conn.execute("SELECT daring FROM av_preferences WHERE player_token = ?", (token,)).fetchone()
-        return bool(row and row["daring"])
+        if not row:
+            return 0
+        try:
+            value = int(row["daring"])
+        except (TypeError, ValueError):
+            return 0
+        return 2 if value >= 2 else 1 if value == 1 else 0
 
-    def save_preference(code, token, daring):
+    def save_preference(code, token, level):
+        level = 2 if level >= 2 else 1 if level == 1 else 0
         now = _now()
         with db_connection() as conn:
             conn.execute("DELETE FROM av_preferences WHERE player_token = ?", (token,))
             conn.execute(
                 "INSERT INTO av_preferences (player_token, room_code, daring, created_at) VALUES (?, ?, ?, ?)",
-                (token, code, 1 if daring else 0, now),
+                (token, code, level, now),
             )
             conn.execute("UPDATE av_rooms SET updated_at = ? WHERE code = ?", (now, code))
             conn.commit()
+
+    def requested_level(mode):
+        return {"classic": 0, "daring": 1, "very_daring": 2}.get(mode, -1)
 
     ensure_table()
 
     content = game_content.get("action-verite")
     if content:
         content["objective"] = (
-            "Action ou Vérité se joue de 2 à 5 personnes. Chaque joueur indique son âge puis, s’il est majeur, "
-            "choisit pour lui-même entre Classique et Osé. Le niveau Osé contient des questions plus personnelles "
-            "et plus gênantes. Un joueur peut toujours passer une question ou une action s’il ne veut pas répondre."
+            "Action ou Vérité se joue de 2 à 5 personnes. Chaque majeur choisit pour lui-même entre Classique, Osé et Très osé. "
+            "Très osé est réservé aux adultes et contient des questions très intimes, y compris sur la vie sexuelle, sans détails graphiques. "
+            "Un joueur peut toujours passer une question ou une action."
         )
         content["rules"] = [
             "Le groupe doit contenir entre 2 et 5 joueurs.",
             "Chaque joueur indique son prénom ou pseudo et son âge avant de commencer.",
-            "Chaque joueur majeur choisit pour lui-même : Classique ou Osé.",
-            "Un joueur en Classique reçoit seulement les questions et actions normales.",
-            "Un joueur en Osé reçoit des questions plus personnelles et plus gênantes.",
+            "Chaque majeur choisit pour lui-même : Classique, Osé ou Très osé.",
+            "Classique reste sur les questions et actions normales.",
+            "Osé pose des questions plus personnelles et gênantes.",
+            "Très osé peut aborder la vie intime et sexuelle avec des mots simples, sans détails graphiques.",
             "Un joueur peut toujours passer si une question ou une action va trop loin pour lui.",
             "Si au moins un joueur est mineur, toute la partie reste en Classique.",
             "À chaque tour, le joueur concerné choisit Action ou Vérité.",
-            "Une classe privée peut être créée pour jouer à distance avec un code à 4 chiffres.",
         ]
 
     original_choose = app.view_functions.get("av_room_choose")
@@ -175,7 +222,7 @@ def register_action_verite_preferences(app, db_connection, game_content):
                 return response
             current = players[int(room["turn_index"]) % len(players)]
             all_adults = all(bool(player["is_adult"]) for player in players)
-            daring = all_adults and bool(current["is_adult"]) and preference_for(current["player_token"])
+            level = preference_level(current["player_token"]) if all_adults and bool(current["is_adult"]) else 0
             kind = room.get("current_kind")
             if kind not in {"action", "verite"}:
                 return response
@@ -183,7 +230,7 @@ def register_action_verite_preferences(app, db_connection, game_content):
             with db_connection() as conn:
                 conn.execute(
                     "UPDATE av_rooms SET current_prompt = ?, updated_at = ? WHERE code = ?",
-                    (_pick_prompt(kind, daring), now, code),
+                    (_pick_prompt(kind, level), now, code),
                 )
                 conn.commit()
             return response
@@ -192,26 +239,30 @@ def register_action_verite_preferences(app, db_connection, game_content):
 
     @app.context_processor
     def inject_action_verite_preferences():
+        empty = {
+            "av_level_by_token": {},
+            "av_level_available": False,
+            "av_member_level": 0,
+            "av_daring_by_token": {},
+            "av_daring_available": False,
+            "av_member_daring": False,
+        }
         if request.endpoint != "av_room":
-            return {
-                "av_daring_by_token": {},
-                "av_daring_available": False,
-                "av_member_daring": False,
-            }
+            return empty
         code = ((request.view_args or {}).get("code") or "").strip()
         token = memberships().get(code)
         if not re.fullmatch(r"\d{4}", code) or not token:
-            return {
-                "av_daring_by_token": {},
-                "av_daring_available": False,
-                "av_member_daring": False,
-            }
+            return empty
         players = players_for(code)
-        mapping = {player["player_token"]: preference_for(player["player_token"]) for player in players}
+        mapping = {player["player_token"]: preference_level(player["player_token"]) for player in players}
+        available = bool(players) and all(bool(player["is_adult"]) for player in players)
         return {
+            "av_level_by_token": mapping,
+            "av_level_available": available,
+            "av_member_level": int(mapping.get(token, 0)),
             "av_daring_by_token": mapping,
-            "av_daring_available": bool(players) and all(bool(player["is_adult"]) for player in players),
-            "av_member_daring": bool(mapping.get(token)),
+            "av_daring_available": available,
+            "av_member_daring": bool(mapping.get(token, 0)),
         }
 
     @app.route("/action-verite/classe/<code>/preference", methods=["POST"])
@@ -227,9 +278,10 @@ def register_action_verite_preferences(app, db_connection, game_content):
         if not member:
             abort(403)
         mode = (request.form.get("content_mode") or "classic").strip().lower()
-        if mode not in {"classic", "daring"}:
+        level = requested_level(mode)
+        if level < 0:
             abort(400)
-        save_preference(code, token, bool(member["is_adult"]) and mode == "daring")
+        save_preference(code, token, level if bool(member["is_adult"]) else 0)
         return redirect(url_for("av_room", code=code))
 
     @app.after_request
@@ -249,9 +301,9 @@ def register_action_verite_preferences(app, db_connection, game_content):
                     age = int(request.form.get("age", ""))
                 except (TypeError, ValueError):
                     age = 0
-                mode = (request.form.get("content_mode") or "classic").strip().lower()
+                level = requested_level((request.form.get("content_mode") or "classic").strip().lower())
                 if token:
-                    save_preference(code, token, age >= 18 and mode == "daring")
+                    save_preference(code, token, level if age >= 18 and level >= 0 else 0)
 
         if request.method == "POST" and path == "/action-verite/local" and 300 <= response.status_code < 400:
             action = (request.form.get("action") or "").strip().lower()
@@ -261,15 +313,17 @@ def register_action_verite_preferences(app, db_connection, game_content):
                     modes = request.form.getlist("player_mode")
                     for index, player in enumerate(state["players"]):
                         requested = modes[index] if index < len(modes) else "classic"
-                        player["daring"] = bool(player.get("is_adult")) and requested == "daring"
+                        level = requested_level(requested)
+                        player["level"] = level if bool(player.get("is_adult")) and level >= 0 else 0
+                        player["daring"] = player["level"] > 0
                     session["av_local"] = state
                 elif action == "choose" and state.get("prompt"):
                     players = state["players"]
                     current = players[int(state.get("turn_index", 0)) % len(players)]
-                    daring = bool(state.get("adult_mode")) and bool(current.get("is_adult")) and bool(current.get("daring"))
+                    level = int(current.get("level", 1 if current.get("daring") else 0)) if state.get("adult_mode") else 0
                     kind = state.get("kind")
                     if kind in {"action", "verite"}:
-                        state["prompt"] = _pick_prompt(kind, daring)
+                        state["prompt"] = _pick_prompt(kind, level)
                         session["av_local"] = state
 
         return response
