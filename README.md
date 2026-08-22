@@ -7,7 +7,7 @@ PlayBed est une plateforme gratuite de mini-jeux web, accessible depuis un navig
 ## Fonctionnalités principales
 - Flask + Gunicorn
 - PostgreSQL en production, SQLite possible en local
-- 11 jeux : Pendu, Plus ou Moins, Vrai ou Faux, Quiz Express, Memory, Calcul Mental, Mot Mélangé, Suite Logique, Pair ou Impair, Chrono 10 et Action ou Vérité
+- 11 jeux : Pendu, Plus ou Moins, Vrai ou Faux, Quiz Express, Memory, Calcul Mental, Mot Mélangé, Suite Logique, Pair ou Impair, Chrono et Action ou Vérité
 - pseudo sans création de compte obligatoire
 - scores persistants et classements général, quotidien, hebdomadaire et mensuel
 - XP, niveaux, missions quotidiennes et hebdomadaires
@@ -19,6 +19,7 @@ PlayBed est une plateforme gratuite de mini-jeux web, accessible depuis un navig
 - solde de défi lié à la session du navigateur pour éviter qu’un simple pseudo puisse prendre les points d’un autre joueur
 - une seule manche par joueur et comparaison automatique des scores
 - remboursement des mises en cas d’égalité ou d’annulation avant toute manche
+- Chrono avec une cible aléatoire de 5 à 30 secondes, différente de la partie précédente
 - Action ou Vérité local à 2–5 joueurs
 - classes privées Action ou Vérité à distance avec code à 4 chiffres, réponses et synchronisation des tours
 - choix individuel Classique/Osé/Très osé pour chaque joueur majeur dans Action ou Vérité
@@ -42,7 +43,7 @@ PlayBed est une plateforme gratuite de mini-jeux web, accessible depuis un navig
 | Mot Mélangé | Lettres |
 | Suite Logique | Logique |
 | Pair ou Impair | Rapidité |
-| Chrono 10 | Rapidité |
+| Chrono | Rapidité |
 | Action ou Vérité | Groupe |
 
 ### Affrontements 1 contre 1
@@ -52,6 +53,10 @@ Le mode `/affronter` permet de choisir un jeu à score et une mise de points vir
 Chaque navigateur possède un solde de défi séparé du simple texte du pseudo. Le solde commence avec 1 000 points virtuels et les parties terminées dans les jeux à score peuvent le créditer. Quand un défi est accepté, la même mise est retirée aux deux joueurs. Le meilleur score reçoit les deux mises, soit un gain net égal à la mise de l’adversaire. Une égalité rembourse les deux mises.
 
 Les points de défi n’ont aucune valeur monétaire : ils ne peuvent pas être achetés, retirés, convertis en argent ou échangés contre un bien réel. Action ou Vérité est exclu des affrontements car il n’a pas de score permettant de désigner un gagnant.
+
+### Chrono
+
+À chaque nouvelle partie, PlayBed choisit une durée entière entre **5 et 30 secondes**. La nouvelle cible ne peut pas être identique à celle de la partie précédente. Le joueur voit la durée à viser, puis le temps s’écoule sans chronomètre visible. Le score dépend uniquement de l’écart entre le temps réel et la cible.
 
 ### Action ou Vérité
 
@@ -93,6 +98,7 @@ Variables recommandées :
 
 - `core.py` : application Flask, jeux historiques, scores et base de données ;
 - `extra_games.py` : jeux additionnels ;
+- `chrono_variation.py` : cible aléatoire et calcul du Chrono ;
 - `versus.py` : solde de défi et affrontements 1 contre 1 avec mise de points virtuels ;
 - `action_verite.py` : jeu Action ou Vérité, mode local et classes privées ;
 - `action_verite_preferences.py` : préférences individuelles et sélection des propositions ;
