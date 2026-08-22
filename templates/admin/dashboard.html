@@ -1,6 +1,17 @@
 {% extends 'admin/base.html' %}
 {% block title %}Tableau de bord{% endblock %}
 {% block content %}
+<style>
+  .admin-actions-panel{border-color:#355c8d;background:linear-gradient(135deg,rgba(25,93,182,.13),rgba(13,26,43,.94))}
+  .admin-action-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:16px}
+  .admin-action-card{display:flex;flex-direction:column;gap:7px;min-height:178px;padding:17px;border:1px solid var(--line);border-radius:14px;background:rgba(7,17,31,.58);transition:transform .15s ease,border-color .15s ease,background .15s ease}
+  .admin-action-card:hover{transform:translateY(-2px);border-color:#4b7fbd;background:rgba(18,34,56,.9)}
+  .admin-action-card strong{font-size:18px}.admin-action-card>span:not(.admin-action-icon){color:var(--muted);flex:1}.admin-action-card em{font-style:normal;color:#8fc0ff;font-weight:700}.admin-action-icon{font-size:27px}
+  .section-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.section-heading h2{margin:0}
+  @media(max-width:900px){.admin-action-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media(max-width:540px){.admin-action-grid{grid-template-columns:1fr}.admin-action-card{min-height:0}.section-heading{align-items:flex-start;flex-direction:column}}
+</style>
+
 <div class="topbar">
   <div>
     <h1>Tableau de bord</h1>
