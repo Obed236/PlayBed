@@ -6,14 +6,14 @@
 {% block content %}
 <main class="content-shell av-shell" data-av-room data-state-url="{{ url_for('av_room_state', code=room.code) }}" data-room-version="{{ room.updated_at }}">
     <nav class="breadcrumb"><a href="{{ url_for('av_home') }}">Action ou Vérité</a><span>›</span><span>Classe {{ room.code }}</span></nav>
-    <section class="av-room-header"><div><span class="eyebrow">CLASSE PRIVÉE</span><h1>Code <button class="av-code-button" type="button" data-copy-code="{{ room.code }}">{{ room.code }}</button></h1><p>Partage uniquement ce code avec les personnes que tu veux inviter.</p></div><span class="av-mode-pill {% if av_daring_available %}adult{% endif %}">{% if av_daring_available %}🔞 Groupe majeur · choix individuels{% else %}🛡️ Grand public · mineur présent{% endif %}</span></section>
+    <section class="av-room-header"><div><span class="eyebrow">CLASSE PRIVÉE</span><h1>Code <button class="av-code-button" type="button" data-copy-code="{{ room.code }}">{{ room.code }}</button></h1><p>Partage seulement ce code avec les personnes que tu veux inviter.</p></div><span class="av-mode-pill {% if av_daring_available %}adult{% endif %}">{% if av_daring_available %}🔞 Tous majeurs · chacun choisit son niveau{% else %}🛡️ Classique · mineur présent{% endif %}</span></section>
     <section class="av-room-layout">
-        <aside class="content-card av-room-players"><div class="av-side-title"><h2>Joueurs</h2><span>{{ players|length }}/5</span></div><div class="av-player-list">{% for player in players %}<div class="av-player-chip {% if current_player and current_player.player_token == player.player_token %}current{% endif %}"><span>👤</span><strong>{{ player.name }}</strong><small>{% if not player.is_adult %}-18 · Classique{% elif av_daring_by_token.get(player.player_token) %}18+ · 🌶️ Osé{% else %}18+ · Classique{% endif %}</small>{% if player.player_token == room.creator_token %}<em>Créateur</em>{% endif %}</div>{% endfor %}</div>{% if room.status == 'waiting' %}<p class="av-note">La partie peut démarrer dès que vous êtes au moins 2. Chaque majeur choisit son niveau pour ses propres tours.</p>{% endif %}</aside>
+        <aside class="content-card av-room-players"><div class="av-side-title"><h2>Joueurs</h2><span>{{ players|length }}/5</span></div><div class="av-player-list">{% for player in players %}<div class="av-player-chip {% if current_player and current_player.player_token == player.player_token %}current{% endif %}"><span>👤</span><strong>{{ player.name }}</strong><small>{% if not player.is_adult %}-18 · Classique{% elif av_daring_by_token.get(player.player_token) %}18+ · 🌶️ Osé{% else %}18+ · Classique{% endif %}</small>{% if player.player_token == room.creator_token %}<em>Créateur</em>{% endif %}</div>{% endfor %}</div>{% if room.status == 'waiting' %}<p class="av-note">La partie peut commencer dès que vous êtes au moins 2. Chaque majeur choisit son propre niveau.</p>{% endif %}</aside>
         <section class="av-game-card av-remote-game">
             {% if room.status == 'waiting' %}
-                <span class="eyebrow">SALLE D’ATTENTE</span><h2>Choisis ton niveau avant de jouer</h2><p>Ton vote ne change pas celui des autres. Si tout le monde est majeur, les joueurs ayant choisi Osé recevront des propositions plus gênantes ; les autres resteront en Classique.</p>
-                {% if member.is_adult %}<form method="post" action="{{ url_for('av_room_preference', code=room.code) }}" class="av-choice"><h3>Pour tes tours :</h3><button class="{{ 'primary-button' if not av_member_daring else 'secondary-button' }}" name="content_mode" value="classic" type="submit">🛡️ Classique</button> <button class="{{ 'primary-button' if av_member_daring else 'secondary-button' }}" name="content_mode" value="daring" type="submit">🌶️ Osé</button></form>{% else %}<div class="av-waiting">Tu as moins de 18 ans : tes tours restent automatiquement en Classique.</div>{% endif %}
-                {% if not av_daring_available %}<p class="av-note">Un mineur est présent : les propositions Osées sont verrouillées pour toute la classe afin qu’aucun contenu 18+ ne soit affiché devant lui.</p>{% endif %}
+                <span class="eyebrow">SALLE D’ATTENTE</span><h2>Choisis ton niveau avant de jouer</h2><p>Ton choix ne change pas celui des autres. Si tout le monde est majeur, ceux qui choisissent Osé auront des questions beaucoup plus gênantes. Ceux qui choisissent Classique auront seulement les questions normales.</p>
+                {% if member.is_adult %}<form method="post" action="{{ url_for('av_room_preference', code=room.code) }}" class="av-choice"><h3>Pour tes tours :</h3><button class="{{ 'primary-button' if not av_member_daring else 'secondary-button' }}" name="content_mode" value="classic" type="submit">🛡️ Classique</button> <button class="{{ 'primary-button' if av_member_daring else 'secondary-button' }}" name="content_mode" value="daring" type="submit">🌶️ Osé</button></form>{% else %}<div class="av-waiting">Tu as moins de 18 ans : tes tours restent en Classique.</div>{% endif %}
+                {% if not av_daring_available %}<p class="av-note">Un mineur est présent : le niveau Osé est bloqué pour toute la classe.</p>{% endif %}
                 {% if is_creator %}<form method="post" action="{{ url_for('av_room_start', code=room.code) }}"><button class="primary-button" type="submit" {% if players|length < 2 %}disabled{% endif %}>Démarrer la partie</button></form>{% else %}<p class="av-waiting">Le créateur lancera la partie.</p>{% endif %}
             {% else %}
                 <div class="av-game-top"><div><span class="eyebrow">C’EST AU TOUR DE</span><h2>{{ current_player.name }}</h2></div><span class="av-mode-pill {% if av_daring_available and av_daring_by_token.get(current_player.player_token) %}adult{% endif %}">{% if av_daring_available and av_daring_by_token.get(current_player.player_token) %}🌶️ Niveau Osé{% else %}🛡️ Niveau Classique{% endif %}</span>{% if is_current %}<span class="season-pill">Ton tour</span>{% endif %}</div>
@@ -26,9 +26,9 @@
                         <section class="av-response-card">
                             <span class="eyebrow">RÉPONSE DE {{ av_response.player_name|upper }}</span>
                             {% if av_response.status == 'passed' %}
-                                <h3>⏭️ {{ av_response.player_name }} a préféré passer.</h3>
+                                <h3>⏭️ {{ av_response.player_name }} a choisi de passer.</h3>
                             {% elif av_response.kind == 'action' %}
-                                <h3>✅ Action réalisée</h3>
+                                <h3>✅ Action faite</h3>
                                 {% if av_response.response_text %}<p>{{ av_response.response_text }}</p>{% else %}<p>{{ av_response.player_name }} indique avoir fait l’action.</p>{% endif %}
                             {% else %}
                                 <p class="av-response-text">{{ av_response.response_text }}</p>
@@ -40,13 +40,13 @@
                             {% if room.current_kind == 'verite' %}
                                 <label for="avAnswer">Ta réponse</label>
                                 <textarea id="avAnswer" name="answer_text" maxlength="500" required placeholder="Écris ta réponse ici…"></textarea>
-                                <div class="av-answer-actions"><button class="primary-button" name="mode" value="answer" type="submit">Envoyer ma réponse</button><button class="secondary-button" name="mode" value="pass" type="submit" formnovalidate>Je préfère passer</button></div>
+                                <div class="av-answer-actions"><button class="primary-button" name="mode" value="answer" type="submit">Envoyer ma réponse</button><button class="secondary-button" name="mode" value="pass" type="submit" formnovalidate>Passer cette question</button></div>
                             {% else %}
-                                <label for="avAnswer">Commentaire facultatif</label>
-                                <textarea id="avAnswer" name="answer_text" maxlength="500" placeholder="Ex. : fait 😅, c’était gênant, mission accomplie…"></textarea>
-                                <div class="av-answer-actions"><button class="primary-button" name="mode" value="done" type="submit">✅ J’ai fait l’action</button><button class="secondary-button" name="mode" value="pass" type="submit">Je préfère passer</button></div>
+                                <label for="avAnswer">Tu peux ajouter un commentaire</label>
+                                <textarea id="avAnswer" name="answer_text" maxlength="500" placeholder="Ex. : fait 😅, c’était gênant…"></textarea>
+                                <div class="av-answer-actions"><button class="primary-button" name="mode" value="done" type="submit">✅ J’ai fait l’action</button><button class="secondary-button" name="mode" value="pass" type="submit">Passer cette action</button></div>
                             {% endif %}
-                            <small>Ta réponse sera visible par les personnes présentes dans cette classe.</small>
+                            <small>Si c’est trop gênant pour toi, tu peux toujours passer. Ta réponse sera visible seulement par les personnes de cette classe.</small>
                         </form>
                     {% else %}
                         <div class="av-waiting">En attente de la réponse de <strong>{{ current_player.name }}</strong>…</div>
