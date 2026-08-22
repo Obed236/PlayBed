@@ -1,6 +1,77 @@
 {% extends "base.html" %}
 {% block title %}Contact & support | PlayBed{% endblock %}
-{% block description %}Contacte PlayBed pour signaler un bug, proposer une amélioration ou poser une question sur la plateforme de mini-jeux.{% endblock %}
+{% block description %}Contacte directement l’administrateur PlayBed pour signaler un bug, proposer une amélioration ou poser une question.{% endblock %}
 {% block content %}
-<main class="content-shell"><header class="content-hero"><span class="eyebrow">CONTACT & SUPPORT</span><h1>Un problème, une idée ou une question ?</h1><p>PlayBed est un projet en évolution. Les retours permettent de corriger les erreurs, d’améliorer l’expérience et de choisir les prochaines fonctionnalités.</p></header><section class="support-grid"><article class="content-card support-card"><span class="support-icon">🐞</span><h2>Signaler un bug</h2><p>Indique le jeu concerné, l’appareil utilisé et ce qui s’est passé. Évite de publier des données personnelles dans un signalement public.</p><a class="secondary-button" href="https://github.com/Obed236/PlayBed/issues/new" target="_blank" rel="noopener noreferrer">Ouvrir un signalement GitHub</a></article><article class="content-card support-card"><span class="support-icon">💡</span><h2>Proposer une amélioration</h2><p>Nouveau jeu, amélioration de l’interface ou idée de fonctionnalité : les suggestions peuvent être proposées sur le dépôt officiel.</p><a class="secondary-button" href="https://github.com/Obed236/PlayBed/issues/new" target="_blank" rel="noopener noreferrer">Envoyer une suggestion</a></article><article class="content-card support-card"><span class="support-icon">✉️</span><h2>Demande générale</h2>{% if contact_email %}<p>Pour une demande qui ne doit pas être publique, tu peux contacter PlayBed par e-mail.</p><a class="primary-button" href="mailto:{{ contact_email }}">Écrire à PlayBed</a>{% else %}<p>Le canal de contact public actuellement disponible est le dépôt GitHub officiel. Une adresse de support dédiée pourra être ajoutée depuis la configuration du site.</p><a class="primary-button" href="https://github.com/Obed236/PlayBed" target="_blank" rel="noopener noreferrer">Dépôt officiel</a>{% endif %}</article></section><article class="content-card prose"><h2>Avant de nous contacter</h2><p>Consulte la <a class="text-link" href="{{ url_for('faq_page') }}">FAQ</a> et la page <a class="text-link" href="{{ url_for('how_to_play_page') }}">Comment jouer</a>.</p></article></main>
+<main class="content-shell">
+  <header class="content-hero">
+    <span class="eyebrow">CONTACT & SUPPORT</span>
+    <h1>Un problème, une idée ou une question ?</h1>
+    <p>Envoie ton message directement à l’administrateur de PlayBed. Aucun compte GitHub n’est nécessaire.</p>
+  </header>
+
+  {% if request.args.get('sent') == '1' %}
+  <article class="content-card">
+    <h2>✅ Message envoyé</h2>
+    <p>Ton message a bien été transmis à l’administrateur de PlayBed et apparaît maintenant dans son espace de signalements.</p>
+  </article>
+  {% elif request.args.get('sent') == 'too_fast' %}
+  <article class="content-card">
+    <h2>⏳ Un instant</h2>
+    <p>Un message vient déjà d’être envoyé. Attends quelques secondes avant d’en envoyer un autre.</p>
+  </article>
+  {% endif %}
+
+  <section class="support-grid">
+    <article class="content-card support-card">
+      <span class="support-icon">🐞</span>
+      <h2>Signaler un bug</h2>
+      <p>Indique le jeu concerné, ton appareil et ce qui s’est passé. Le signalement arrivera directement dans l’interface administrateur.</p>
+    </article>
+    <article class="content-card support-card">
+      <span class="support-icon">💡</span>
+      <h2>Proposer une amélioration</h2>
+      <p>Tu peux proposer un nouveau jeu, une amélioration de l’interface ou une fonctionnalité directement à l’administrateur.</p>
+    </article>
+    <article class="content-card support-card">
+      <span class="support-icon">✉️</span>
+      <h2>Poser une question</h2>
+      <p>Pour toute question générale sur PlayBed, utilise le formulaire ci-dessous. Le message reste dans le système PlayBed.</p>
+    </article>
+  </section>
+
+  <article class="content-card prose">
+    <h2>Contacter l’administrateur</h2>
+    <p>Choisis le type de demande puis décris clairement ce que tu veux signaler. Le message sera enregistré dans l’espace administrateur de PlayBed.</p>
+    <form method="post" action="{{ url_for('contact_administrator') }}">
+      <input type="hidden" name="csrf_token" value="{{ support_csrf_token() }}">
+
+      <p>
+        <label for="support-category"><strong>Type de demande</strong></label><br>
+        <select id="support-category" name="category" required>
+          <option value="bug">Signaler un bug</option>
+          <option value="suggestion">Proposer une amélioration</option>
+          <option value="question">Poser une question</option>
+          <option value="other">Autre demande</option>
+        </select>
+      </p>
+
+      <p>
+        <label for="support-game"><strong>Jeu concerné</strong> <span class="muted">(facultatif)</span></label><br>
+        <input id="support-game" name="game" type="text" maxlength="80" placeholder="Ex. Pendu, Quiz, Action ou Vérité…">
+      </p>
+
+      <p>
+        <label for="support-message"><strong>Ton message</strong></label><br>
+        <textarea id="support-message" name="message" rows="7" minlength="5" maxlength="1000" required placeholder="Explique le problème, ta question ou ton idée…"></textarea>
+      </p>
+
+      <button class="primary-button" type="submit">Envoyer à l’administrateur</button>
+    </form>
+  </article>
+
+  <article class="content-card prose">
+    <h2>Avant de nous contacter</h2>
+    <p>Consulte aussi la <a class="text-link" href="{{ url_for('faq_page') }}">FAQ</a> et la page <a class="text-link" href="{{ url_for('how_to_play_page') }}">Comment jouer</a>.</p>
+  </article>
+</main>
 {% endblock %}
