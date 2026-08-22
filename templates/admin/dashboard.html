@@ -1,0 +1,16 @@
+{% extends 'admin/base.html' %}
+{% block title %}Tableau de bord{% endblock %}
+{% block content %}
+<div class="topbar"><div><h1>Tableau de bord</h1><div class="muted">Vue d’ensemble de PlayBed.</div></div></div>
+<div class="cards">
+  <div class="card"><span class="muted">Scores enregistrés</span><strong>{{ total_scores }}</strong></div>
+  <div class="card"><span class="muted">Pseudos actifs</span><strong>{{ players }}</strong></div>
+  <div class="card"><span class="muted">Scores sur 24 h</span><strong>{{ scores_24h }}</strong></div>
+  <div class="card"><span class="muted">Pseudos bloqués</span><strong>{{ blocked }}</strong></div>
+</div>
+<div class="grid-2">
+  <section class="panel"><h2>Activité par jeu</h2><div class="table-wrap"><table><thead><tr><th>Jeu</th><th>Parties</th><th>Points cumulés</th></tr></thead><tbody>{% for row in game_stats %}<tr><td>{{ games.get(row['game'], {}).get('name', row['game']) }}</td><td>{{ row['plays'] }}</td><td>{{ row['points'] or 0 }}</td></tr>{% else %}<tr><td colspan="3" class="empty">Aucune activité.</td></tr>{% endfor %}</tbody></table></div></section>
+  <section class="panel"><h2>Journal administrateur</h2><div class="table-wrap"><table><thead><tr><th>Action</th><th>Détail</th></tr></thead><tbody>{% for row in recent_logs %}<tr><td><strong>{{ row['action'] }}</strong><div class="muted">{{ row['created_at'][:19].replace('T',' ') }}</div></td><td>{{ row['details'] or '—' }}</td></tr>{% else %}<tr><td colspan="2" class="empty">Aucune action.</td></tr>{% endfor %}</tbody></table></div></section>
+</div>
+<section class="panel"><h2>Derniers scores</h2><div class="table-wrap"><table><thead><tr><th>Pseudo</th><th>Jeu</th><th>Score</th><th>Date</th></tr></thead><tbody>{% for row in recent_scores %}<tr><td>{{ row['pseudo'] }}</td><td>{{ games.get(row['game'], {}).get('name', row['game']) }}</td><td>{{ row['points'] }}</td><td>{{ row['created_at'][:19].replace('T',' ') }}</td></tr>{% else %}<tr><td colspan="4" class="empty">Aucun score.</td></tr>{% endfor %}</tbody></table></div></section>
+{% endblock %}
