@@ -134,7 +134,7 @@ def register_growth(app, games, db_connection, current_pseudo):
         if endpoint not in {"home", "platform_profile", "leaderboard", "platform_period_leaderboard"}:
             return data
         pseudo = current_pseudo()
-        if pseudo:
+        if pseudo and endpoint != "home":
             data["growth_progress"] = progression_for(db_connection, pseudo)
             data["growth_missions"] = missions_for(db_connection, pseudo)
         if endpoint == "home":
