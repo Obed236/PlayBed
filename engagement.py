@@ -169,7 +169,6 @@ def register_engagement(app, games, db_connection, current_pseudo):
         pseudo = current_pseudo()
         endpoint = request.endpoint or ""
         if not pseudo or endpoint not in {
-            "home",
             "platform_profile",
             "leaderboard",
             "platform_period_leaderboard",

@@ -19,9 +19,23 @@
 
     {% if engagement_streak %}<section class="content-card streak-progress-card"><div><span class="eyebrow">SÉRIE QUOTIDIENNE</span><h2>🔥 {{ engagement_streak.current }} jour{% if engagement_streak.current != 1 %}s{% endif %} de suite</h2>{% if engagement_streak.played_today %}<p>Ta journée est validée. Continue demain pour faire grandir ta série.</p>{% elif engagement_streak.at_risk %}<p>Ta série est active mais pas encore validée aujourd’hui. Termine une partie avant la fin de la journée.</p>{% else %}<p>Termine une partie aujourd’hui pour démarrer une nouvelle série.</p>{% endif %}</div><div class="streak-goal"><span>Prochain palier</span><strong>{{ engagement_streak.next_goal }} jours</strong></div></section>{% endif %}
 
+    {% if growth_missions.daily %}
+    <section class="profile-section">
+        <div class="section-heading compact"><span class="eyebrow">MISSIONS DU JOUR</span><h2>Objectifs d’aujourd’hui</h2><p>Ces missions se mettent à jour selon les parties et les points enregistrés aujourd’hui.</p></div>
+        <div class="mission-list">
+            {% for mission in growth_missions.daily %}
+            <article class="mission-item {% if mission.completed %}done{% endif %}" data-mission-complete="{{ 'true' if mission.completed else 'false' }}" data-mission-name="{{ mission.title }}">
+                <div class="mission-head"><strong>{% if mission.completed %}✅{% else %}🎯{% endif %} {{ mission.title }}</strong><span>{{ mission.current }}/{{ mission.target }}</span></div>
+                <p>{{ mission.description }}</p><div class="mission-mini"><span style="width: {{ mission.percent }}%"></span></div>
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
     {% if growth_missions.weekly %}
     <section class="profile-section">
-        <div class="section-heading compact"><span class="eyebrow">MISSIONS</span><h2>Objectifs de la semaine</h2><p>Ces objectifs se recalculent chaque lundi et s’appuient sur tes scores enregistrés.</p></div>
+        <div class="section-heading compact"><span class="eyebrow">MISSIONS DE LA SEMAINE</span><h2>Objectifs de la semaine</h2><p>Ces objectifs se recalculent chaque lundi et s’appuient sur tes scores enregistrés.</p></div>
         <div class="mission-list">
             {% for mission in growth_missions.weekly %}
             <article class="mission-item {% if mission.completed %}done{% endif %}" data-mission-complete="{{ 'true' if mission.completed else 'false' }}" data-mission-name="{{ mission.title }}">
