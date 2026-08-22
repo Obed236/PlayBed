@@ -1,0 +1,7 @@
+{% extends 'admin/base.html' %}
+{% block title %}Journal administrateur{% endblock %}
+{% block content %}
+<div class="topbar"><div><h1>Journal administrateur</h1><div class="muted">Historique des actions sensibles effectuées dans le back-office.</div></div></div>
+<section class="panel"><form class="inline-form" method="get"><div class="field"><label for="action">Filtrer par action</label><select id="action" name="action"><option value="">Toutes</option>{% for row in actions %}<option value="{{ row.action }}" {% if action_filter == row.action %}selected{% endif %}>{{ row.action }}</option>{% endfor %}</select></div><button class="btn primary" type="submit">Filtrer</button><a class="btn" href="{{ url_for('admin_logs_page') }}">Réinitialiser</a></form></section>
+<section class="panel"><div class="table-wrap"><table><thead><tr><th>Date</th><th>Admin</th><th>Action</th><th>Détails</th></tr></thead><tbody>{% for row in logs %}<tr><td>{{ row.created_at[:19].replace('T',' ') }}</td><td>{{ row.actor }}</td><td><span class="badge">{{ row.action }}</span></td><td>{{ row.details or '—' }}</td></tr>{% else %}<tr><td colspan="4" class="empty">Aucune action enregistrée.</td></tr>{% endfor %}</tbody></table></div></section>
+{% endblock %}
