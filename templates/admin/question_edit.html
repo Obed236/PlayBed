@@ -1,0 +1,16 @@
+{% extends 'admin/base.html' %}
+{% block title %}Modifier une question{% endblock %}
+{% block content %}
+<div class="topbar"><div><h1>Modifier une question</h1><div class="muted">{{ 'Question d’origine' if item.source == 'base' else 'Question ajoutée depuis l’admin' }} · {{ 'Vrai ou Faux' if item.game == 'vof' else 'Quiz Express' }}</div></div><a class="btn" href="{{ url_for('admin_questions') }}">← Retour</a></div>
+<section class="panel" style="max-width:850px">
+<form method="post">
+  <input type="hidden" name="csrf_token" value="{{ admin_csrf_token() }}">
+  <input type="hidden" name="source" value="{{ item.source }}"><input type="hidden" name="game" value="{{ item.game }}"><input type="hidden" name="id" value="{{ item.id }}">
+  <div class="field"><label for="question">Question</label><textarea id="question" name="question" required>{{ item.question }}</textarea></div>
+  {% if item.game == 'quiz' %}<div class="field"><label for="options">Choix de réponse</label><input id="options" name="options" value="{{ item.options|join(' | ') }}" required><span class="help">Sépare les choix avec |. La réponse correcte doit correspondre exactement à l’un des choix.</span></div>{% endif %}
+  <div class="field"><label for="answer">Réponse correcte</label><input id="answer" name="answer" value="{{ item.answer }}" required></div>
+  <div class="field"><label for="active">État</label><select id="active" name="active"><option value="1" {% if item.active %}selected{% endif %}>Active</option><option value="0" {% if not item.active %}selected{% endif %}>Désactivée</option></select></div>
+  <div class="actions"><button class="btn primary" type="submit">Enregistrer les modifications</button><a class="btn" href="{{ url_for('admin_questions') }}">Annuler</a></div>
+</form>
+</section>
+{% endblock %}
