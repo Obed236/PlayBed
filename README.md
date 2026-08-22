@@ -17,8 +17,9 @@ PlayBed est une plateforme gratuite de mini-jeux web, accessible depuis un navig
 - défis de score partageables
 - Quiz Duel asynchrone entre deux joueurs
 - Action ou Vérité local à 2–5 joueurs
-- classes privées Action ou Vérité à distance avec code à 4 chiffres et synchronisation des tours
-- adaptation automatique du contenu Action ou Vérité selon l’âge du groupe
+- classes privées Action ou Vérité à distance avec code à 4 chiffres, réponses et synchronisation des tours
+- choix individuel Classique/Osé pour chaque joueur majeur dans Action ou Vérité
+- verrouillage automatique du niveau Osé si un mineur est présent
 - PWA installable
 - analytics d’interaction et suivi des Core Web Vitals
 - pages éditoriales, guides, FAQ, mentions légales et politique de confidentialité
@@ -47,7 +48,7 @@ Deux modes sont disponibles :
 - **local** : 2 à 5 personnes jouent sur un seul téléphone ;
 - **classe privée** : le créateur obtient un code à 4 chiffres et les autres joueurs rejoignent depuis leur propre appareil.
 
-Le jeu demande l’âge au démarrage uniquement pour choisir le niveau de contenu. Si au moins une personne a moins de 18 ans, le mode reste grand public. Le mode 18+ léger n’est possible que si tous les joueurs sont majeurs. Action ou Vérité ne produit pas de score et n’influence pas les classements.
+Le jeu demande l’âge au démarrage uniquement pour adapter le contenu. Chaque joueur majeur choisit individuellement entre **Classique** et **Osé**. Le niveau Osé contient des propositions plus gênantes, romantiques ou suggestives, mais reste non explicite et non dangereux. Un joueur ayant choisi Classique ne reçoit pas de proposition Osée. Si au moins une personne a moins de 18 ans, le niveau Osé est désactivé pour toute la partie afin qu’aucun contenu 18+ ne soit affiché devant un mineur. Action ou Vérité ne produit pas de score et n’influence pas les classements.
 
 ## Lancer en local
 
@@ -82,6 +83,8 @@ Variables recommandées :
 - `core.py` : application Flask, jeux historiques, scores et base de données ;
 - `extra_games.py` : jeux additionnels ;
 - `action_verite.py` : jeu Action ou Vérité, mode local et classes privées ;
+- `action_verite_preferences.py` : préférences individuelles Classique/Osé et sélection des propositions ;
+- `action_verite_answers.py` : réponses synchronisées des classes privées ;
 - `platform_routes.py` : pages publiques, guides et profils ;
 - `engagement.py` : séries et classements temporels ;
 - `growth.py` : XP, niveaux, missions, profils publics et défis ;
