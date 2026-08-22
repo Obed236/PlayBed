@@ -1,5 +1,6 @@
 import os
 
+import core as core_module
 from core import app, GAMES, db_connection, current_pseudo, init_db, save_score, load_words, load_quiz_questions
 from engagement import register_engagement
 from platform_routes import register_platform_routes, GUIDES, GAME_CONTENT
@@ -10,7 +11,7 @@ from action_verite_preferences import register_action_verite_preferences
 from action_verite_no_repeat import register_action_verite_no_repeat
 from action_verite_answers import register_action_verite_answers
 from action_verite_recovery import register_action_verite_recovery
-from duels import register_duels
+from versus import VersusManager
 from creator_routes import register_creator_routes
 from sitemap_routes import register_sitemap_route
 from growth import register_growth
@@ -30,9 +31,13 @@ class PlatformGames(dict):
 
 
 platform_games = PlatformGames(GAMES)
+versus = VersusManager(app, GAMES, db_connection, current_pseudo, save_score)
+# Les jeux historiques appellent core.save_score directement : on branche le
+# gestionnaire de défis pour créditer le solde et enregistrer la manche active.
+core_module.save_score = versus.save_score
 
 register_platform_routes(app, platform_games, db_connection, current_pseudo)
-register_extra_games(app, GAMES, current_pseudo, save_score, load_words)
+register_extra_games(app, GAMES, current_pseudo, versus.save_score, load_words)
 register_action_verite(app, GAMES, GAME_CONTENT, db_connection, current_pseudo)
 register_action_verite_preferences(app, db_connection, GAME_CONTENT)
 register_action_verite_no_repeat(app, db_connection)
@@ -40,7 +45,8 @@ register_action_verite_answers(app, db_connection)
 # À enregistrer après les autres modules Action ou Vérité pour entourer
 # leurs routes finales sans modifier leurs contrôles d'autorisation.
 register_action_verite_recovery(app)
-register_duels(app, db_connection, current_pseudo, load_quiz_questions)
+# Les gardes de défi doivent entourer les routes finales de démarrage/reprise.
+versus.register_routes()
 register_engagement(app, GAMES, db_connection, current_pseudo)
 register_growth(app, GAMES, db_connection, current_pseudo)
 register_creator_routes(app, current_pseudo)
