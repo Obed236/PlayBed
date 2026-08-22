@@ -20,19 +20,22 @@
 
     const privacyButton = document.getElementById("privacyCookieSettings");
 
-    // Google Privacy & Messaging / CMP. Le bouton n'apparaît que lorsque
-    // l'API de consentement Google est réellement disponible sur la page.
-    window.googlefc = window.googlefc || {};
-    window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
-    window.googlefc.callbackQueue.push({
-        CONSENT_API_READY: () => {
-            if (privacyButton) privacyButton.hidden = false;
-        },
-    });
+    // N'initialise le helper Funding Choices que sur les pages où le lien de
+    // révocation est réellement présent. La politique de confidentialité reste
+    // ainsi totalement dépourvue de balise ou helper de consentement Google.
+    if (privacyButton) {
+        window.googlefc = window.googlefc || {};
+        window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
+        window.googlefc.callbackQueue.push({
+            CONSENT_API_READY: () => {
+                privacyButton.hidden = false;
+            },
+        });
 
-    privacyButton?.addEventListener("click", () => {
-        if (typeof window.googlefc.showRevocationMessage === "function") {
-            window.googlefc.showRevocationMessage();
-        }
-    });
+        privacyButton.addEventListener("click", () => {
+            if (typeof window.googlefc.showRevocationMessage === "function") {
+                window.googlefc.showRevocationMessage();
+            }
+        });
+    }
 })();
