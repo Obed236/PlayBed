@@ -1,8 +1,35 @@
-{% set no_ads_page = request.path.startswith('/play/') or request.path.startswith('/arcade/') or request.path.startswith('/action-verite') or request.path.startswith('/jeux/action-verite') or request.path.startswith('/profil') or request.path.startswith('/joueur/') or request.path.startswith('/defi/') or request.path.startswith('/affronter') or request.path.startswith('/classement') %}
+{% set privacy_policy_page = request.path.startswith('/politique-confidentialite') %}
+{% set cmp_force_test = request.args.get('fc') == 'alwaysshow' and request.args.get('fctype') == 'gdpr' %}
+{% set no_ads_page = request.path.startswith('/play/') or request.path.startswith('/arcade/') or request.path.startswith('/action-verite') or request.path.startswith('/jeux/action-verite') or request.path.startswith('/profil') or request.path.startswith('/joueur/') or request.path.startswith('/defi/') or request.path.startswith('/affronter') or request.path.startswith('/classement') or privacy_policy_page or request.path.startswith('/mentions-legales') or request.path.startswith('/conditions-utilisation') or request.path.startswith('/contact') %}
 <!DOCTYPE html>
 <html lang="fr" data-theme="dark">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    {% if cmp_force_test %}
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    {% endif %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block description %}PlayBed, la plateforme gratuite de mini-jeux rapides sur navigateur.{% endblock %}">
+    <meta name="author" content="Obed Gelly Ousmane Tassango">
+    <meta name="theme-color" content="#08111f">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="PlayBed">
+    <meta name="google-adsense-account" content="ca-pub-8115913863262508">
+
+    {# La balise AdSense est volontairement chargée avant GTM afin que la CMP Google
+       puisse initialiser son runtime sans dépendre d'un autre script. Sur l'URL de
+       test fc=alwaysshow&fctype=gdpr, GTM et les scripts PlayBed sont neutralisés. #}
+    {% if not no_ads_page %}
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8115913863262508" crossorigin="anonymous" data-playbed-adsense="true"></script>
+    {% endif %}
+
+    {% if not cmp_force_test %}
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
@@ -15,17 +42,8 @@
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-THGHCD6K');</script>
     <!-- End Google Tag Manager -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="{% block description %}PlayBed, la plateforme gratuite de mini-jeux rapides sur navigateur.{% endblock %}">
-    <meta name="author" content="Obed Gelly Ousmane Tassango">
-    <meta name="theme-color" content="#08111f">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="PlayBed">
-    <meta name="google-adsense-account" content="ca-pub-8115913863262508">
-    {% if not no_ads_page %}<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8115913863262508" crossorigin="anonymous" data-playbed-adsense="true"></script>{% endif %}
+    {% endif %}
+
     <meta name="robots" content="{% block robots %}index,follow,max-image-preview:large{% endblock %}">
     <meta property="og:title" content="{% block og_title %}PlayBed V3{% endblock %}">
     <meta property="og:description" content="{% block og_description %}Joue, progresse et défie tes amis sur PlayBed.{% endblock %}">
@@ -40,19 +58,23 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/platform.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/engagement.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/growth.css') }}">
+    {% if not cmp_force_test %}
     <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script defer src="{{ url_for('static', filename='js/platform.js') }}"></script>
     <script defer src="{{ url_for('static', filename='js/pwa.js') }}"></script>
     <script defer src="{{ url_for('static', filename='js/growth.js') }}"></script>
+    {% endif %}
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","@id":"https://playbed.fr/#website","name":"PlayBed","url":"https://playbed.fr/","inLanguage":"fr","description":"Plateforme gratuite de mini-jeux en ligne avec niveaux, missions, défis, classements et profils joueurs.","creator":{"@id":"https://playbed.fr/createur#person"}}</script>
     {% block head_extra %}{% endblock %}
 </head>
 
-<body data-ads-page="{{ 'false' if no_ads_page else 'true' }}">
+<body data-ads-page="{{ 'false' if no_ads_page else 'true' }}" data-cmp-force-test="{{ 'true' if cmp_force_test else 'false' }}">
+    {% if not cmp_force_test %}
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-THGHCD6K"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
+    {% endif %}
     <a class="skip-link" href="#main-content">Aller au contenu principal</a>
     <header class="navbar">
         <a class="brand" href="{{ url_for('home') }}" aria-label="Accueil PlayBed"><span aria-hidden="true">🎮</span> PlayBed</a>
@@ -72,7 +94,7 @@
     <footer>
         <div class="footer-copy"><span>© 2026 PlayBed · Créé et développé par <a href="{{ url_for('creator_page') }}">Obed Gelly Ousmane Tassango</a>.</span><span>Mini-jeux gratuits · Mobile et ordinateur · Aucun compte obligatoire</span></div>
         <nav class="footer-links" aria-label="Informations et mentions">
-            <a href="{{ url_for('versus_home') }}">Affronter un joueur</a><a href="{{ url_for('av_home') }}">Action ou Vérité</a><a href="{{ url_for('about_page') }}">À propos</a><a href="{{ url_for('creator_page') }}">Créateur</a><a href="{{ url_for('how_to_play_page') }}">Comment jouer</a><a href="{{ url_for('platform_guides') }}">Guides</a><a href="{{ url_for('platform_news') }}">Nouveautés</a><a href="{{ url_for('faq_page') }}">FAQ</a><a href="{{ url_for('site_map_page') }}">Plan du site</a><a href="{{ url_for('platform_contact') }}">Contact</a><a href="{{ url_for('platform_legal') }}">Mentions légales</a><a href="{{ url_for('privacy_page') }}">Confidentialité</a><a href="{{ url_for('terms_page') }}">Conditions d’utilisation</a><button class="footer-link-button pwa-install-button" data-pwa-install type="button" hidden>Installer PlayBed</button><button class="footer-link-button" id="privacyCookieSettings" type="button" hidden>Paramètres concernant la confidentialité et les cookies</button>
+            <a href="{{ url_for('versus_home') }}">Affronter un joueur</a><a href="{{ url_for('av_home') }}">Action ou Vérité</a><a href="{{ url_for('about_page') }}">À propos</a><a href="{{ url_for('creator_page') }}">Créateur</a><a href="{{ url_for('how_to_play_page') }}">Comment jouer</a><a href="{{ url_for('platform_guides') }}">Guides</a><a href="{{ url_for('platform_news') }}">Nouveautés</a><a href="{{ url_for('faq_page') }}">FAQ</a><a href="{{ url_for('site_map_page') }}">Plan du site</a><a href="{{ url_for('platform_contact') }}">Contact</a><a href="{{ url_for('platform_legal') }}">Mentions légales</a><a href="{{ url_for('privacy_page') }}">Confidentialité</a><a href="{{ url_for('terms_page') }}">Conditions d’utilisation</a>{% if not privacy_policy_page and not cmp_force_test %}<button class="footer-link-button" id="privacyCookieSettings" type="button" hidden>Paramètres concernant la confidentialité et les cookies</button>{% endif %}<button class="footer-link-button pwa-install-button" data-pwa-install type="button" hidden>Installer PlayBed</button>
         </nav>
     </footer>
 </body>
