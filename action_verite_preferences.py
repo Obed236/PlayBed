@@ -9,51 +9,73 @@ from action_verite import NORMAL_DARES, NORMAL_TRUTHS
 
 PREFERENCE_TTL_HOURS = 24
 
-# Niveau « osé » : volontairement plus gênant et intime, mais sans contenu
-# sexuel explicite, défi dangereux, humiliation forcée ou contact imposé.
+# Niveau « Osé » : des questions plus personnelles et plus gênantes,
+# avec des mots simples. Pas de contenu explicite, pas de danger,
+# pas d'humiliation forcée et pas de contact imposé.
 DARING_TRUTHS = [
-    "Qui dans ce groupe trouves-tu le plus séduisant ?",
+    "Qui dans ce groupe te plaît le plus physiquement ?",
     "Avec qui dans ce groupe accepterais-tu le plus facilement un rendez-vous ?",
-    "As-tu déjà eu un crush sur un ami proche sans lui dire ?",
-    "Quelle est la chose la plus gênante que tu aies faite pour attirer l’attention d’un crush ?",
-    "As-tu déjà envoyé un message de flirt puis regretté immédiatement ?",
-    "Quel est ton plus gros turn-off chez quelqu’un qui te plaît ?",
-    "As-tu déjà fait semblant de ne pas être intéressé alors que tu l’étais vraiment ?",
-    "Quelle personne de ton entourage t’a déjà attiré alors que tu savais que c’était une mauvaise idée ?",
+    "Qui du groupe aimerais-tu embrasser si tu devais choisir ?",
+    "As-tu déjà eu des sentiments pour un ami proche sans lui dire ?",
+    "As-tu déjà été attiré par quelqu’un alors que tu savais que c’était une mauvaise idée ?",
     "As-tu déjà été attiré par deux personnes en même temps ?",
+    "As-tu déjà eu des sentiments pour la personne avec qui sortait un ami ?",
+    "As-tu déjà embrassé quelqu’un puis regretté juste après ?",
+    "As-tu déjà embrassé quelqu’un pour rendre une autre personne jalouse ?",
+    "As-tu déjà rendu quelqu’un jaloux exprès ?",
+    "As-tu déjà caché une relation ou un début de relation à quelqu’un ?",
+    "As-tu déjà menti sur tes sentiments pour ne pas avouer qu’une personne te plaisait ?",
+    "As-tu déjà fait semblant de ne pas être intéressé alors que la personne te plaisait vraiment ?",
+    "Quelle est la chose la plus gênante que tu aies faite pour attirer l’attention d’une personne qui te plaisait ?",
+    "As-tu déjà envoyé un message très gênant à une personne qui te plaisait puis regretté ?",
+    "As-tu déjà supprimé un message juste après l’avoir envoyé parce que tu avais honte ?",
+    "As-tu déjà relu plusieurs fois une discussion avec une personne qui te plaisait ?",
+    "As-tu déjà regardé très longtemps le profil d’une personne qui te plaisait sans lui parler ?",
     "Quel est le plus gros mensonge que tu aies raconté pour éviter un rendez-vous ?",
-    "As-tu déjà stalké le profil d’un crush beaucoup plus longtemps que tu ne veux l’avouer ?",
-    "Quelle est la première chose qui peut te faire craquer chez quelqu’un ?",
-    "Quel est le compliment le plus audacieux qu’on t’ait déjà fait ?",
-    "As-tu déjà eu un crush sur quelqu’un présent dans cette pièce ou cette classe ?",
-    "Si tu devais choisir, avec qui du groupe imaginerais-tu le plus facilement un baiser ?",
     "Quel est le rendez-vous le plus gênant que tu aies vécu ?",
-    "As-tu déjà rendu quelqu’un jaloux volontairement ?",
-    "Quelle conversation romantique aimerais-tu pouvoir effacer de ta mémoire ?",
-    "As-tu déjà gardé des sentiments pour quelqu’un beaucoup trop longtemps ?",
-    "Qui est la dernière personne à laquelle tu as pensé avant de dormir hier ?",
-    "As-tu déjà relu plusieurs fois une conversation avec quelqu’un qui te plaît ?",
+    "Quelle personne présente ici pourrait le plus facilement te faire craquer ?",
+    "Quelle personne du groupe serait la plus dangereuse pour ton cœur ?",
+    "Si tu devais sortir avec une personne de ce groupe, qui choisirais-tu ?",
+    "Si tu devais passer une soirée en tête-à-tête avec une personne du groupe, qui choisirais-tu ?",
+    "Qui du groupe serait, selon toi, le meilleur partenaire pour toi ?",
+    "As-tu déjà pensé à sortir avec quelqu’un présent dans ce groupe ?",
+    "As-tu déjà eu envie d’embrasser quelqu’un sans jamais lui dire ?",
+    "Quelle est la chose la plus folle que tu aies faite par amour ou par attirance ?",
+    "Quel est ton plus gros secret amoureux que tu acceptes de raconter ?",
+    "As-tu déjà menti à la personne avec qui tu étais en couple au sujet d’une autre personne ?",
+    "As-tu déjà parlé à quelqu’un juste parce que tu le trouvais très beau ou très belle ?",
+    "Qui est la dernière personne à laquelle tu as pensé avant de dormir hier soir ?",
+    "Quelle personne de ton passé pourrais-tu revoir si elle te le demandait aujourd’hui ?",
+    "As-tu déjà regretté d’avoir quitté quelqu’un ?",
+    "As-tu déjà regretté de ne pas avoir tenté ta chance avec quelqu’un ?",
+    "Quelle est la première chose que tu regardes chez une personne qui te plaît ?",
     "Quelle est ta plus grande faiblesse quand quelqu’un te plaît vraiment ?",
-    "As-tu déjà dit « je ne veux rien de sérieux » alors que tu avais peur de t’attacher ?",
-    "Quelle personne du groupe serait, selon toi, la plus dangereuse pour ton cœur ?",
+    "Qu’est-ce qui peut te faire tomber amoureux très vite ?",
+    "As-tu déjà dit que tu ne voulais rien de sérieux alors que tu avais peur de t’attacher ?",
+    "Quelle personne du groupe serait la plus difficile à oublier après une relation ?",
 ]
 
 DARING_DARES = [
-    "Choisis un joueur volontaire et fais-lui un compliment vraiment charmeur.",
-    "Regarde un joueur volontaire dans les yeux pendant 15 secondes sans rire.",
-    "Fais ta meilleure phrase de drague à un joueur volontaire, sans le toucher.",
-    "Montre ta meilleure technique de séduction en 20 secondes, sans contact physique.",
-    "Choisis la personne du groupe avec qui tu formerais le meilleur couple fictif et explique pourquoi.",
-    "Improvise un message de flirt très audacieux que tu n’enverras à personne.",
-    "Fais une fausse déclaration de crush à un joueur volontaire pendant 15 secondes.",
-    "Dis trois qualités qui pourraient vraiment te faire tomber amoureux de quelqu’un.",
-    "Imite ta réaction si ton crush t’envoyait maintenant : « tu me manques ».",
-    "Fais un compliment charmeur différent à deux joueurs volontaires.",
-    "Joue une scène de premier rendez-vous très gênante avec un joueur volontaire pendant 20 secondes.",
-    "Décris ton rendez-vous idéal comme si tu essayais de convaincre ton crush de venir.",
-    "Laisse le groupe choisir un prénom fictif et invente une phrase de flirt que tu pourrais lui envoyer.",
-    "Dis quel type de personnalité te ferait craquer en trois critères, sans citer de nom.",
-    "Choisis un joueur volontaire et improvisez une scène où vous vous rencontrez pour la première fois dans un film romantique.",
+    "Choisis une personne volontaire du groupe et dis-lui ce que tu trouves le plus attirant chez elle.",
+    "Regarde une personne volontaire dans les yeux pendant 20 secondes sans détourner le regard.",
+    "Choisis une personne volontaire et fais-lui une déclaration très directe comme si elle te plaisait vraiment.",
+    "Choisis la personne du groupe que tu inviterais à un rendez-vous et explique pourquoi.",
+    "Dis à une personne volontaire trois choses qui pourraient te faire craquer chez elle.",
+    "Fais ta meilleure phrase pour séduire une personne volontaire, sans la toucher.",
+    "Choisis une personne volontaire et joue une scène de premier rendez-vous très gênante pendant 20 secondes.",
+    "Dis quelle personne du groupe pourrait le plus facilement te faire tomber amoureux.",
+    "Choisis une personne du groupe avec qui tu formerais le meilleur couple et explique pourquoi.",
+    "Improvise un message très direct que tu pourrais envoyer à une personne qui te plaît, sans l’envoyer.",
+    "Fais une fausse déclaration d’amour à une personne volontaire pendant 20 secondes.",
+    "Choisis une personne volontaire et dis-lui quel serait votre rendez-vous idéal.",
+    "Dis devant le groupe quel type de personne te fait le plus craquer.",
+    "Choisis deux personnes du groupe et dis laquelle tu inviterais à un rendez-vous si tu devais choisir.",
+    "Fais semblant de rencontrer pour la première fois une personne volontaire qui te plaît beaucoup.",
+    "Choisis une personne volontaire et dis-lui le compliment le plus gênant que tu oses lui faire.",
+    "Dis qui du groupe tu choisirais pour passer une soirée en tête-à-tête.",
+    "Choisis une personne volontaire et explique en 20 secondes pourquoi elle pourrait te plaire.",
+    "Fais semblant d’avouer tes sentiments à une personne volontaire devant tout le groupe.",
+    "Dis quelle personne du groupe serait, selon toi, la plus difficile à oublier après une relation.",
 ]
 
 
@@ -122,21 +144,21 @@ def register_action_verite_preferences(app, db_connection, game_content):
 
     ensure_table()
 
-    # Met à jour la page de règles sans modifier le moteur historique.
     content = game_content.get("action-verite")
     if content:
         content["objective"] = (
             "Action ou Vérité se joue de 2 à 5 personnes. Chaque joueur indique son âge puis, s’il est majeur, "
-            "choisit individuellement entre le niveau Classique et le niveau Osé. Les propositions osées ne sont "
-            "servies qu’aux joueurs majeurs qui les ont acceptées et uniquement dans un groupe entièrement majeur."
+            "choisit pour lui-même entre Classique et Osé. Le niveau Osé contient des questions plus personnelles "
+            "et plus gênantes. Un joueur peut toujours passer une question ou une action s’il ne veut pas répondre."
         )
         content["rules"] = [
             "Le groupe doit contenir entre 2 et 5 joueurs.",
             "Chaque joueur indique son prénom ou pseudo et son âge avant de commencer.",
             "Chaque joueur majeur choisit pour lui-même : Classique ou Osé.",
-            "Un joueur ayant choisi Classique reçoit uniquement les questions et actions normales.",
-            "Un joueur ayant choisi Osé peut recevoir des propositions plus gênantes et suggestives, sans contenu explicite ni action dangereuse.",
-            "Si au moins un joueur est mineur, toute la partie reste automatiquement en mode Classique.",
+            "Un joueur en Classique reçoit seulement les questions et actions normales.",
+            "Un joueur en Osé reçoit des questions plus personnelles et plus gênantes.",
+            "Un joueur peut toujours passer si une question ou une action va trop loin pour lui.",
+            "Si au moins un joueur est mineur, toute la partie reste en Classique.",
             "À chaque tour, le joueur concerné choisit Action ou Vérité.",
             "Une classe privée peut être créée pour jouer à distance avec un code à 4 chiffres.",
         ]
@@ -214,8 +236,6 @@ def register_action_verite_preferences(app, db_connection, game_content):
     def save_join_and_local_preferences(response):
         path = request.path
 
-        # Après création ou arrivée dans une classe, l’ancienne route a déjà
-        # créé l’adhésion de session. On rattache alors le vote au joueur.
         if request.method == "POST" and path in {
             "/action-verite/classe/creer",
             "/action-verite/classe/rejoindre",
@@ -233,8 +253,6 @@ def register_action_verite_preferences(app, db_connection, game_content):
                 if token:
                     save_preference(code, token, age >= 18 and mode == "daring")
 
-        # En local, le moteur historique construit la partie puis on ajoute le
-        # vote individuel de chacun à l’état de session.
         if request.method == "POST" and path == "/action-verite/local" and 300 <= response.status_code < 400:
             action = (request.form.get("action") or "").strip().lower()
             state = session.get("av_local")
