@@ -7,6 +7,7 @@ import extra_games as extra_games_module
 
 MIN_TARGET_SECONDS = 5
 MAX_TARGET_SECONDS = 30
+LAST_TARGET_SESSION_KEY = "chrono_last_target"
 
 
 def register_variable_chrono(app, games, game_content, save_score, current_pseudo):
@@ -38,14 +39,14 @@ def register_variable_chrono(app, games, game_content, save_score, current_pseud
         )
 
     def new_chrono_state():
-        previous = session.get("extra_chrono")
-        previous_target = previous.get("target") if isinstance(previous, dict) else None
+        previous_target = session.get(LAST_TARGET_SESSION_KEY)
         targets = [
             value
             for value in range(MIN_TARGET_SECONDS, MAX_TARGET_SECONDS + 1)
             if value != previous_target
         ]
         target = choice(targets)
+        session[LAST_TARGET_SESSION_KEY] = target
         return {
             "game": "chrono",
             "target": target,
