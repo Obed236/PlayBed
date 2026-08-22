@@ -6,6 +6,7 @@ from engagement import register_engagement
 from platform_routes import register_platform_routes, GUIDES, GAME_CONTENT
 from editorial_guides import EDITORIAL_GUIDES
 from extra_games import EXTRA_GAMES, EXTRA_GAME_CONTENT, register_extra_games
+from chrono_variation import register_variable_chrono
 from action_verite import ACTION_GAME, ACTION_GAME_CONTENT, register_action_verite
 from action_verite_preferences import register_action_verite_preferences
 from action_verite_no_repeat import register_action_verite_no_repeat
@@ -38,6 +39,7 @@ core_module.save_score = versus.save_score
 
 register_platform_routes(app, platform_games, db_connection, current_pseudo)
 register_extra_games(app, GAMES, current_pseudo, versus.save_score, load_words)
+register_variable_chrono(app, GAMES, GAME_CONTENT, versus.save_score, current_pseudo)
 register_action_verite(app, GAMES, GAME_CONTENT, db_connection, current_pseudo)
 register_action_verite_preferences(app, db_connection, GAME_CONTENT)
 register_action_verite_no_repeat(app, db_connection)
