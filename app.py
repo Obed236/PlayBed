@@ -1,5 +1,7 @@
 import os
 
+from flask import render_template, request
+
 import core as core_module
 from core import app, GAMES, db_connection, current_pseudo, init_db, save_score, load_words, load_quiz_questions
 from engagement import register_engagement
@@ -32,6 +34,70 @@ class PlatformGames(dict):
 
 
 platform_games = PlatformGames(GAMES)
+
+# Le hook historique initialisait PostgreSQL avant absolument chaque requête,
+# y compris les pages légales, robots.txt et le sitemap. On le remplace par
+# une initialisation ciblée afin que les contenus publics restent accessibles
+# même pendant une indisponibilité momentanée de la base.
+for scope, functions in list(app.before_request_funcs.items()):
+    app.before_request_funcs[scope] = [
+        function for function in functions
+        if function is not core_module.ensure_database
+    ]
+
+DATABASE_OPTIONAL_ENDPOINTS = {
+    "static",
+    "home",
+    "about_page",
+    "how_to_play_page",
+    "faq_page",
+    "privacy_page",
+    "terms_page",
+    "ads_txt",
+    "robots_txt",
+    "sitemap_xml",
+    "health",
+    "platform_game_detail",
+    "platform_guides",
+    "platform_guide_detail",
+    "platform_news",
+    "platform_contact",
+    "platform_legal",
+    "creator_page",
+    "site_map_page",
+    "pwa_manifest",
+    "pwa_service_worker",
+}
+
+
+@app.before_request
+def ensure_database_for_dynamic_routes():
+    endpoint = request.endpoint
+    if endpoint is None or endpoint in DATABASE_OPTIONAL_ENDPOINTS:
+        return None
+    init_db()
+    return None
+
+
+# La page d'accueil affiche un compteur de scores, mais ce compteur ne doit
+# jamais rendre tout le site inaccessible si PostgreSQL répond mal.
+_original_home = app.view_functions.get("home")
+if _original_home:
+    def resilient_home():
+        try:
+            return _original_home()
+        except Exception:
+            app.logger.exception("Base de données indisponible sur la page d'accueil")
+            return render_template(
+                "index.html",
+                games=GAMES,
+                pseudo=current_pseudo(),
+                total_scores=0,
+            )
+
+    app.view_functions["home"] = resilient_home
+
+
 versus = VersusManager(app, GAMES, db_connection, current_pseudo, save_score)
 # Les jeux historiques appellent core.save_score directement : on branche le
 # gestionnaire de défis pour créditer le solde et enregistrer la manche active.
