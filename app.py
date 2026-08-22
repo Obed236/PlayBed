@@ -7,6 +7,7 @@ from editorial_guides import EDITORIAL_GUIDES
 from extra_games import EXTRA_GAMES, EXTRA_GAME_CONTENT, register_extra_games
 from action_verite import ACTION_GAME, ACTION_GAME_CONTENT, register_action_verite
 from action_verite_preferences import register_action_verite_preferences
+from action_verite_no_repeat import register_action_verite_no_repeat
 from action_verite_answers import register_action_verite_answers
 from action_verite_recovery import register_action_verite_recovery
 from duels import register_duels
@@ -34,6 +35,7 @@ register_platform_routes(app, platform_games, db_connection, current_pseudo)
 register_extra_games(app, GAMES, current_pseudo, save_score, load_words)
 register_action_verite(app, GAMES, GAME_CONTENT, db_connection, current_pseudo)
 register_action_verite_preferences(app, db_connection, GAME_CONTENT)
+register_action_verite_no_repeat(app, db_connection)
 register_action_verite_answers(app, db_connection)
 # À enregistrer après les autres modules Action ou Vérité pour entourer
 # leurs routes finales sans modifier leurs contrôles d'autorisation.
