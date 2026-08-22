@@ -7,7 +7,7 @@
 <main class="content-shell av-shell">
     <nav class="breadcrumb"><a href="{{ url_for('av_home') }}">Action ou Vérité</a><span>›</span><span>Partie locale</span></nav>
     {% if not state %}
-    <section class="content-card av-setup-card"><span class="eyebrow">📱 PARTIE LOCALE</span><h1>Qui joue ?</h1><p>Ajoute entre 2 et 5 joueurs. Chaque majeur choisit son propre niveau : Classique ou Osé. Après la configuration, PlayBed ne garde dans l’état temporaire que « mineur / majeur » et ce choix, pas l’âge exact.</p>{% if error %}<p class="av-error">{{ error }}</p>{% endif %}
+    <section class="content-card av-setup-card"><span class="eyebrow">📱 PARTIE LOCALE</span><h1>Qui joue ?</h1><p>Ajoute entre 2 et 5 joueurs. Chaque majeur choisit son niveau : Classique ou Osé. Après la configuration, PlayBed garde seulement « mineur / majeur » et le niveau choisi, pas l’âge exact.</p>{% if error %}<p class="av-error">{{ error }}</p>{% endif %}
         <form method="post" class="av-setup-form" data-av-local-form>
             <input type="hidden" name="action" value="setup">
             <label for="playerCount">Nombre de joueurs</label>
@@ -15,15 +15,15 @@
             <div class="av-player-fields" data-player-fields>
                 {% for index in range(5) %}<div class="av-player-row" data-player-row="{{ index }}" {% if index >= 2 %}hidden{% endif %}><strong>Joueur {{ index + 1 }}</strong><input type="text" name="player_name" minlength="2" maxlength="20" placeholder="Pseudo" {% if index < 2 %}required{% endif %}><input type="number" name="player_age" min="13" max="100" placeholder="Âge" {% if index < 2 %}required{% endif %}><select name="player_mode" aria-label="Niveau du joueur {{ index + 1 }}"><option value="classic">🛡️ Classique</option><option value="daring">🌶️ Osé (18+)</option></select></div>{% endfor %}
             </div>
-            <p class="av-note">Le niveau Osé est réservé aux majeurs. Si au moins un joueur a moins de 18 ans, toute la partie reste automatiquement en Classique afin qu’aucune proposition 18+ ne soit affichée devant un mineur.</p><button class="primary-button" type="submit">Commencer</button>
+            <p class="av-note">Le niveau Osé est réservé aux majeurs. Si un joueur a moins de 18 ans, toute la partie reste en Classique.</p><button class="primary-button" type="submit">Commencer</button>
         </form>
     </section>
     {% else %}
     <section class="av-game-card">
         <div class="av-game-top"><div><span class="eyebrow">TOUR {{ state.round }}</span><h1>{{ current_player.name }}</h1><p>C’est à toi de choisir.</p></div><span class="av-mode-pill {% if state.adult_mode and current_player.daring %}adult{% endif %}">{% if not state.adult_mode %}🛡️ Classique · mineur présent{% elif current_player.daring %}🌶️ Ton niveau : Osé{% else %}🛡️ Ton niveau : Classique{% endif %}</span></div>
-        <div class="av-players-strip">{% for player in state.players %}<span class="{% if loop.index0 == state.turn_index %}active{% endif %}">{{ player.name }} {% if not player.is_adult %}<small>-18 · Classique</small>{% elif not state.adult_mode and player.daring %}<small>18+ · Osé verrouillé</small>{% elif player.daring %}<small>18+ · 🌶️ Osé</small>{% else %}<small>18+ · Classique</small>{% endif %}</span>{% endfor %}</div>
+        <div class="av-players-strip">{% for player in state.players %}<span class="{% if loop.index0 == state.turn_index %}active{% endif %}">{{ player.name }} {% if not player.is_adult %}<small>-18 · Classique</small>{% elif not state.adult_mode and player.daring %}<small>18+ · Osé bloqué</small>{% elif player.daring %}<small>18+ · 🌶️ Osé</small>{% else %}<small>18+ · Classique</small>{% endif %}</span>{% endfor %}</div>
         {% if not state.prompt %}<div class="av-choice"><h2>Action ou Vérité ?</h2><form method="post"><input type="hidden" name="action" value="choose"><button class="av-choice-button action" name="kind" value="action" type="submit">🔥 Action</button><button class="av-choice-button truth" name="kind" value="verite" type="submit">💬 Vérité</button></form></div>{% else %}
-        <div class="av-prompt"><span class="eyebrow">{% if state.kind == 'action' %}🔥 ACTION{% else %}💬 VÉRITÉ{% endif %}{% if state.adult_mode and current_player.daring %} · 🌶️ OSÉ{% endif %}</span><p>{{ state.prompt }}</p></div><form method="post" class="av-next-form"><input type="hidden" name="action" value="next"><button class="primary-button" type="submit">Joueur suivant →</button></form>{% endif %}
+        <div class="av-prompt"><span class="eyebrow">{% if state.kind == 'action' %}🔥 ACTION{% else %}💬 VÉRITÉ{% endif %}{% if state.adult_mode and current_player.daring %} · 🌶️ OSÉ{% endif %}</span><p>{{ state.prompt }}</p></div>{% if state.adult_mode and current_player.daring %}<p class="av-note">Trop gênant ? Tu peux passer, sans avoir à te justifier.</p>{% endif %}<form method="post" class="av-next-form"><input type="hidden" name="action" value="next"><button class="primary-button" type="submit">Passer / joueur suivant →</button></form>{% endif %}
         <form method="post" class="av-reset-form"><input type="hidden" name="action" value="reset"><button class="danger-link" type="submit">Recommencer avec d’autres joueurs</button></form>
     </section>
     {% endif %}
