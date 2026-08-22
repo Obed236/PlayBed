@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block robots %}noindex,follow{% endblock %}
+{% block title %}Défis 1 contre 1 — PlayBed{% endblock %}
+{% block description %}Affronte un autre joueur sur les jeux à score de PlayBed avec une mise de points virtuels.{% endblock %}
+{% block head_extra %}<link rel="stylesheet" href="{{ url_for('static', filename='css/versus.css') }}">{% endblock %}
+{% block content %}
+<main class="content-shell versus-shell">
+    <header class="content-hero versus-hero">
+        <span class="eyebrow">⚔️ DÉFIS 1 CONTRE 1</span>
+        <h1>Choisis un jeu. Mise des points. Affronte quelqu’un.</h1>
+        <p>Chaque joueur joue une seule manche. Le meilleur score gagne la mise de l’autre. En cas d’égalité, chacun récupère sa mise.</p>
+        <div class="versus-balance"><span>Ton solde de défi</span><strong>{{ wallet.balance }} pts</strong><small>Points virtuels uniquement · aucun argent réel</small></div>
+    </header>
+
+    <section class="versus-grid">
+        <article class="content-card versus-create-card">
+            <span class="eyebrow">NOUVEAU DÉFI</span>
+            <h2>Créer un affrontement</h2>
+            {% if error %}<p class="versus-error">{{ error }}</p>{% endif %}
+            <form method="post" class="versus-form">
+                <label for="versusGame">Jeu</label>
+                <select id="versusGame" name="game" required>
+                    {% for slug, game in games.items() %}
+                    <option value="{{ slug }}" {% if slug == selected_game %}selected{% endif %}>{{ game.emoji }} {{ game.name }}</option>
+                    {% endfor %}
+                </select>
+                <label for="versusStake">Mise par joueur</label>
+                <input id="versusStake" name="stake" type="number" min="{{ min_stake }}" max="{{ max_stake }}" step="10" value="100" required>
+                <p class="versus-note">La mise est retirée dès la création du défi et remboursée si personne ne l’accepte ou si le défi est annulé avant le début.</p>
+                <button class="primary-button" type="submit">Créer le défi</button>
+            </form>
+        </article>
+
+        <article class="content-card versus-rules">
+            <span class="eyebrow">COMMENT ÇA MARCHE</span>
+            <h2>Une manche chacun.</h2>
+            <ol>
+                <li>Tu choisis un jeu et une mise.</li>
+                <li>Tu partages le lien du défi à une personne.</li>
+                <li>Elle accepte : sa mise est retirée aussi.</li>
+                <li>Vous jouez chacun une seule manche du même jeu.</li>
+                <li>Le meilleur score reçoit les deux mises.</li>
+            </ol>
+            <p><strong>Action ou Vérité n’est pas disponible ici</strong>, car ce jeu n’a pas de score permettant de désigner un gagnant.</p>
+        </article>
+    </section>
+
+    <section class="content-card versus-history">
+        <div class="versus-section-head"><div><span class="eyebrow">MES DÉFIS</span><h2>Historique récent</h2></div></div>
+        {% if recent %}
+        <div class="versus-list">
+            {% for item in recent %}
+            <a class="versus-row" href="{{ url_for('versus_match', match_id=item.id) }}">
+                <span class="versus-game">{{ games[item.game].emoji if item.game in games else '🎮' }}</span>
+                <span><strong>{{ games[item.game].name if item.game in games else item.game }}</strong><small>{{ item.creator_name }}{% if item.opponent_name %} vs {{ item.opponent_name }}{% else %} · en attente d’un adversaire{% endif %}</small></span>
+                <span class="versus-stake">{{ item.stake }} pts</span>
+                <span class="versus-status status-{{ item.status }}">{% if item.status == 'waiting' %}En attente{% elif item.status == 'playing' %}En cours{% elif item.status == 'finished' %}Terminé{% else %}Annulé{% endif %}</span>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}<p>Tu n’as encore créé ou rejoint aucun défi.</p>{% endif %}
+    </section>
+</main>
+{% endblock %}
