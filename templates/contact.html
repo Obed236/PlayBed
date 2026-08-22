@@ -12,7 +12,7 @@
   {% if request.args.get('sent') == '1' %}
   <article class="content-card">
     <h2>✅ Message envoyé</h2>
-    <p>Ton message a bien été transmis à l’administrateur de PlayBed et apparaît maintenant dans son espace de signalements.</p>
+    <p>Ton message a bien été transmis à l’administrateur de PlayBed. Tu peux suivre son état sur cette page avec le même pseudo.</p>
   </article>
   {% elif request.args.get('sent') == 'too_fast' %}
   <article class="content-card">
@@ -68,6 +68,43 @@
       <button class="primary-button" type="submit">Envoyer à l’administrateur</button>
     </form>
   </article>
+
+  {% if pseudo %}
+  <article class="content-card prose">
+    <h2>Mes demandes</h2>
+    {% if support_requests %}
+      {% for r in support_requests %}
+      <div style="padding:14px 0; border-bottom:1px solid rgba(127,127,127,.22);">
+        <p style="margin-bottom:6px;">
+          <strong>{{ r['target_value'] or 'Demande' }}</strong>
+          —
+          {% if r['status'] == 'open' %}
+            <span class="badge warn">En cours</span>
+          {% elif r['status'] == 'resolved' %}
+            <span class="badge good">Résolue</span>
+          {% else %}
+            <span class="badge">Rejetée</span>
+          {% endif %}
+        </p>
+        <p class="muted">Envoyée le {{ r['created_at'][:19].replace('T',' ') }}</p>
+        <p>{{ r['reason'] }}</p>
+        {% if r['status'] == 'resolved' and r['admin_message'] %}
+          <p><strong>Réponse de l’administrateur :</strong> {{ r['admin_message'] }}</p>
+        {% elif r['status'] == 'dismissed' and r['admin_message'] %}
+          <p><strong>Motif du rejet :</strong> {{ r['admin_message'] }}</p>
+        {% endif %}
+      </div>
+      {% endfor %}
+    {% else %}
+      <p class="muted">Aucune demande envoyée avec ce pseudo pour le moment.</p>
+    {% endif %}
+  </article>
+  {% else %}
+  <article class="content-card prose">
+    <h2>Suivre mes demandes</h2>
+    <p>Choisis d’abord un pseudo sur PlayBed. Les demandes envoyées avec ce pseudo pourront ensuite être suivies ici.</p>
+  </article>
+  {% endif %}
 
   <article class="content-card prose">
     <h2>Avant de nous contacter</h2>
