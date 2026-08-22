@@ -22,6 +22,19 @@
     <meta name="apple-mobile-web-app-title" content="PlayBed">
     <meta name="google-adsense-account" content="ca-pub-8115913863262508">
 
+    {# Initialise l'API Privacy & Messaging AVANT la balise AdSense. Sur l'URL
+       officielle de test, on autorise explicitement Google à poursuivre le flux
+       du message pour éliminer tout blocage côté page. #}
+    <script>
+        window.googlefc = window.googlefc || {};
+        window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
+        {% if cmp_force_test %}
+        window.googlefc.controlledMessagingFunction = (message) => {
+            message.proceed(true);
+        };
+        {% endif %}
+    </script>
+
     {# La balise AdSense est volontairement chargée avant GTM afin que la CMP Google
        puisse initialiser son runtime sans dépendre d'un autre script. Sur l'URL de
        test fc=alwaysshow&fctype=gdpr, GTM et les scripts PlayBed sont neutralisés. #}
