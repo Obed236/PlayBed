@@ -46,12 +46,25 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          curl --fail --silent --show-error --location \
-            --connect-timeout 20 \
-            --max-time 60 \
-            -H 'User-Agent: PlayBed-Keepalive/1.1' \
-            "https://playbed.fr/?keepalive=$(date +%s)" >/dev/null
-          echo "Homepage responds."
+
+          for attempt in 1 2 3 4 5; do
+            if curl --fail --silent --show-error --location \
+              --connect-timeout 10 \
+              --max-time 20 \
+              -H 'User-Agent: PlayBed-Keepalive/1.1' \
+              "https://playbed.fr/?keepalive=$(date +%s)" >/dev/null; then
+              echo "Homepage responds."
+              exit 0
+            fi
+
+            if [ "$attempt" -lt 5 ]; then
+              echo "Homepage attempt ${attempt} failed. Retrying in 10 seconds..."
+              sleep 10
+            fi
+          done
+
+          echo "Homepage did not respond successfully after 5 attempts."
+          exit 1
 
       - name: Verify robots.txt after wake-up
         shell: bash
