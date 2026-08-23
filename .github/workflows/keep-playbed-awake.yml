@@ -48,22 +48,39 @@ jobs:
           set -euo pipefail
 
           for attempt in 1 2 3 4 5; do
-            if curl --fail --silent --show-error --location \
+            body_file="$(mktemp)"
+
+            if ! http_code="$(curl --silent --show-error --location \
               --connect-timeout 10 \
               --max-time 20 \
               -H 'User-Agent: PlayBed-Keepalive/1.1' \
-              "https://playbed.fr/?keepalive=$(date +%s)" >/dev/null; then
-              echo "Homepage responds."
+              --output "$body_file" \
+              --write-out '%{http_code}' \
+              "https://playbed.fr/?keepalive=$(date +%s)")"; then
+              http_code="000"
+            fi
+
+            if [[ "$http_code" =~ ^[23][0-9][0-9]$ ]]; then
+              rm -f "$body_file"
+              echo "Homepage responds with HTTP ${http_code}."
               exit 0
             fi
 
+            if [ "$http_code" = "503" ] && grep -Fq 'PlayBed est en maintenance' "$body_file"; then
+              rm -f "$body_file"
+              echo "Homepage is intentionally in maintenance mode (HTTP 503)."
+              exit 0
+            fi
+
+            rm -f "$body_file"
+
             if [ "$attempt" -lt 5 ]; then
-              echo "Homepage attempt ${attempt} failed. Retrying in 10 seconds..."
+              echo "Homepage attempt ${attempt} returned HTTP ${http_code}. Retrying in 10 seconds..."
               sleep 10
             fi
           done
 
-          echo "Homepage did not respond successfully after 5 attempts."
+          echo "Homepage did not return a healthy response or the expected maintenance page after 5 attempts."
           exit 1
 
       - name: Verify robots.txt after wake-up
