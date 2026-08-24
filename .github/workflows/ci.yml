@@ -23,4 +23,4 @@ jobs:
       - name: Import Flask application and check templates
         env:
           SECRET_KEY: ci-secret-key
-        run: python -c "import app; rules={r.rule for r in app.app.url_map.iter_rules()}; assert '/imposteur' in rules; assert '/admin/administrateurs/pseudo' in rules; app.app.jinja_env.get_template('leaderboard.html'); app.app.jinja_env.get_template('admin/users.html'); app.app.jinja_env.get_template('admin/admins.html'); print('Routes:', len(rules), 'Imposteur: OK, admin-player link: OK')"
+        run: python -c "import app; rules={r.rule for r in app.app.url_map.iter_rules()}; assert '/imposteur' in rules; assert '/admin/administrateurs/pseudo' in rules; assert '/mon-compte-admin/pseudo' in rules; app.app.jinja_env.get_template('leaderboard.html'); app.app.jinja_env.get_template('admin/users.html'); app.app.jinja_env.get_template('admin/admins.html'); app.app.jinja_env.get_template('admin/dashboard.html'); print('Routes:', len(rules), 'Imposteur: OK, admin self-link: OK')"
