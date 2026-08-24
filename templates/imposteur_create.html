@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Créer une partie de L’Imposteur — PlayBed{% endblock %}
+{% block description %}Crée une salle publique ou privée pour jouer à L’Imposteur sur PlayBed.{% endblock %}
+{% block content %}
+<main>
+<section class="section">
+    <div class="section-heading">
+        <span class="eyebrow">L’IMPOSTEUR</span>
+        <h1>Créer une partie</h1>
+        <p>Choisis qui peut entrer dans la salle et le nombre de joueurs. Le code sera créé automatiquement.</p>
+    </div>
+
+    {% if error %}<div class="message error" style="margin-bottom:20px">{{ error }}</div>{% endif %}
+
+    <form class="game-panel" method="post" style="max-width:760px;margin:0 auto;display:grid;gap:22px">
+        <div>
+            <label for="visibility"><strong>Type de salle</strong></label>
+            <select id="visibility" name="visibility" required style="width:100%;margin-top:8px">
+                <option value="public">🌐 Publique — visible et rejoignable par tout le monde</option>
+                <option value="private">🔒 Privée — uniquement avec le code</option>
+            </select>
+        </div>
+        <div>
+            <label for="maxPlayers"><strong>Nombre maximum de joueurs</strong></label>
+            <select id="maxPlayers" name="max_players" style="width:100%;margin-top:8px">
+                {% for n in range(3, 13) %}<option value="{{ n }}" {% if n == 6 %}selected{% endif %}>{{ n }} joueurs</option>{% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="impostors"><strong>Nombre d’imposteurs</strong></label>
+            <select id="impostors" name="impostor_count" style="width:100%;margin-top:8px">
+                <option value="1">1 imposteur</option>
+                <option value="2">2 imposteurs</option>
+                <option value="3">3 imposteurs</option>
+            </select>
+            <p class="muted">PlayBed bloque automatiquement une configuration déséquilibrée pour le nombre de joueurs choisi.</p>
+        </div>
+        <div class="hero-actions">
+            <button class="primary-button" type="submit">Créer la salle</button>
+            <a class="secondary-button" href="{{ url_for('im_home') }}">Annuler</a>
+        </div>
+    </form>
+</section>
+</main>
+{% endblock %}
