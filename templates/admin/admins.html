@@ -4,7 +4,7 @@
 <div class="topbar">
   <div>
     <h1>Administrateurs</h1>
-    <p class="muted" style="margin:5px 0 0">Crée des comptes séparés et choisis précisément ce que chaque admin peut gérer.</p>
+    <p class="muted" style="margin:5px 0 0">Crée des comptes séparés, choisis leurs droits et associe chaque admin à son pseudo joueur PlayBed.</p>
   </div>
 </div>
 
@@ -12,9 +12,45 @@
 {% if error %}<div class="error">{{ error }}</div>{% endif %}
 
 <section class="panel">
+  {% set primary_linked = admin_linked_player('environment') %}
   <h2>Super-admin principal</h2>
   <p style="margin-bottom:6px"><strong>{{ primary_username or admin_session }}</strong> <span class="badge good">Super-admin</span></p>
-  <p class="muted" style="margin:0">Ce compte garde tous les droits et reste configuré par les variables d’environnement Render. Les admins ajoutés ci-dessous ne peuvent ni le modifier ni créer d’autres super-admins.</p>
+  {% if primary_linked %}
+    <p style="margin:8px 0"><span class="badge">🎮 Pseudo joueur : {{ primary_linked }}</span></p>
+  {% else %}
+    <p class="muted" style="margin:8px 0">Aucun pseudo joueur n’est encore lié à ce compte.</p>
+  {% endif %}
+  <p class="muted">La liaison ne change ni ton pseudo ni tes anciens scores : elle indique simplement à PlayBed que ce profil joueur appartient au super-admin.</p>
+
+  <form class="inline-form" method="post" action="{{ url_for('admin_player_link_update') }}" style="margin-top:14px">
+    <input type="hidden" name="csrf_token" value="{{ admin_csrf_token() }}">
+    <input type="hidden" name="target" value="environment">
+    <input type="hidden" name="action" value="link">
+    <div class="field">
+      <label for="primary-player-pseudo">Pseudo joueur à associer</label>
+      <input id="primary-player-pseudo" name="pseudo" value="{{ primary_linked or current_player_pseudo or '' }}" placeholder="Ton pseudo PlayBed" required>
+    </div>
+    <button class="btn primary" type="submit">Associer ce pseudo</button>
+  </form>
+
+  {% if current_player_pseudo and current_player_pseudo != primary_linked %}
+  <form method="post" action="{{ url_for('admin_player_link_update') }}" style="margin-top:9px">
+    <input type="hidden" name="csrf_token" value="{{ admin_csrf_token() }}">
+    <input type="hidden" name="target" value="environment">
+    <input type="hidden" name="action" value="link">
+    <input type="hidden" name="pseudo" value="{{ current_player_pseudo }}">
+    <button class="btn good" type="submit">Utiliser mon pseudo actuel : {{ current_player_pseudo }}</button>
+  </form>
+  {% endif %}
+
+  {% if primary_linked %}
+  <form method="post" action="{{ url_for('admin_player_link_update') }}" style="margin-top:9px">
+    <input type="hidden" name="csrf_token" value="{{ admin_csrf_token() }}">
+    <input type="hidden" name="target" value="environment">
+    <input type="hidden" name="action" value="unlink">
+    <button class="btn danger small" type="submit">Retirer la liaison</button>
+  </form>
+  {% endif %}
 </section>
 
 <section class="panel">
@@ -57,6 +93,7 @@
   {% if accounts %}
     <div class="stack">
       {% for account in accounts %}
+      {% set account_linked = admin_linked_player('account:' ~ account.id) %}
       <article class="game-card">
         <div style="display:flex;justify-content:space-between;gap:14px;align-items:flex-start;flex-wrap:wrap">
           <div>
@@ -65,10 +102,32 @@
             <div style="margin-top:7px">
               <span class="badge">Admin</span>
               {% if account.active %}<span class="badge good">Actif</span>{% else %}<span class="badge bad">Désactivé</span>{% endif %}
+              {% if account_linked %}<span class="badge">🎮 {{ account_linked }}</span>{% endif %}
             </div>
           </div>
           <div class="muted" style="font-size:12px">Créé par {{ account.created_by or 'super-admin' }}</div>
         </div>
+
+        <form class="inline-form" method="post" action="{{ url_for('admin_player_link_update') }}" style="margin-top:16px">
+          <input type="hidden" name="csrf_token" value="{{ admin_csrf_token() }}">
+          <input type="hidden" name="target" value="account">
+          <input type="hidden" name="account_id" value="{{ account.id }}">
+          <input type="hidden" name="action" value="link">
+          <div class="field">
+            <label for="pseudo-{{ account.id }}">Pseudo joueur associé</label>
+            <input id="pseudo-{{ account.id }}" name="pseudo" value="{{ account_linked or '' }}" placeholder="Pseudo PlayBed" required>
+          </div>
+          <button class="btn primary" type="submit">Associer le pseudo</button>
+        </form>
+        {% if account_linked %}
+        <form method="post" action="{{ url_for('admin_player_link_update') }}" style="margin-top:8px">
+          <input type="hidden" name="csrf_token" value="{{ admin_csrf_token() }}">
+          <input type="hidden" name="target" value="account">
+          <input type="hidden" name="account_id" value="{{ account.id }}">
+          <input type="hidden" name="action" value="unlink">
+          <button class="btn danger small" type="submit">Retirer la liaison avec {{ account_linked }}</button>
+        </form>
+        {% endif %}
 
         <form method="post" action="{{ url_for('admin_account_update') }}" style="margin-top:16px">
           <input type="hidden" name="csrf_token" value="{{ admin_csrf_token() }}">
