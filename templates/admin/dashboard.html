@@ -1,8 +1,38 @@
 {% extends 'admin/base.html' %}
 {% block title %}Tableau de bord{% endblock %}
 {% block content %}
-<style>.admin-actions-panel{border-color:#355c8d;background:linear-gradient(135deg,rgba(25,93,182,.13),rgba(13,26,43,.94))}.admin-action-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:16px}.admin-action-card{display:flex;flex-direction:column;gap:7px;min-height:178px;padding:17px;border:1px solid var(--line);border-radius:14px;background:rgba(7,17,31,.58);transition:transform .15s ease,border-color .15s ease,background .15s ease}.admin-action-card:hover{transform:translateY(-2px);border-color:#4b7fbd;background:rgba(18,34,56,.9)}.admin-action-card strong{font-size:18px}.admin-action-card>span:not(.admin-action-icon){color:var(--muted);flex:1}.admin-action-card em{font-style:normal;color:#8fc0ff;font-weight:700}.admin-action-icon{font-size:27px}.section-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.section-heading h2{margin:0}@media(max-width:1000px){.admin-action-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:540px){.admin-action-grid{grid-template-columns:1fr}.admin-action-card{min-height:0}.section-heading{align-items:flex-start;flex-direction:column}}</style>
+<style>.admin-actions-panel{border-color:#355c8d;background:linear-gradient(135deg,rgba(25,93,182,.13),rgba(13,26,43,.94))}.admin-action-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:16px}.admin-action-card{display:flex;flex-direction:column;gap:7px;min-height:178px;padding:17px;border:1px solid var(--line);border-radius:14px;background:rgba(7,17,31,.58);transition:transform .15s ease,border-color .15s ease,background .15s ease}.admin-action-card:hover{transform:translateY(-2px);border-color:#4b7fbd;background:rgba(18,34,56,.9)}.admin-action-card strong{font-size:18px}.admin-action-card>span:not(.admin-action-icon){color:var(--muted);flex:1}.admin-action-card em{font-style:normal;color:#8fc0ff;font-weight:700}.admin-action-icon{font-size:27px}.section-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.section-heading h2{margin:0}.account-link-panel{border-color:#315b48;background:linear-gradient(135deg,rgba(23,79,56,.2),rgba(13,26,43,.94))}.account-link-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:18px;align-items:end}.account-link-status{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px}.success{background:rgba(64,201,138,.1);border:1px solid #2b6b4d;color:#c9ffe3;padding:11px 12px;border-radius:10px;margin:14px 0}@media(max-width:1000px){.admin-action-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:760px){.account-link-grid{grid-template-columns:1fr}}@media(max-width:540px){.admin-action-grid{grid-template-columns:1fr}.admin-action-card{min-height:0}.section-heading{align-items:flex-start;flex-direction:column}}</style>
 <div class="topbar"><div><h1>Tableau de bord</h1><div class="muted">Vue d’ensemble et accès direct à tous les outils d’administration de PlayBed.</div></div></div>
+{% if request.args.get('message') %}<div class="success">{{ request.args.get('message') }}</div>{% endif %}
+{% if request.args.get('error') %}<div class="error">{{ request.args.get('error') }}</div>{% endif %}
+<section class="panel account-link-panel">
+    <div class="section-heading"><div><h2>Mon compte joueur</h2><div class="muted">Associe ton compte administrateur à ton pseudo PlayBed. Cette liaison sert notamment à reconnaître ton profil joueur comme administrateur.</div></div></div>
+    <div class="account-link-grid">
+        <div>
+            <div class="muted">Compte admin connecté</div>
+            <strong>{{ admin_session }}</strong>
+            <div class="account-link-status">
+                {% if admin_linked_pseudo %}<span class="badge good">🎮 Lié à {{ admin_linked_pseudo }}</span>{% else %}<span class="badge warn">Aucun pseudo lié</span>{% endif %}
+                {% if current_player_pseudo %}<span class="badge">Pseudo PlayBed actif : {{ current_player_pseudo }}</span>{% endif %}
+            </div>
+        </div>
+        <div>
+            <form method="post" action="{{ url_for('admin_self_player_link_update') }}">
+                <input type="hidden" name="csrf_token" value="{{ admin_csrf_token() }}">
+                <input type="hidden" name="action" value="link">
+                <div class="field"><label for="adminPlayerPseudo">Pseudo joueur à associer</label><input id="adminPlayerPseudo" name="pseudo" minlength="2" maxlength="20" required value="{{ current_player_pseudo or admin_linked_pseudo or '' }}" placeholder="Ex. Obed"></div>
+                <div class="actions"><button class="btn good" type="submit">Associer à mon compte admin</button></div>
+            </form>
+            {% if admin_linked_pseudo %}
+            <form method="post" action="{{ url_for('admin_self_player_link_update') }}" style="margin-top:8px">
+                <input type="hidden" name="csrf_token" value="{{ admin_csrf_token() }}">
+                <input type="hidden" name="action" value="unlink">
+                <button class="btn small danger" type="submit">Supprimer la liaison</button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</section>
 <section class="panel admin-actions-panel"><div class="section-heading"><div><h2>Gérer PlayBed</h2><div class="muted">Ces outils modifient réellement les données ou le fonctionnement de la plateforme.</div></div></div><div class="admin-action-grid">
 <a class="admin-action-card" href="{{ url_for('admin_users') }}"><span class="admin-action-icon">👥</span><strong>Utilisateurs</strong><span>Fiches joueurs, rang, historique, notes privées, blocage et scores.</span><em>Gérer les utilisateurs →</em></a>
 <a class="admin-action-card" href="{{ url_for('admin_games') }}"><span class="admin-action-icon">🎮</span><strong>Jeux</strong><span>Activer, désactiver et modifier nom, description, catégorie et emoji.</span><em>Gérer les jeux →</em></a>
