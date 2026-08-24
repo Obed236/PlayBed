@@ -68,56 +68,23 @@ def register_admin_linking(app, db_connection):
                 return f"account:{account_id}"
         abort(400)
 
-    @app.context_processor
-    def inject_admin_player_link_helpers():
-        if not session.get("playbed_admin"):
-            return {
-                "admin_linked_pseudo": None,
-                "admin_linked_player": lambda _key: None,
-                "current_player_pseudo": session.get("pseudo"),
-            }
-        return {
-            "admin_linked_pseudo": linked_pseudo(current_admin_key()),
-            "admin_linked_player": linked_pseudo,
-            "current_player_pseudo": session.get("pseudo"),
-        }
-
-    @app.route("/admin/administrateurs/pseudo", methods=["POST"])
-    def admin_player_link_update():
-        if not session.get("playbed_admin"):
-            return redirect(url_for("admin_login", next=request.path))
-        if session.get("admin_role") != "super_admin":
-            abort(403)
-
-        verify_csrf()
-        ensure_schema()
-        admin_key = target_admin_key()
-        action = (request.form.get("action") or "link").strip()
-
-        if action == "unlink":
-            with db_connection() as conn:
-                conn.execute("DELETE FROM admin_player_links WHERE admin_key = ?", (admin_key,))
-                conn.commit()
-            return redirect(url_for("admin_accounts_page", message="Liaison avec le pseudo supprimée."))
-
-        pseudo = (request.form.get("pseudo") or "").strip()
-        if not valid_pseudo(pseudo):
-            return redirect(url_for("admin_accounts_page", error="Pseudo invalide : utilise un pseudo PlayBed de 2 à 20 caractères."))
-
-        # Si ce pseudo a déjà joué, conserve exactement la casse enregistrée dans les scores.
+    def canonical_pseudo(pseudo):
         with db_connection() as conn:
             score_row = conn.execute(
                 "SELECT pseudo FROM scores WHERE LOWER(pseudo) = LOWER(?) ORDER BY created_at DESC LIMIT 1",
                 (pseudo,),
             ).fetchone()
-            canonical = score_row["pseudo"] if score_row else pseudo
+        return score_row["pseudo"] if score_row else pseudo
 
+    def save_link(admin_key, pseudo):
+        canonical = canonical_pseudo(pseudo)
+        with db_connection() as conn:
             conflict = conn.execute(
                 "SELECT admin_key FROM admin_player_links WHERE LOWER(player_pseudo) = LOWER(?) AND admin_key <> ? LIMIT 1",
                 (canonical, admin_key),
             ).fetchone()
             if conflict:
-                return redirect(url_for("admin_accounts_page", error="Ce pseudo est déjà lié à un autre compte administrateur."))
+                return None, "Ce pseudo est déjà lié à un autre compte administrateur."
 
             existing = conn.execute(
                 "SELECT admin_key FROM admin_player_links WHERE admin_key = ?",
@@ -134,5 +101,77 @@ def register_admin_linking(app, db_connection):
                     (admin_key, canonical, now_iso()),
                 )
             conn.commit()
+        return canonical, None
+
+    def remove_link(admin_key):
+        with db_connection() as conn:
+            conn.execute("DELETE FROM admin_player_links WHERE admin_key = ?", (admin_key,))
+            conn.commit()
+
+    @app.context_processor
+    def inject_admin_player_link_helpers():
+        if not session.get("playbed_admin"):
+            return {
+                "admin_linked_pseudo": None,
+                "admin_linked_player": lambda _key: None,
+                "current_player_pseudo": session.get("pseudo"),
+            }
+        return {
+            "admin_linked_pseudo": linked_pseudo(current_admin_key()),
+            "admin_linked_player": linked_pseudo,
+            "current_player_pseudo": session.get("pseudo"),
+        }
+
+    @app.route("/mon-compte-admin/pseudo", methods=["POST"])
+    def admin_self_player_link_update():
+        """Allow any authenticated admin to manage only their own player link."""
+        if not session.get("playbed_admin"):
+            return redirect(url_for("admin_login", next=url_for("admin_dashboard")))
+
+        verify_csrf()
+        ensure_schema()
+        admin_key = current_admin_key()
+        if not admin_key:
+            abort(400)
+
+        action = (request.form.get("action") or "link").strip()
+        if action == "unlink":
+            remove_link(admin_key)
+            return redirect(url_for("admin_dashboard", message="Liaison avec ton pseudo joueur supprimée."))
+
+        pseudo = (request.form.get("pseudo") or session.get("pseudo") or "").strip()
+        if not valid_pseudo(pseudo):
+            return redirect(url_for("admin_dashboard", error="Pseudo invalide : utilise un pseudo PlayBed de 2 à 20 caractères."))
+
+        canonical, error = save_link(admin_key, pseudo)
+        if error:
+            return redirect(url_for("admin_dashboard", error=error))
+
+        return redirect(url_for("admin_dashboard", message=f"Ton compte admin est maintenant associé au pseudo {canonical}."))
+
+    @app.route("/admin/administrateurs/pseudo", methods=["POST"])
+    def admin_player_link_update():
+        """Super-admin management of any administrator/player association."""
+        if not session.get("playbed_admin"):
+            return redirect(url_for("admin_login", next=request.path))
+        if session.get("admin_role") != "super_admin":
+            abort(403)
+
+        verify_csrf()
+        ensure_schema()
+        admin_key = target_admin_key()
+        action = (request.form.get("action") or "link").strip()
+
+        if action == "unlink":
+            remove_link(admin_key)
+            return redirect(url_for("admin_accounts_page", message="Liaison avec le pseudo supprimée."))
+
+        pseudo = (request.form.get("pseudo") or "").strip()
+        if not valid_pseudo(pseudo):
+            return redirect(url_for("admin_accounts_page", error="Pseudo invalide : utilise un pseudo PlayBed de 2 à 20 caractères."))
+
+        canonical, error = save_link(admin_key, pseudo)
+        if error:
+            return redirect(url_for("admin_accounts_page", error=error))
 
         return redirect(url_for("admin_accounts_page", message=f"Le pseudo {canonical} est maintenant lié au compte administrateur."))
