@@ -9,7 +9,7 @@
     {% if error %}<div class="error">{{ error }}</div>{% endif %}
     {% if not configured %}<div class="notice warn">L’accès doit d’abord être configuré dans les variables d’environnement Render.</div>{% endif %}
     <form method="post" autocomplete="on">
-      <div class="field"><label for="username">Identifiant</label><input id="username" name="username" autocomplete="username" required></div>
+      <div class="field"><label for="username">Nom d’utilisateur</label><input id="username" name="username" autocomplete="username" required></div>
       <div class="field"><label for="password">Mot de passe</label><input id="password" name="password" type="password" autocomplete="current-password" required></div>
       <button class="btn primary" style="width:100%" type="submit">Se connecter</button>
     </form>
