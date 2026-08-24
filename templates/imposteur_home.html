@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}L’Imposteur multijoueur — PlayBed{% endblock %}
+{% block description %}Joue à L’Imposteur en ligne sur PlayBed dans une salle publique ou privée. Donne des indices, discute et vote pour démasquer l’imposteur.{% endblock %}
+{% block content %}
+<main>
+<section class="hero">
+    <div class="hero-copy">
+        <span class="eyebrow">MULTIJOUEUR</span>
+        <h1>L’Imposteur.<br><span>Qui bluffe ?</span></h1>
+        <p>Entre dans une salle publique sans demander l’autorisation, ou crée une partie privée et partage son code avec tes amis.</p>
+        <div class="hero-actions">
+            {% if pseudo %}<a class="primary-button" href="{{ url_for('im_create') }}">Créer une partie</a>{% else %}<a class="primary-button" href="{{ url_for('home') }}#player">Choisir un pseudo</a>{% endif %}
+            <a class="secondary-button" href="#public-rooms">Parties publiques</a>
+        </div>
+    </div>
+    <div class="hero-card">
+        <div class="orb">🕵️</div>
+        <strong>3 à 12 joueurs</strong>
+        <span>Salons publics & privés</span>
+        <div class="mini-stats"><span>💬 Discussion</span><span>🗳️ Vote</span><span>🎭 Rôles secrets</span><span>📱 Multi-écrans</span></div>
+    </div>
+</section>
+
+{% if error %}<section class="section"><div class="message error">{{ error }}</div></section>{% endif %}
+{% if info %}<section class="section"><div class="message">{{ info }}</div></section>{% endif %}
+
+<section class="section" id="public-rooms">
+    <div class="section-heading">
+        <span class="eyebrow">PARTIES PUBLIQUES</span>
+        <h2>Rejoins directement une salle.</h2>
+        <p>Tant qu’une partie n’a pas commencé et qu’il reste une place, tout joueur peut la rejoindre sans validation du créateur.</p>
+    </div>
+
+    {% if public_rooms %}
+    <div class="game-grid">
+        {% for room in public_rooms %}
+        <article class="game-card">
+            <div class="card-top"><div class="game-icon">🌐</div><span class="game-tag">{{ room.player_count }}/{{ room.max_players }} joueurs</span></div>
+            <h3>Salle {{ room.code }}</h3>
+            <p>{{ room.impostor_count }} imposteur{% if room.impostor_count|int > 1 %}s{% endif %} prévu{% if room.impostor_count|int > 1 %}s{% endif %}. Rejoins la salle et attends le lancement.</p>
+            {% if pseudo %}
+            <form action="{{ url_for('im_join_public', code=room.code) }}" method="post">
+                <button class="primary-button" type="submit">Rejoindre maintenant</button>
+            </form>
+            {% else %}
+            <a class="primary-button" href="{{ url_for('home') }}#player">Choisir un pseudo</a>
+            {% endif %}
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="filter-empty" style="display:block">Aucune salle publique disponible pour le moment. Tu peux créer la première.</div>
+    {% endif %}
+</section>
+
+<section class="section player-panel">
+    <div>
+        <span class="eyebrow">PARTIE PRIVÉE</span>
+        <h2>Tu as reçu un code ?</h2>
+        <p>Entre les 6 caractères du code partagé par le créateur de la salle.</p>
+    </div>
+    {% if pseudo %}
+    <form class="pseudo-form" action="{{ url_for('im_join_private') }}" method="post">
+        <label class="sr-only" for="privateCode">Code de salle</label>
+        <input id="privateCode" name="code" maxlength="6" minlength="6" value="{{ code_value }}" placeholder="ABC234" autocomplete="off" autocapitalize="characters" required>
+        <button class="primary-button" type="submit">Rejoindre</button>
+    </form>
+    {% else %}
+    <a class="primary-button" href="{{ url_for('home') }}#player">Choisir un pseudo d’abord</a>
+    {% endif %}
+</section>
+
+<section class="section feature-section">
+    <div class="section-heading"><span class="eyebrow">COMMENT ÇA MARCHE</span><h2>Une partie en quatre temps.</h2></div>
+    <div class="info-grid">
+        <article class="info-card"><span class="eyebrow">1</span><h3>Rôle secret</h3><p>Les citoyens découvrent le même mot. L’imposteur ne le voit pas.</p></article>
+        <article class="info-card"><span class="eyebrow">2</span><h3>Indices</h3><p>Chaque joueur donne un indice court. L’imposteur doit bluffer sans se trahir.</p></article>
+        <article class="info-card"><span class="eyebrow">3</span><h3>Discussion</h3><p>Le chat de la salle permet de défendre ses choix et de soupçonner les autres.</p></article>
+        <article class="info-card"><span class="eyebrow">4</span><h3>Vote</h3><p>Le vote s’ouvre quand tous les joueurs encore en jeu ont donné leur indice.</p></article>
+    </div>
+</section>
+</main>
+{% endblock %}
