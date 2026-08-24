@@ -1,0 +1,117 @@
+{% extends 'admin/base.html' %}
+{% block title %}Administrateurs{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h1>Administrateurs</h1>
+    <p class="muted" style="margin:5px 0 0">Crée des comptes séparés et choisis précisément ce que chaque admin peut gérer.</p>
+  </div>
+</div>
+
+{% if message %}<div class="notice">{{ message }}</div>{% endif %}
+{% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+<section class="panel">
+  <h2>Super-admin principal</h2>
+  <p style="margin-bottom:6px"><strong>{{ primary_username or admin_session }}</strong> <span class="badge good">Super-admin</span></p>
+  <p class="muted" style="margin:0">Ce compte garde tous les droits et reste configuré par les variables d’environnement Render. Les admins ajoutés ci-dessous ne peuvent ni le modifier ni créer d’autres super-admins.</p>
+</section>
+
+<section class="panel">
+  <h2>Ajouter un administrateur</h2>
+  <form method="post" action="{{ url_for('admin_account_add') }}">
+    <input type="hidden" name="csrf_token" value="{{ admin_csrf_token() }}">
+    <div class="grid-2">
+      <div class="field">
+        <label for="new-admin-username">Identifiant</label>
+        <input id="new-admin-username" name="username" minlength="3" maxlength="40" required placeholder="ex. moderateur1">
+      </div>
+      <div class="field">
+        <label for="new-admin-email">E-mail</label>
+        <input id="new-admin-email" name="email" type="email" required placeholder="admin@exemple.fr">
+      </div>
+    </div>
+    <div class="field">
+      <label for="new-admin-password">Mot de passe</label>
+      <input id="new-admin-password" name="password" type="password" minlength="12" autocomplete="new-password" required>
+      <span class="help">12 caractères minimum. Le mot de passe est enregistré sous forme hachée.</span>
+    </div>
+    <div class="field">
+      <label>Droits accordés</label>
+      <div class="grid-3">
+        {% for key, label in permissions.items() %}
+        <label class="game-card" style="display:flex;gap:9px;align-items:center;margin:0;cursor:pointer">
+          <input type="checkbox" name="permissions" value="{{ key }}" style="width:auto">
+          <span>{{ label }}</span>
+        </label>
+        {% endfor %}
+      </div>
+      <span class="help">Le tableau de bord reste accessible. Tout le reste est bloqué côté serveur si le droit n’est pas coché.</span>
+    </div>
+    <button class="btn primary" type="submit">Ajouter l’administrateur</button>
+  </form>
+</section>
+
+<section class="panel">
+  <h2>Comptes administrateurs</h2>
+  {% if accounts %}
+    <div class="stack">
+      {% for account in accounts %}
+      <article class="game-card">
+        <div style="display:flex;justify-content:space-between;gap:14px;align-items:flex-start;flex-wrap:wrap">
+          <div>
+            <h3 style="margin-bottom:2px">{{ account.username }}</h3>
+            <div class="muted">{{ account.email }}</div>
+            <div style="margin-top:7px">
+              <span class="badge">Admin</span>
+              {% if account.active %}<span class="badge good">Actif</span>{% else %}<span class="badge bad">Désactivé</span>{% endif %}
+            </div>
+          </div>
+          <div class="muted" style="font-size:12px">Créé par {{ account.created_by or 'super-admin' }}</div>
+        </div>
+
+        <form method="post" action="{{ url_for('admin_account_update') }}" style="margin-top:16px">
+          <input type="hidden" name="csrf_token" value="{{ admin_csrf_token() }}">
+          <input type="hidden" name="id" value="{{ account.id }}">
+
+          <div class="field">
+            <label>État du compte</label>
+            <select name="active">
+              <option value="1" {% if account.active %}selected{% endif %}>Actif</option>
+              <option value="0" {% if not account.active %}selected{% endif %}>Désactivé</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Droits</label>
+            <div class="grid-3">
+              {% for key, label in permissions.items() %}
+              <label class="game-card" style="display:flex;gap:9px;align-items:center;margin:0;cursor:pointer">
+                <input type="checkbox" name="permissions" value="{{ key }}" style="width:auto" {% if key in account.permissions %}checked{% endif %}>
+                <span>{{ label }}</span>
+              </label>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="password-{{ account.id }}">Nouveau mot de passe <span class="muted">(facultatif)</span></label>
+            <input id="password-{{ account.id }}" name="new_password" type="password" minlength="12" autocomplete="new-password" placeholder="Laisser vide pour ne pas changer">
+          </div>
+
+          <button class="btn good" type="submit">Enregistrer les changements</button>
+        </form>
+
+        <form method="post" action="{{ url_for('admin_account_delete') }}" style="margin-top:10px" onsubmit="return confirm('Supprimer définitivement cet administrateur ?')">
+          <input type="hidden" name="csrf_token" value="{{ admin_csrf_token() }}">
+          <input type="hidden" name="id" value="{{ account.id }}">
+          <button class="btn danger" type="submit">Supprimer le compte</button>
+        </form>
+      </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty">Aucun administrateur secondaire pour le moment.</div>
+  {% endif %}
+</section>
+{% endblock %}
