@@ -57,15 +57,10 @@
   <h2>Ajouter un administrateur</h2>
   <form method="post" action="{{ url_for('admin_account_add') }}">
     <input type="hidden" name="csrf_token" value="{{ admin_csrf_token() }}">
-    <div class="grid-2">
-      <div class="field">
-        <label for="new-admin-username">Identifiant</label>
-        <input id="new-admin-username" name="username" minlength="3" maxlength="40" required placeholder="ex. moderateur1">
-      </div>
-      <div class="field">
-        <label for="new-admin-email">E-mail</label>
-        <input id="new-admin-email" name="email" type="email" required placeholder="admin@exemple.fr">
-      </div>
+    <div class="field">
+      <label for="new-admin-username">Nom d’utilisateur</label>
+      <input id="new-admin-username" name="username" maxlength="8" required placeholder="ex. admin2" autocomplete="username">
+      <span class="help">8 caractères maximum. Aucune adresse e-mail n’est nécessaire.</span>
     </div>
     <div class="field">
       <label for="new-admin-password">Mot de passe</label>
@@ -98,7 +93,6 @@
         <div style="display:flex;justify-content:space-between;gap:14px;align-items:flex-start;flex-wrap:wrap">
           <div>
             <h3 style="margin-bottom:2px">{{ account.username }}</h3>
-            <div class="muted">{{ account.email }}</div>
             <div style="margin-top:7px">
               <span class="badge">Admin</span>
               {% if account.active %}<span class="badge good">Actif</span>{% else %}<span class="badge bad">Désactivé</span>{% endif %}
