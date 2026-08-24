@@ -22,6 +22,7 @@ from growth import register_growth
 from support_routes import register_support_routes
 from admin_routes import register_admin_routes
 from admin_accounts import register_admin_accounts
+from admin_badges import register_admin_badges
 from admin_complete import register_admin_complete
 from admin_action_verite import register_admin_action_verite
 
@@ -140,6 +141,7 @@ register_sitemap_route(app, GAMES, current_pseudo)
 register_support_routes(app, db_connection, current_pseudo)
 register_admin_routes(app, GAMES, db_connection, current_pseudo, core_module)
 register_admin_accounts(app, db_connection)
+register_admin_badges(app, db_connection)
 register_admin_complete(app, GAMES, db_connection, current_pseudo, core_module)
 register_admin_action_verite(app, db_connection)
 
