@@ -270,8 +270,6 @@ def register_admin_accounts(app, db_connection):
                     abort(403)
                 return None
 
-        # Par défaut, un admin délégué n'accède pas à une nouvelle route admin
-        # tant qu'un droit explicite ne lui a pas été attribué.
         if not is_super_admin():
             abort(403)
         return None
@@ -316,7 +314,6 @@ def register_admin_accounts(app, db_connection):
 
         return render_template("admin/login.html", configured=admin_configured(), error=error)
 
-    # La route existe déjà dans admin_routes.py : on remplace uniquement sa vue.
     app.view_functions["admin_login"] = multi_admin_login
 
     def multi_admin_logout():
@@ -433,12 +430,19 @@ def register_admin_accounts(app, db_connection):
         verify_csrf()
         ensure_schema()
         account_id = request.form.get("id") or ""
+        new_username = (request.form.get("username") or "").strip()
         permissions = selected_permissions_from_form()
         active = 1 if request.form.get("active") == "1" else 0
         new_password = request.form.get("new_password") or ""
 
+        if not valid_username(new_username):
+            return redirect(url_for("admin_accounts_page", error="Nom d’utilisateur invalide : 1 à 8 caractères, lettres/chiffres/._- uniquement."))
         if new_password and len(new_password) < 8:
             return redirect(url_for("admin_accounts_page", error="Le nouveau mot de passe doit contenir au moins 8 caractères."))
+
+        primary = os.environ.get("PLAYBED_ADMIN_USERNAME", "").strip()
+        if primary and new_username.lower() == primary.lower():
+            return redirect(url_for("admin_accounts_page", error="Ce nom d’utilisateur est réservé au super-admin principal."))
 
         with db_connection() as conn:
             row = conn.execute(
@@ -448,14 +452,27 @@ def register_admin_accounts(app, db_connection):
             if not row:
                 abort(404)
 
+            duplicate = conn.execute(
+                """
+                SELECT id FROM admin_accounts
+                WHERE LOWER(username) = LOWER(?) AND id <> ?
+                LIMIT 1
+                """,
+                (new_username, account_id),
+            ).fetchone()
+            if duplicate:
+                return redirect(url_for("admin_accounts_page", error="Ce nom d’utilisateur est déjà utilisé."))
+
+            old_username = row["username"]
             if new_password:
                 conn.execute(
                     """
                     UPDATE admin_accounts
-                    SET permissions_json = ?, active = ?, password_hash = ?, updated_at = ?
+                    SET username = ?, permissions_json = ?, active = ?, password_hash = ?, updated_at = ?
                     WHERE id = ?
                     """,
                     (
+                        new_username,
                         json.dumps(permissions, ensure_ascii=False),
                         active,
                         generate_password_hash(new_password),
@@ -467,15 +484,24 @@ def register_admin_accounts(app, db_connection):
                 conn.execute(
                     """
                     UPDATE admin_accounts
-                    SET permissions_json = ?, active = ?, updated_at = ?
+                    SET username = ?, permissions_json = ?, active = ?, updated_at = ?
                     WHERE id = ?
                     """,
-                    (json.dumps(permissions, ensure_ascii=False), active, now_iso(), account_id),
+                    (
+                        new_username,
+                        json.dumps(permissions, ensure_ascii=False),
+                        active,
+                        now_iso(),
+                        account_id,
+                    ),
                 )
             conn.commit()
 
-        log_action("admin_update", f"Compte admin modifié : {row['username']}")
-        return redirect(url_for("admin_accounts_page", message=f"Administrateur {row['username']} mis à jour."))
+        if old_username != new_username:
+            log_action("admin_update", f"Compte admin renommé : {old_username} -> {new_username}")
+        else:
+            log_action("admin_update", f"Compte admin modifié : {new_username}")
+        return redirect(url_for("admin_accounts_page", message=f"Administrateur {new_username} mis à jour."))
 
     @app.route("/admin/administrateurs/supprimer", methods=["POST"])
     @super_admin_required
