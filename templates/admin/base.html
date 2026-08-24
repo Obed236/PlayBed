@@ -32,7 +32,10 @@
             <a href="{{ url_for('home') }}" target="_blank" rel="noopener">Voir PlayBed ↗</a>
         </nav>
         <div class="sidebar-bottom">
-            <div class="muted" style="margin:0 0 8px 4px">Connecté : {{ admin_session }} · {{ admin_role_label }}</div>
+            <div class="muted" style="margin:0 0 5px 4px">Connecté : {{ admin_session }} · {{ admin_role_label }}</div>
+            <div style="margin:0 0 9px 4px;font-size:12px">
+                {% if admin_linked_pseudo %}<span class="badge">🎮 {{ admin_linked_pseudo }}</span>{% else %}<span class="muted">Aucun pseudo joueur lié</span>{% endif %}
+            </div>
             <form method="post" action="{{ url_for('admin_logout') }}">
                 <input type="hidden" name="csrf_token" value="{{ admin_csrf_token() }}">
                 <button class="btn logout" type="submit">Se déconnecter</button>
