@@ -113,7 +113,8 @@ if _original_home:
     app.view_functions["home"] = resilient_home
 
 
-versus = VersusManager(app, GAMES, db_connection, current_pseudo, save_score)
+versus_games = {slug: meta for slug, meta in GAMES.items() if slug != "imposteur"}
+versus = VersusManager(app, versus_games, db_connection, current_pseudo, save_score)
 # Les jeux historiques appellent core.save_score directement : on branche le
 # gestionnaire de défis pour créditer le solde et enregistrer la manche active.
 core_module.save_score = versus.save_score
