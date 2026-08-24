@@ -105,12 +105,12 @@ def register_admin_accounts(app, db_connection):
         with db_connection() as conn:
             return conn.execute(
                 """
-                SELECT id, username, email, password_hash, role, permissions_json, active
+                SELECT id, username, password_hash, role, permissions_json, active
                 FROM admin_accounts
-                WHERE LOWER(username) = LOWER(?) OR LOWER(email) = LOWER(?)
+                WHERE LOWER(username) = LOWER(?)
                 LIMIT 1
                 """,
-                (identifier, identifier),
+                (identifier,),
             ).fetchone()
 
     def database_account_by_id(account_id):
@@ -118,7 +118,7 @@ def register_admin_accounts(app, db_connection):
         with db_connection() as conn:
             return conn.execute(
                 """
-                SELECT id, username, email, password_hash, role, permissions_json, active
+                SELECT id, username, password_hash, role, permissions_json, active
                 FROM admin_accounts WHERE id = ? LIMIT 1
                 """,
                 (account_id,),
@@ -312,7 +312,7 @@ def register_admin_accounts(app, db_connection):
                         return redirect(next_url)
                     return redirect(url_for("admin_dashboard"))
 
-            error = "Identifiant, e-mail ou mot de passe incorrect."
+            error = "Nom d’utilisateur ou mot de passe incorrect."
 
         return render_template("admin/login.html", configured=admin_configured(), error=error)
 
@@ -336,11 +336,7 @@ def register_admin_accounts(app, db_connection):
         })
 
     def valid_username(value):
-        return bool(re.fullmatch(r"[A-Za-z0-9._-]{3,40}", value or ""))
-
-    def valid_email(value):
-        value = (value or "").strip()
-        return 5 <= len(value) <= 254 and "@" in value and "." in value.rsplit("@", 1)[-1]
+        return bool(re.fullmatch(r"[A-Za-z0-9._-]{1,8}", value or ""))
 
     @app.route("/admin/administrateurs")
     @super_admin_required
@@ -349,7 +345,7 @@ def register_admin_accounts(app, db_connection):
         with db_connection() as conn:
             accounts = conn.execute(
                 """
-                SELECT id, username, email, role, permissions_json, active,
+                SELECT id, username, role, permissions_json, active,
                        created_by, created_at, updated_at
                 FROM admin_accounts
                 ORDER BY created_at DESC
@@ -360,7 +356,6 @@ def register_admin_accounts(app, db_connection):
             normalized.append({
                 "id": row["id"],
                 "username": row["username"],
-                "email": row["email"],
                 "role": row["role"],
                 "permissions": parse_permissions(row["permissions_json"]),
                 "active": bool(int(row["active"])),
@@ -383,34 +378,32 @@ def register_admin_accounts(app, db_connection):
         verify_csrf()
         ensure_schema()
         username = (request.form.get("username") or "").strip()
-        email = (request.form.get("email") or "").strip().lower()
         password = request.form.get("password") or ""
         permissions = selected_permissions_from_form()
 
         if not valid_username(username):
-            return redirect(url_for("admin_accounts_page", error="Identifiant invalide : 3 à 40 caractères, lettres/chiffres/._- uniquement."))
-        if not valid_email(email):
-            return redirect(url_for("admin_accounts_page", error="Adresse e-mail invalide."))
+            return redirect(url_for("admin_accounts_page", error="Nom d’utilisateur invalide : 1 à 8 caractères, lettres/chiffres/._- uniquement."))
         if len(password) < 12:
             return redirect(url_for("admin_accounts_page", error="Le mot de passe doit contenir au moins 12 caractères."))
 
         primary = os.environ.get("PLAYBED_ADMIN_USERNAME", "").strip()
         if primary and username.lower() == primary.lower():
-            return redirect(url_for("admin_accounts_page", error="Cet identifiant est réservé au super-admin principal."))
+            return redirect(url_for("admin_accounts_page", error="Ce nom d’utilisateur est réservé au super-admin principal."))
 
         with db_connection() as conn:
             duplicate = conn.execute(
                 """
                 SELECT id FROM admin_accounts
-                WHERE LOWER(username) = LOWER(?) OR LOWER(email) = LOWER(?)
+                WHERE LOWER(username) = LOWER(?)
                 LIMIT 1
                 """,
-                (username, email),
+                (username,),
             ).fetchone()
             if duplicate:
-                return redirect(url_for("admin_accounts_page", error="Cet identifiant ou cet e-mail est déjà utilisé."))
+                return redirect(url_for("admin_accounts_page", error="Ce nom d’utilisateur est déjà utilisé."))
 
             account_id = secrets.token_hex(16)
+            internal_identifier = f"username-only:{account_id}"
             timestamp = now_iso()
             conn.execute(
                 """
@@ -421,7 +414,7 @@ def register_admin_accounts(app, db_connection):
                 (
                     account_id,
                     username,
-                    email,
+                    internal_identifier,
                     generate_password_hash(password),
                     json.dumps(permissions, ensure_ascii=False),
                     session.get("playbed_admin"),
