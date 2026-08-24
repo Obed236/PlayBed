@@ -19,19 +19,20 @@
         <a class="brand" href="{{ url_for('admin_dashboard') }}">🎮 PlayBed Admin</a>
         <nav class="nav">
             <a href="{{ url_for('admin_dashboard') }}">Tableau de bord</a>
-            <a href="{{ url_for('admin_users') }}">Utilisateurs</a>
-            <a href="{{ url_for('admin_games') }}">Jeux</a>
-            <a href="{{ url_for('admin_scores') }}">Scores</a>
-            <a href="{{ url_for('admin_questions') }}">Quiz / Vrai-Faux</a>
-            <a href="{{ url_for('admin_av_content') }}">Action ou Vérité</a>
-            <a href="{{ url_for('admin_reports') }}">Signalements</a>
-            <a href="{{ url_for('admin_announcements') }}">Annonces</a>
-            <a href="{{ url_for('admin_logs_page') }}">Journal admin</a>
-            <a href="{{ url_for('admin_settings') }}">Paramètres</a>
+            {% if admin_can('users') %}<a href="{{ url_for('admin_users') }}">Utilisateurs</a>{% endif %}
+            {% if admin_can('games') %}<a href="{{ url_for('admin_games') }}">Jeux</a>{% endif %}
+            {% if admin_can('scores') %}<a href="{{ url_for('admin_scores') }}">Scores</a>{% endif %}
+            {% if admin_can('questions') %}<a href="{{ url_for('admin_questions') }}">Quiz / Vrai-Faux</a>{% endif %}
+            {% if admin_can('action_verite') %}<a href="{{ url_for('admin_av_content') }}">Action ou Vérité</a>{% endif %}
+            {% if admin_can('reports') %}<a href="{{ url_for('admin_reports') }}">Signalements</a>{% endif %}
+            {% if admin_can('announcements') %}<a href="{{ url_for('admin_announcements') }}">Annonces</a>{% endif %}
+            {% if admin_can('logs') %}<a href="{{ url_for('admin_logs_page') }}">Journal admin</a>{% endif %}
+            {% if admin_can('settings') %}<a href="{{ url_for('admin_settings') }}">Paramètres</a>{% endif %}
+            {% if admin_is_super %}<a href="{{ url_for('admin_accounts_page') }}">Administrateurs</a>{% endif %}
             <a href="{{ url_for('home') }}" target="_blank" rel="noopener">Voir PlayBed ↗</a>
         </nav>
         <div class="sidebar-bottom">
-            <div class="muted" style="margin:0 0 8px 4px">Connecté : {{ admin_session }}</div>
+            <div class="muted" style="margin:0 0 8px 4px">Connecté : {{ admin_session }} · {{ admin_role_label }}</div>
             <form method="post" action="{{ url_for('admin_logout') }}">
                 <input type="hidden" name="csrf_token" value="{{ admin_csrf_token() }}">
                 <button class="btn logout" type="submit">Se déconnecter</button>
