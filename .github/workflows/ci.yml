@@ -19,8 +19,8 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Compile Python files
-        run: python -m py_compile app.py core.py imposteur.py admin_routes.py admin_accounts.py admin_complete.py admin_action_verite.py
-      - name: Import Flask application and check Imposteur route
+        run: python -m py_compile app.py core.py imposteur.py admin_routes.py admin_accounts.py admin_badges.py admin_complete.py admin_action_verite.py
+      - name: Import Flask application and check templates
         env:
           SECRET_KEY: ci-secret-key
-        run: python -c "import app; rules={r.rule for r in app.app.url_map.iter_rules()}; assert '/imposteur' in rules; print('Routes:', len(rules), 'Imposteur: OK')"
+        run: python -c "import app; rules={r.rule for r in app.app.url_map.iter_rules()}; assert '/imposteur' in rules; app.app.jinja_env.get_template('leaderboard.html'); app.app.jinja_env.get_template('admin/users.html'); print('Routes:', len(rules), 'Imposteur: OK, admin badges: OK')"
