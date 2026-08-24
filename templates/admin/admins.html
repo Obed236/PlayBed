@@ -64,8 +64,8 @@
     </div>
     <div class="field">
       <label for="new-admin-password">Mot de passe</label>
-      <input id="new-admin-password" name="password" type="password" minlength="12" autocomplete="new-password" required>
-      <span class="help">12 caractères minimum. Le mot de passe est enregistré sous forme hachée.</span>
+      <input id="new-admin-password" name="password" type="password" minlength="8" autocomplete="new-password" required>
+      <span class="help">8 caractères minimum. Le mot de passe est enregistré sous forme hachée.</span>
     </div>
     <div class="field">
       <label>Droits accordés</label>
@@ -149,7 +149,7 @@
 
           <div class="field">
             <label for="password-{{ account.id }}">Nouveau mot de passe <span class="muted">(facultatif)</span></label>
-            <input id="password-{{ account.id }}" name="new_password" type="password" minlength="12" autocomplete="new-password" placeholder="Laisser vide pour ne pas changer">
+            <input id="password-{{ account.id }}" name="new_password" type="password" minlength="8" autocomplete="new-password" placeholder="Laisser vide pour ne pas changer">
           </div>
 
           <button class="btn good" type="submit">Enregistrer les changements</button>
