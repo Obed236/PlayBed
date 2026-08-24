@@ -64,7 +64,10 @@
     </div>
     <div class="field">
       <label for="new-admin-password">Mot de passe</label>
-      <input id="new-admin-password" name="password" type="password" minlength="8" autocomplete="new-password" required>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input id="new-admin-password" name="password" type="password" minlength="8" autocomplete="new-password" required style="flex:1">
+        <button class="btn small" type="button" data-toggle-password="new-admin-password">👁 Voir</button>
+      </div>
       <span class="help">8 caractères minimum. Le mot de passe est enregistré sous forme hachée.</span>
     </div>
     <div class="field">
@@ -128,6 +131,12 @@
           <input type="hidden" name="id" value="{{ account.id }}">
 
           <div class="field">
+            <label for="username-{{ account.id }}">Nom d’utilisateur</label>
+            <input id="username-{{ account.id }}" name="username" value="{{ account.username }}" maxlength="8" required autocomplete="username">
+            <span class="help">Tu peux le modifier. 8 caractères maximum.</span>
+          </div>
+
+          <div class="field">
             <label>État du compte</label>
             <select name="active">
               <option value="1" {% if account.active %}selected{% endif %}>Actif</option>
@@ -149,7 +158,11 @@
 
           <div class="field">
             <label for="password-{{ account.id }}">Nouveau mot de passe <span class="muted">(facultatif)</span></label>
-            <input id="password-{{ account.id }}" name="new_password" type="password" minlength="8" autocomplete="new-password" placeholder="Laisser vide pour ne pas changer">
+            <div style="display:flex;gap:8px;align-items:center">
+              <input id="password-{{ account.id }}" name="new_password" type="password" minlength="8" autocomplete="new-password" placeholder="Laisser vide pour ne pas changer" style="flex:1">
+              <button class="btn small" type="button" data-toggle-password="password-{{ account.id }}">👁 Voir</button>
+            </div>
+            <span class="help">Le mot de passe actuel n’est jamais affiché. Saisis-en un nouveau uniquement si tu veux le remplacer.</span>
           </div>
 
           <button class="btn good" type="submit">Enregistrer les changements</button>
@@ -167,4 +180,16 @@
     <div class="empty">Aucun administrateur secondaire pour le moment.</div>
   {% endif %}
 </section>
+
+<script>
+document.addEventListener('click', function (event) {
+  const button = event.target.closest('[data-toggle-password]');
+  if (!button) return;
+  const input = document.getElementById(button.dataset.togglePassword);
+  if (!input) return;
+  const show = input.type === 'password';
+  input.type = show ? 'text' : 'password';
+  button.textContent = show ? '🙈 Masquer' : '👁 Voir';
+});
+</script>
 {% endblock %}
