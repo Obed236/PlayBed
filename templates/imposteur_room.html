@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+{% block title %}Salle {{ room.code }} — L’Imposteur — PlayBed{% endblock %}
+{% block description %}Partie multijoueur de L’Imposteur sur PlayBed.{% endblock %}
+{% block content %}
+<style>
+.im-room-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.65fr);gap:24px;align-items:start}
+.im-panel{background:var(--surface,rgba(255,255,255,.04));border:1px solid var(--border,rgba(255,255,255,.12));border-radius:22px;padding:22px}
+.im-code{font-size:clamp(1.8rem,5vw,3.2rem);letter-spacing:.16em;margin:.2em 0}
+.im-players{display:grid;gap:10px;margin-top:14px}
+.im-player{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border:1px solid var(--border,rgba(255,255,255,.12));border-radius:14px}
+.im-player.dead{opacity:.5}
+.im-role{padding:22px;border-radius:20px;margin-bottom:20px;text-align:center}
+.im-role.citizen{background:rgba(46,160,67,.12);border:1px solid rgba(46,160,67,.35)}
+.im-role.impostor{background:rgba(220,53,69,.12);border:1px solid rgba(220,53,69,.35)}
+.im-word{font-size:clamp(2rem,7vw,4rem);font-weight:900;margin:.2em 0}
+.im-clues{display:grid;gap:10px;margin:16px 0}
+.im-clue{padding:12px 14px;border-radius:14px;background:rgba(127,127,127,.08)}
+.im-chat{display:grid;gap:8px;max-height:360px;overflow:auto;margin:14px 0}
+.im-message{padding:10px 12px;border-radius:12px;background:rgba(127,127,127,.08)}
+.im-message strong{display:block;margin-bottom:3px}
+.im-vote-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.im-vote-grid button{width:100%}
+.im-status{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;background:rgba(127,127,127,.1);font-weight:700}
+@media(max-width:850px){.im-room-grid{grid-template-columns:1fr}.im-panel{padding:17px}}
+</style>
+<main>
+<section class="section">
+    <div class="section-heading">
+        <span class="eyebrow">L’IMPOSTEUR · {{ 'PUBLIQUE' if room.visibility == 'public' else 'PRIVÉE' }}</span>
+        <h1>Salle <span class="im-code">{{ room.code }}</span></h1>
+        <p>
+            {% if room.status == 'waiting' %}<span class="im-status">⏳ En attente</span>
+            {% elif room.status == 'playing' %}<span class="im-status">💡 Tour {{ room.round_no }} · indices</span>
+            {% elif room.status == 'voting' %}<span class="im-status">🗳️ Tour {{ room.round_no }} · vote</span>
+            {% else %}<span class="im-status">🏁 Partie terminée</span>{% endif %}
+        </p>
+    </div>
+
+    <div class="im-room-grid">
+        <div>
+            {% if room.result_message %}<div class="message" style="margin-bottom:18px">{{ room.result_message }}</div>{% endif %}
+
+            {% if room.status == 'waiting' %}
+            <section class="im-panel">
+                <h2>La salle se remplit</h2>
+                <p>{{ players|length }}/{{ room.max_players }} joueurs · {{ room.impostor_count }} imposteur{% if room.impostor_count|int > 1 %}s{% endif %} configuré{% if room.impostor_count|int > 1 %}s{% endif %}.</p>
+                {% if room.visibility == 'private' %}<p>Partage simplement le code <strong>{{ room.code }}</strong> avec les personnes que tu veux inviter.</p>{% else %}<p>Cette salle apparaît dans la liste publique : tout joueur peut la rejoindre directement tant qu’il reste de la place.</p>{% endif %}
+                {% if is_creator %}
+                    {% if players|length >= 3 %}
+                    <form method="post" action="{{ url_for('im_start', code=room.code) }}" style="margin-top:18px"><button class="primary-button" type="submit">Lancer la partie</button></form>
+                    {% else %}
+                    <p class="muted">Il faut au moins 3 joueurs pour commencer.</p>
+                    {% endif %}
+                {% else %}
+                <p class="muted">Le créateur lancera la partie dès que le groupe sera prêt.</p>
+                {% endif %}
+            </section>
+            {% else %}
+                {% if member.role == 'citizen' %}
+                <section class="im-role citizen">
+                    <span class="eyebrow">TON RÔLE</span><h2>🙂 Citoyen</h2>
+                    <p>Catégorie : <strong>{{ room.category }}</strong></p>
+                    <div class="im-word">{{ reveal_word }}</div>
+                    <p>Donne un indice sans écrire directement le mot.</p>
+                </section>
+                {% elif member.role == 'impostor' %}
+                <section class="im-role impostor">
+                    <span class="eyebrow">TON RÔLE</span><h2>🕵️ IMPOSTEUR</h2>
+                    <p>Catégorie : <strong>{{ room.category }}</strong></p>
+                    <div class="im-word">???</div>
+                    <p>Tu ne connais pas le mot. Bluffe grâce aux indices des autres sans te faire repérer.</p>
+                </section>
+                {% endif %}
+
+                {% if not member.alive and room.status != 'finished' %}
+                <div class="message">👻 Tu es éliminé. Tu peux observer la suite, mais tu ne peux plus donner d’indice, voter ou écrire dans le chat.</div>
+                {% endif %}
+
+                {% if room.status == 'playing' %}
+                <section class="im-panel">
+                    <h2>💡 Les indices</h2>
+                    <p>{{ clues|length }}/{{ alive_players|length }} joueur(s) encore en jeu ont donné leur indice.</p>
+                    <div class="im-clues">
+                        {% for item in clues %}<div class="im-clue"><strong>{{ item.name }}</strong> — {{ item.clue }}</div>{% else %}<div class="muted">Aucun indice pour le moment.</div>{% endfor %}
+                    </div>
+                    {% if member.alive and not member_clue %}
+                    <form method="post" action="{{ url_for('im_clue', code=room.code) }}">
+                        <label for="clue"><strong>Ton indice</strong></label>
+                        <div class="pseudo-form" style="margin-top:8px">
+                            <input id="clue" name="clue" minlength="2" maxlength="40" required placeholder="Un mot ou une courte idée">
+                            <button class="primary-button" type="submit">Envoyer</button>
+                        </div>
+                    </form>
+                    {% elif member.alive %}
+                    <p class="muted">Ton indice est envoyé. Le vote s’ouvrira automatiquement quand tous les joueurs auront répondu.</p>
+                    {% endif %}
+                </section>
+                {% elif room.status == 'voting' %}
+                <section class="im-panel">
+                    <h2>🗳️ Qui est l’imposteur ?</h2>
+                    <p>{{ votes_cast }}/{{ alive_players|length }} vote(s) enregistré(s). Le résultat apparaît quand tout le monde a voté.</p>
+                    <div class="im-clues">
+                        {% for item in clues %}<div class="im-clue"><strong>{{ item.name }}</strong> — {{ item.clue }}</div>{% endfor %}
+                    </div>
+                    {% if member.alive and not member_voted %}
+                    <form method="post" action="{{ url_for('im_vote', code=room.code) }}">
+                        <div class="im-vote-grid">
+                            {% for player in alive_players %}
+                                {% if player.player_token != member.player_token %}
+                                <button class="secondary-button" type="submit" name="target" value="{{ player.player_token }}">Voter {{ player.name }}</button>
+                                {% endif %}
+                            {% endfor %}
+                            <button class="secondary-button" type="submit" name="target" value="skip">Passer le vote</button>
+                        </div>
+                    </form>
+                    {% elif member.alive %}
+                    <p class="muted">Vote enregistré. Les votes restent anonymes.</p>
+                    {% endif %}
+                </section>
+                {% elif room.status == 'finished' %}
+                <section class="im-panel">
+                    {% if room.winner == 'citizens' %}<h2>🏆 Les citoyens gagnent !</h2><p>Tous les imposteurs ont été éliminés.</p>
+                    {% else %}<h2>🕵️ Les imposteurs gagnent !</h2><p>Ils sont devenus assez nombreux pour prendre le contrôle de la partie.</p>{% endif %}
+                    <p>Le mot secret était <strong>{{ room.secret_word }}</strong> ({{ room.category }}).</p>
+                    <h3>Rôles révélés</h3>
+                    <div class="im-players">
+                        {% for player in players %}
+                        <div class="im-player"><strong>{{ player.name }}</strong><span>{{ '🕵️ Imposteur' if player.role == 'impostor' else '🙂 Citoyen' }}</span></div>
+                        {% endfor %}
+                    </div>
+                    {% if is_creator %}<form method="post" action="{{ url_for('im_replay', code=room.code) }}" style="margin-top:18px"><button class="primary-button" type="submit">Rejouer avec le groupe</button></form>{% endif %}
+                </section>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        <aside>
+            <section class="im-panel">
+                <h2>👥 Joueurs</h2>
+                <div class="im-players">
+                    {% for player in players %}
+                    <div class="im-player {{ 'dead' if not player.alive and room.status != 'waiting' else '' }}">
+                        <strong>{{ player.name }}{% if player.player_token == room.creator_token %} 👑{% endif %}</strong>
+                        <span>{% if room.status != 'waiting' and not player.alive %}Éliminé{% else %}{{ player.player_order + 1 }}{% endif %}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <section class="im-panel" style="margin-top:20px">
+                <h2>💬 Discussion</h2>
+                <div class="im-chat">
+                    {% for message in messages %}<div class="im-message"><strong>{{ message.name }}</strong>{{ message.message }}</div>{% else %}<div class="muted">Pas encore de message.</div>{% endfor %}
+                </div>
+                {% if room.status != 'finished' and (room.status == 'waiting' or member.alive) %}
+                <form method="post" action="{{ url_for('im_chat', code=room.code) }}">
+                    <input name="message" maxlength="240" required placeholder="Écrire un message…" style="width:100%;margin-bottom:9px">
+                    <button class="secondary-button" type="submit">Envoyer</button>
+                </form>
+                {% endif %}
+            </section>
+
+            <section class="im-panel" style="margin-top:20px">
+                <h2>⚙️ Salle</h2>
+                <p><strong>{{ 'Publique' if room.visibility == 'public' else 'Privée' }}</strong> · {{ room.max_players }} places</p>
+                <form method="post" action="{{ url_for('im_leave', code=room.code) }}">
+                    <button class="danger-link" type="submit">{{ 'Fermer et quitter' if is_creator else 'Quitter la salle' }}</button>
+                </form>
+            </section>
+        </aside>
+    </div>
+</section>
+</main>
+
+<script>
+(() => {
+    let lastUpdate = {{ room.updated_at|tojson }};
+    let busy = false;
+    async function refreshRoom() {
+        if (busy || document.hidden) return;
+        busy = true;
+        try {
+            const response = await fetch({{ url_for('im_state', code=room.code)|tojson }}, {headers: {"Accept": "application/json"}});
+            if (!response.ok) return;
+            const data = await response.json();
+            if (!data.available) return;
+            if (data.updated_at && data.updated_at !== lastUpdate) {
+                window.location.reload();
+                return;
+            }
+        } catch (_) {
+            // Une coupure réseau momentanée ne doit pas interrompre la partie.
+        } finally {
+            busy = false;
+        }
+    }
+    setInterval(refreshRoom, 1800);
+})();
+</script>
+{% endblock %}
