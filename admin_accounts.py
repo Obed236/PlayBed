@@ -383,8 +383,8 @@ def register_admin_accounts(app, db_connection):
 
         if not valid_username(username):
             return redirect(url_for("admin_accounts_page", error="Nom d’utilisateur invalide : 1 à 8 caractères, lettres/chiffres/._- uniquement."))
-        if len(password) < 12:
-            return redirect(url_for("admin_accounts_page", error="Le mot de passe doit contenir au moins 12 caractères."))
+        if len(password) < 8:
+            return redirect(url_for("admin_accounts_page", error="Le mot de passe doit contenir au moins 8 caractères."))
 
         primary = os.environ.get("PLAYBED_ADMIN_USERNAME", "").strip()
         if primary and username.lower() == primary.lower():
@@ -437,8 +437,8 @@ def register_admin_accounts(app, db_connection):
         active = 1 if request.form.get("active") == "1" else 0
         new_password = request.form.get("new_password") or ""
 
-        if new_password and len(new_password) < 12:
-            return redirect(url_for("admin_accounts_page", error="Le nouveau mot de passe doit contenir au moins 12 caractères."))
+        if new_password and len(new_password) < 8:
+            return redirect(url_for("admin_accounts_page", error="Le nouveau mot de passe doit contenir au moins 8 caractères."))
 
         with db_connection() as conn:
             row = conn.execute(
