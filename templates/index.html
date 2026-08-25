@@ -8,7 +8,7 @@
         <span class="eyebrow">PLAYBED V3</span>
         <h1>Joue.<br>Défie.<br><span>Amuse-toi.</span></h1>
         <p>PlayBed rassemble {{ games|length }} jeux gratuits et rapides avec profils publics, affrontements 1 contre 1, jeux multijoueurs et classements. Aucun téléchargement ni compte obligatoire.</p>
-        <div class="hero-actions"><a class="primary-button" href="#games">Choisir un jeu</a><a class="secondary-button" href="{{ url_for('im_home') }}">🕵️ L’Imposteur</a><a class="secondary-button" href="{{ url_for('av_home') }}">🎭 Action ou Vérité</a><a class="secondary-button" href="{{ url_for('versus_home') }}">⚔️ Affronter un joueur</a><a class="secondary-button" href="{{ url_for('platform_daily_challenge') }}">🔥 Défi du jour</a><a class="secondary-button" href="{{ url_for('leaderboard') }}">🏆 Classement</a></div>
+        <div class="hero-actions"><a class="primary-button" href="#games">Choisir un jeu</a><a class="secondary-button" href="#games" id="surpriseGameButton" title="Lancer un jeu au hasard">🎲 Jeu surprise</a><a class="secondary-button" href="{{ url_for('im_home') }}">🕵️ L’Imposteur</a><a class="secondary-button" href="{{ url_for('av_home') }}">🎭 Action ou Vérité</a><a class="secondary-button" href="{{ url_for('versus_home') }}">⚔️ Affronter un joueur</a><a class="secondary-button" href="{{ url_for('platform_daily_challenge') }}">🔥 Défi du jour</a><a class="secondary-button" href="{{ url_for('leaderboard') }}">🏆 Classement</a></div>
     </div>
     <div class="hero-card"><div class="orb">🕹️</div><strong>{{ games|length }} jeux disponibles</strong><span>{{ total_scores }} score(s) enregistré(s)</span><div class="mini-stats"><span>🎮 Mini-jeux</span><span>⚔️ Affrontements</span><span>👥 Multijoueur</span><span>📱 PWA</span></div></div>
 </section>
@@ -49,4 +49,24 @@
 
 <section class="section about"><span class="eyebrow">PLAYBED</span><h2>Un projet informatique devenu une plateforme publique.</h2><p>PlayBed a été créé et développé par Obed Gelly Ousmane Tassango dans le cadre d'un projet autour du web, du réseau et de la programmation. Le projet est désormais accessible gratuitement au public et continue d’évoluer avec de nouvelles fonctionnalités.</p><p>L’objectif reste simple : proposer une expérience rapide et agréable, sans inscription obligatoire, tout en donnant suffisamment d’informations aux joueurs pour comprendre les règles, les scores et la manière dont leurs données sont utilisées.</p><a class="secondary-button" href="{{ url_for('about_page') }}">En savoir plus sur PlayBed</a></section>
 </main>
+
+<script>
+(() => {
+    const button = document.getElementById('surpriseGameButton');
+    if (!button) return;
+
+    button.addEventListener('click', (event) => {
+        const excludedGames = new Set(['action-verite', 'imposteur']);
+        const cards = Array.from(document.querySelectorAll('[data-game-card]')).filter((card) => {
+            return !excludedGames.has(card.dataset.gameSlug) && card.dataset.gameStartUrl;
+        });
+
+        if (!cards.length) return;
+
+        event.preventDefault();
+        const selected = cards[Math.floor(Math.random() * cards.length)];
+        window.location.href = selected.dataset.gameStartUrl;
+    });
+})();
+</script>
 {% endblock %}
