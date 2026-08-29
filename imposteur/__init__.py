@@ -28,16 +28,16 @@ IMPOSTEUR_GAME_CONTENT = deepcopy(_legacy.IMPOSTEUR_GAME_CONTENT)
 
 _rules = IMPOSTEUR_GAME_CONTENT["imposteur"]["rules"]
 _turn_rule = (
-    "Les descriptions se font dans un ordre imposé : un citoyen parle toujours "
-    "avant un imposteur. À 3 joueurs, l’imposteur parle obligatoirement en deuxième."
+    "L’ordre de prise de parole est déterminé automatiquement par le jeu. "
+    "Chaque joueur doit attendre son tour pour donner sa description."
 )
 if _turn_rule not in _rules:
     _rules.insert(4, _turn_rule)
 
 _tips = IMPOSTEUR_GAME_CONTENT["imposteur"]["tips"]
 _tips[1] = (
-    "Si tu es imposteur, écoute le citoyen qui parle avant toi puis donne un indice "
-    "crédible sans copier le sien."
+    "Si tu es imposteur, écoute les descriptions déjà données puis donne un indice "
+    "crédible sans copier les autres."
 )
 
 
