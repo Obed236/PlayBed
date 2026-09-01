@@ -1,4 +1,11 @@
 /* PlayBed app-style layout — preserves the existing PlayBed color palette. */
+html, body { min-height: 100%; }
+body {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+}
+#main-content { flex: 1 0 auto; }
 .pb-home-page { padding-top: 22px; }
 
 .pb-home-shell {
@@ -104,7 +111,8 @@
 
 .pb-site-footer {
     width: min(1180px, calc(100% - 40px));
-    margin: 28px auto 18px;
+    margin: auto auto 18px;
+    flex: 0 0 auto;
 }
 
 .pb-footer-panel {
@@ -153,22 +161,6 @@
     background: color-mix(in srgb, var(--surface) 78%, transparent);
 }
 .pb-footer-bottom p { margin: 4px 0; line-height: 1.6; }
-.pb-footer-divider {
-    width: min(420px, 80%);
-    height: 1px;
-    margin: 18px auto;
-    background: var(--border);
-}
-.pb-footer-domain {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 16px;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    color: var(--text);
-    font-weight: 850;
-}
 
 @media (max-width: 820px) {
     .pb-home-page { padding-top: 14px; }
@@ -205,7 +197,13 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 24px 18px;
     }
-    .pb-footer-bottom { margin-bottom: 92px; }
+    .pb-site-footer {
+        margin-top: auto;
+        margin-bottom: calc(96px + env(safe-area-inset-bottom));
+    }
+    .pb-footer-bottom {
+        margin: 0;
+    }
 }
 
 @media (max-width: 520px) {
