@@ -32,7 +32,7 @@
     <link rel="canonical" href="https://playbed.fr{{ request.path }}"><link rel="manifest" href="{{ url_for('pwa_manifest') }}"><link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static', filename='icons/playbed-192.png') }}"><link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/playbed-192.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"><link rel="stylesheet" href="{{ url_for('static', filename='css/platform.css') }}"><link rel="stylesheet" href="{{ url_for('static', filename='css/engagement.css') }}"><link rel="stylesheet" href="{{ url_for('static', filename='css/growth.css') }}"><link rel="stylesheet" href="{{ url_for('static', filename='css/navigation.css') }}"><link rel="stylesheet" href="{{ url_for('static', filename='css/app-layout.css') }}">
     <style>.site-announcements{display:grid;gap:8px;padding:10px max(16px,calc((100vw - 1180px)/2));background:#07111f;color:#eaf2ff}.site-announcement{border:1px solid rgba(125,170,255,.35);border-radius:12px;padding:10px 14px;background:rgba(42,94,170,.13);color:#eaf2ff;font-size:14px;line-height:1.5}.site-announcement strong{margin-right:6px;color:#fff}.site-announcement[data-kind="success"]{border-color:rgba(68,201,138,.45);background:rgba(35,130,88,.12)}.site-announcement[data-kind="warning"]{border-color:rgba(255,200,87,.45);background:rgba(180,120,25,.12)}@media(max-width:650px){.site-announcement{font-size:15px;padding:12px 14px}}</style>
-    <script defer src="{{ url_for('static', filename='js/main.js') }}"></script><script defer src="{{ url_for('static', filename='js/platform.js') }}"></script><script defer src="{{ url_for('static', filename='js/pwa.js') }}"></script><script defer src="{{ url_for('static', filename='js/growth.js') }}"></script><script defer src="{{ url_for('static', filename='js/navigation-swipe.js') }}"></script>
+    <script defer src="{{ url_for('static', filename='js/main.js') }}"></script><script defer src="{{ url_for('static', filename='js/platform.js') }}"></script><script defer src="{{ url_for('static', filename='js/pwa.js') }}"></script><script defer src="{{ url_for('static', filename='js/growth.js') }}"></script><script defer src="{{ url_for('static', filename='js/navigation-swipe.js') }}"></script><script defer src="{{ url_for('static', filename='js/mobile-drawer.js') }}"></script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","@id":"https://playbed.fr/#website","name":"PlayBed","url":"https://playbed.fr/","inLanguage":"fr","description":"Plateforme gratuite de mini-jeux en ligne avec niveaux, missions, défis, classements et profils joueurs.","creator":{"@id":"https://playbed.fr/createur#person"}}</script>
     {% block head_extra %}{% endblock %}
 </head>
@@ -50,13 +50,59 @@
                 <a class="pb-nav-link{% if leaderboard_active %} is-active{% endif %}" href="{{ url_for('leaderboard') }}"{% if leaderboard_active %} aria-current="page"{% endif %}>🏆 Classement</a>
                 <a class="pb-profile-link{% if profile_active %} is-active{% endif %}" href="{{ profile_url }}"{% if profile_active %} aria-current="page"{% endif %}>👤 Profil</a>
             </nav>
-            <div class="pb-nav-actions">{% if pseudo %}<span class="pb-player-chip" title="Joueur actif">{{ pseudo }}</span>{% endif %}<button class="pb-theme-toggle theme-toggle" id="themeToggle" type="button" aria-label="Changer de thème">☀️</button></div>
+            <div class="pb-nav-actions">
+                {% if pseudo %}<span class="pb-player-chip" title="Joueur actif">{{ pseudo }}</span>{% endif %}
+                <button class="pb-mobile-menu-button" id="pbMobileMenuButton" type="button" aria-label="Ouvrir le menu" aria-controls="pbMobileDrawer" aria-expanded="false">☰</button>
+                <button class="pb-theme-toggle theme-toggle" id="themeToggle" type="button" aria-label="Changer de thème">☀️</button>
+            </div>
         </div>
     </header>
 
     {% if site_announcements %}<aside class="site-announcements" aria-label="Annonces PlayBed">{% for announcement in site_announcements %}<div class="site-announcement" data-kind="{{ announcement.kind }}"><strong>{{ announcement.title }}</strong>{{ announcement.message }}</div>{% endfor %}</aside>{% endif %}
 
     <div id="main-content" tabindex="-1">{% block content %}{% endblock %}</div>
+
+    <div class="pb-mobile-drawer-backdrop" id="pbMobileDrawerBackdrop" aria-hidden="true"></div>
+    <aside class="pb-mobile-drawer" id="pbMobileDrawer" aria-hidden="true" aria-label="Menu PlayBed">
+        <div class="pb-mobile-drawer-head">
+            <strong>PLAYBED</strong>
+            <button id="pbMobileDrawerClose" type="button" aria-label="Fermer le menu">×</button>
+        </div>
+
+        <nav class="pb-drawer-sections" aria-label="Liens PlayBed">
+            <section class="pb-drawer-section">
+                <h2>ⓘ PlayBed</h2>
+                <a href="{{ url_for('about_page') }}">ⓘ <span>À propos</span></a>
+                <a href="{{ url_for('creator_page') }}">♙ <span>Créateur</span></a>
+                <a href="{{ url_for('platform_news') }}">☆ <span>Nouveautés</span></a>
+                <a href="{{ url_for('site_map_page') }}">▱ <span>Plan du site</span></a>
+            </section>
+
+            <section class="pb-drawer-section">
+                <h2>🎮 Jouer</h2>
+                <a href="{{ url_for('games_catalog') }}">▦ <span>Tous les jeux</span></a>
+                <a href="{{ url_for('versus_home') }}">♧ <span>Affronter un joueur</span></a>
+                <a href="{{ url_for('im_home') }}">♧ <span>Salles</span></a>
+                <a href="{{ url_for('av_home') }}">🎭 <span>Action ou Vérité</span></a>
+            </section>
+
+            <section class="pb-drawer-section">
+                <h2>▣ Aide</h2>
+                <a href="{{ url_for('how_to_play_page') }}">▣ <span>Comment jouer</span></a>
+                <a href="{{ url_for('platform_guides') }}">⌂ <span>Guides</span></a>
+                <a href="{{ url_for('faq_page') }}">? <span>FAQ</span></a>
+                <a href="{{ url_for('platform_contact') }}">✉ <span>Contact</span></a>
+            </section>
+
+            <section class="pb-drawer-section">
+                <h2>◇ Légal & installation</h2>
+                <a href="{{ url_for('platform_legal') }}">▤ <span>Mentions légales</span></a>
+                <a href="{{ url_for('privacy_page') }}">▢ <span>Confidentialité</span></a>
+                <a href="{{ url_for('terms_page') }}">◇ <span>Conditions d’utilisation</span></a>
+                <button class="pwa-install-button pb-drawer-install" data-pwa-install type="button" hidden>⇩ <span>Installer PlayBed</span></button>
+            </section>
+        </nav>
+    </aside>
 
     <nav class="pb-mobile-nav" aria-label="Navigation mobile">
         <a class="pb-mobile-link{% if home_active %} is-active{% endif %}" href="{{ url_for('home') }}" data-swipe-tab="home"{% if home_active %} aria-current="page"{% endif %}><span class="pb-mobile-icon" aria-hidden="true">🏠</span><span>Accueil</span></a>
