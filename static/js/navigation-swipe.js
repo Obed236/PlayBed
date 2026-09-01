@@ -5,7 +5,7 @@
     const nav = document.querySelector('.pb-mobile-nav');
     if (!nav) return;
 
-    const links = Array.from(nav.querySelectorAll('[data-swipe-tab]'));
+    const links = Array.from(nav.querySelectorAll('.pb-mobile-link'));
     if (links.length < 2) return;
 
     const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
@@ -22,18 +22,14 @@
     ));
 
     const activeIndex = () => {
+        if (window.location.pathname === '/' && window.location.hash === '#games') return 1;
         const marked = links.findIndex((link) => link.classList.contains('is-active'));
-        if (marked >= 0) return marked;
-
-        const section = body.dataset.navSection;
-        const bySection = links.findIndex((link) => link.dataset.swipeTab === section);
-        return bySection >= 0 ? bySection : 0;
+        return marked >= 0 ? marked : 0;
     };
 
     document.addEventListener('touchstart', (event) => {
         if (event.touches.length !== 1) return;
-        const target = event.target;
-        blocked = isInteractiveTarget(target);
+        blocked = isInteractiveTarget(event.target);
         if (blocked) return;
 
         const touch = event.touches[0];
