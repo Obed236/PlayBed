@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Tous les jeux | PlayBed{% endblock %}
+{% block description %}Découvre tous les jeux disponibles sur PlayBed : mini-jeux, quiz, défis et jeux multijoueurs.{% endblock %}
+{% block content %}
+<main>
+<section class="content-shell">
+    <header class="content-hero">
+        <span class="eyebrow">JEUX</span>
+        <h1>Tous les jeux PlayBed.</h1>
+        <p>Choisis ton jeu, filtre par catégorie ou recherche directement celui que tu veux lancer.</p>
+    </header>
+
+    {% if not pseudo %}
+    <section class="player-panel" id="player">
+        <div>
+            <span class="eyebrow">AVANT DE JOUER</span>
+            <h2>Choisis ton pseudo</h2>
+            <p>Il sert à enregistrer tes scores et à t’identifier dans les parties multijoueurs.</p>
+        </div>
+        <form class="pseudo-form" action="{{ url_for('set_pseudo') }}" method="post">
+            <label class="sr-only" for="gamesPseudoInput">Choisir un pseudo</label>
+            <input id="gamesPseudoInput" type="text" name="pseudo" minlength="2" maxlength="20" required placeholder="Ex. Obed" autocomplete="nickname">
+            <button class="primary-button" type="submit">Commencer</button>
+        </form>
+    </section>
+    {% endif %}
+
+    <section class="section" style="padding-top:42px">
+        <div class="discovery-tools">
+            <input id="gameSearch" type="search" placeholder="Rechercher un jeu…" aria-label="Rechercher un jeu">
+            <select id="gameCategory" aria-label="Filtrer par catégorie">
+                <option value="all">Toutes les catégories</option>
+                <option value="Lettres">Lettres</option>
+                <option value="Logique">Logique</option>
+                <option value="Culture">Culture</option>
+                <option value="Quiz">Quiz</option>
+                <option value="Mémoire">Mémoire</option>
+                <option value="Rapidité">Rapidité</option>
+                <option value="Groupe">Groupe</option>
+            </select>
+        </div>
+
+        <div class="game-grid" style="margin-top:24px">
+            {% for slug, game in games.items() %}
+            <article class="game-card" data-game-card data-game-slug="{{ slug }}" data-game-name="{{ game.name }}" data-game-tag="{{ game.tag }}" data-game-emoji="{{ game.emoji }}" data-game-start-url="{{ url_for('start_game', game=slug) }}">
+                <div class="card-top">
+                    <div class="game-icon">{{ game.emoji }}</div>
+                    <span class="game-tag">{{ game.tag }}</span>
+                </div>
+                <h3>{{ game.name }}</h3>
+                <p>{{ game.description }}</p>
+                <div class="card-actions">
+                    <a class="text-action" href="{{ url_for('platform_game_detail', game=slug) }}">Règles</a>
+                    <a class="text-action strong" href="{{ url_for('start_game', game=slug) }}" data-game-start="{{ slug }}" data-source="catalog">Jouer <span>→</span></a>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        <div id="gameFilterEmpty" class="filter-empty" hidden>Aucun jeu ne correspond à ta recherche.</div>
+    </section>
+</section>
+</main>
+{% endblock %}
