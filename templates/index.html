@@ -1,47 +1,53 @@
 {% extends "base.html" %}
-{% block title %}PlayBed — Joue, défie et partage{% endblock %}
-{% block description %}PlayBed est une plateforme gratuite de jeux rapides, défis et expériences multijoueurs sur navigateur.{% endblock %}
+{% block title %}PlayBed — Mini-jeux gratuits pour tous{% endblock %}
+{% block description %}PlayBed est une plateforme gratuite de mini-jeux, défis et expériences multijoueurs sur mobile et ordinateur.{% endblock %}
 {% block content %}
-<main>
+<main class="pb-home-page">
 <section class="pb-home-shell">
-    <div class="pb-home-brand"><span class="pb-home-brand-icon" aria-hidden="true">🎮</span><span>PlayBed</span></div>
-    <p class="pb-home-intro">Mini-jeux gratuits pour tous, sur mobile et ordinateur. Joue seul, défie d’autres joueurs ou lance une partie entre amis, sans compte obligatoire.</p>
-    <div class="pb-home-actions">
-        <a class="primary-button" href="{{ url_for('games_catalog') }}">Découvrir les jeux</a>
-        <a class="secondary-button" href="{{ url_for('im_home') }}">Jouer à plusieurs</a>
+    <div class="pb-home-brand" aria-label="PlayBed">
+        <span class="pb-home-brand-icon" aria-hidden="true">🎮</span>
+        <span>PlayBed</span>
+    </div>
+
+    <div class="pb-home-copy">
+        <p>Mini-jeux gratuits pour tous, partout.</p>
+        <p>Mobile et ordinateur · Aucun compte obligatoire</p>
     </div>
 
     <div class="pb-home-cards">
         <a class="pb-home-card" href="{{ url_for('versus_home') }}">
             <span class="pb-home-card-icon" aria-hidden="true">⚔️</span>
-            <h3>Affronter un joueur</h3>
-            <p>Défie un autre joueur et compare directement vos scores.</p>
+            <h2>Affronter un joueur</h2>
+            <p>Défie tes amis ou d’autres joueurs et compare directement vos scores.</p>
         </a>
-        <a class="pb-home-card" href="{{ url_for('im_home') }}">
-            <span class="pb-home-card-icon" aria-hidden="true">👥</span>
-            <h3>Jouer à plusieurs</h3>
-            <p>Retrouve L’Imposteur et Action ou Vérité dans l’espace Salles.</p>
+
+        <a class="pb-home-card" href="{{ url_for('av_home') }}">
+            <span class="pb-home-card-icon" aria-hidden="true">🎭</span>
+            <h2>Action ou Vérité</h2>
+            <p>Pose des questions, relève des défis et joue à plusieurs depuis vos téléphones.</p>
         </a>
+
         <a class="pb-home-card" href="{{ url_for('leaderboard') }}">
             <span class="pb-home-card-icon" aria-hidden="true">🏆</span>
-            <h3>Progression</h3>
+            <h2>Progression</h2>
             <p>Gagne des points, retrouve tes scores et grimpe dans le classement.</p>
         </a>
     </div>
+
+    <div class="pb-home-shortcuts" aria-label="Accès rapides">
+        <a class="primary-button" href="{{ url_for('games_catalog') }}">Voir tous les jeux</a>
+        <a class="secondary-button" href="{{ url_for('im_home') }}">Ouvrir les salles</a>
+        {% if pseudo %}<a class="secondary-button" href="{{ url_for('platform_profile') }}">Mon profil</a>{% else %}<a class="secondary-button" href="{{ url_for('home') }}?need_pseudo=1#player">Choisir un pseudo</a>{% endif %}
+    </div>
 </section>
 
-<section class="pb-home-player">
 {% if not pseudo %}
-    <div class="player-panel" id="player">
-        <div><span class="eyebrow">TON PROFIL JOUEUR</span><h2>Choisis ton pseudo.</h2><p>Pas besoin de créer un compte. Ton pseudo suffit pour enregistrer tes scores et rejoindre les parties multijoueurs.</p></div>
+<section class="pb-home-player" id="player">
+    <div class="player-panel pb-player-compact">
+        <div><span class="eyebrow">JOUER AVEC UN PSEUDO</span><h2>Choisis ton pseudo</h2><p>Il sert uniquement à enregistrer tes scores et à t’identifier dans les parties.</p></div>
         <form class="pseudo-form" action="{{ url_for('set_pseudo') }}" method="post"><label class="sr-only" for="pseudoInput">Choisir un pseudo</label><input id="pseudoInput" type="text" name="pseudo" minlength="2" maxlength="20" required placeholder="Ex. Obed" autocomplete="nickname"><button class="primary-button" type="submit">Commencer</button></form>
     </div>
-{% else %}
-    <div class="player-panel">
-        <div><span class="eyebrow">BON RETOUR</span><h2>Salut {{ pseudo }} 👋</h2><p>Continue à jouer, consulte ton classement ou retrouve ton espace joueur.</p></div>
-        <div class="player-actions"><a class="primary-button" href="{{ url_for('games_catalog') }}">Voir les jeux</a><a class="secondary-button" href="{{ url_for('platform_profile') }}">Mon profil</a></div>
-    </div>
-{% endif %}
 </section>
+{% endif %}
 </main>
 {% endblock %}
