@@ -163,6 +163,10 @@ body {
 .pb-footer-bottom p { margin: 4px 0; line-height: 1.6; }
 
 @media (max-width: 820px) {
+    body:not(.pb-immersive-page) {
+        padding-bottom: calc(250px + env(safe-area-inset-bottom));
+    }
+
     .pb-home-page { padding-top: 14px; }
     .pb-home-shell {
         width: min(100% - 24px, 1180px);
@@ -187,22 +191,38 @@ body {
         font-size: 2rem;
     }
     .pb-home-shortcuts { margin-top: 22px; }
-    .pb-home-player,
-    .pb-site-footer { width: min(100% - 24px, 1180px); }
-    .pb-footer-panel {
-        padding: 24px 20px;
-        border-radius: 24px;
-    }
-    .pb-footer-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 24px 18px;
-    }
+    .pb-home-player { width: min(100% - 24px, 1180px); }
+
     .pb-site-footer {
-        margin-top: auto;
-        margin-bottom: calc(96px + env(safe-area-inset-bottom));
+        position: fixed;
+        left: 12px;
+        right: 12px;
+        bottom: calc(92px + env(safe-area-inset-bottom));
+        z-index: 1050;
+        width: auto;
+        margin: 0;
+        pointer-events: none;
     }
+
+    .pb-site-footer .pb-footer-panel {
+        display: none;
+    }
+
     .pb-footer-bottom {
         margin: 0;
+        padding: 14px 18px;
+        border-radius: 20px;
+        background: color-mix(in srgb, var(--surface-solid) 94%, transparent);
+        box-shadow: 0 14px 36px rgba(0,0,0,.28);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        pointer-events: auto;
+    }
+
+    .pb-footer-bottom p {
+        margin: 2px 0;
+        font-size: .78rem;
+        line-height: 1.35;
     }
 }
 
