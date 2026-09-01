@@ -1,31 +1,32 @@
 {% extends "base.html" %}
-{% block title %}PlayBed — Mini-jeux gratuits{% endblock %}
-{% block description %}Choisis rapidement un jeu sur PlayBed : mini-jeux, L’Imposteur et Action ou Vérité.{% endblock %}
+{% block title %}PlayBed — Joue, défie et partage{% endblock %}
+{% block description %}PlayBed est une plateforme gratuite de jeux rapides, défis et expériences multijoueurs sur navigateur.{% endblock %}
 {% block content %}
 <main>
 <section class="hero">
     <div class="hero-copy">
         <span class="eyebrow">PLAYBED</span>
-        <h1>À quoi veux-tu<br><span>jouer ?</span></h1>
-        <p>Choisis un jeu et lance une partie. Pas de téléchargement, pas de compte obligatoire.</p>
+        <h1>Joue.<br>Défie.<br><span>Partage.</span></h1>
+        <p>Une plateforme gratuite pour lancer des jeux rapides, affronter d’autres joueurs et créer des parties multijoueurs depuis ton navigateur.</p>
         <div class="hero-actions">
-            <a class="primary-button" href="#games">Voir les jeux</a>
+            <a class="primary-button" href="{{ url_for('games_catalog') }}">Découvrir les jeux</a>
             <a class="secondary-button" href="{{ url_for('im_home') }}">👥 Jouer à plusieurs</a>
         </div>
     </div>
     <div class="hero-card">
         <div class="orb">🎮</div>
-        <strong>{{ games|length }} jeux disponibles</strong>
+        <strong>Ton espace de jeu</strong>
         <span>Solo, défis et multijoueur</span>
+        <div class="mini-stats"><span>🎯 Rapide</span><span>📱 Mobile</span><span>👥 Entre amis</span></div>
     </div>
 </section>
 
 {% if not pseudo %}
 <section class="section player-panel" id="player">
     <div>
-        <span class="eyebrow">JOUEUR</span>
-        <h2>Choisis ton pseudo</h2>
-        <p>Il sert à enregistrer tes scores et à t’identifier dans les parties multijoueurs.</p>
+        <span class="eyebrow">TON PROFIL JOUEUR</span>
+        <h2>Choisis ton pseudo.</h2>
+        <p>Pas besoin de créer un compte. Ton pseudo suffit pour enregistrer tes scores et rejoindre les parties multijoueurs.</p>
     </div>
     <form class="pseudo-form" action="{{ url_for('set_pseudo') }}" method="post">
         <label class="sr-only" for="pseudoInput">Choisir un pseudo</label>
@@ -33,44 +34,46 @@
         <button class="primary-button" type="submit">Commencer</button>
     </form>
 </section>
+{% else %}
+<section class="section player-panel">
+    <div>
+        <span class="eyebrow">BON RETOUR</span>
+        <h2>Salut {{ pseudo }} 👋</h2>
+        <p>Continue une partie, consulte ton classement ou retrouve ton espace joueur.</p>
+    </div>
+    <div class="player-actions">
+        <a class="primary-button" href="{{ url_for('games_catalog') }}">Voir les jeux</a>
+        <a class="secondary-button" href="{{ url_for('platform_profile') }}">Mon profil</a>
+    </div>
+</section>
 {% endif %}
 
-<section class="section" id="games">
+<section class="section feature-section">
     <div class="section-heading">
-        <span class="eyebrow">JEUX</span>
-        <h2>Choisis et joue.</h2>
+        <span class="eyebrow">PLAYBED EN 3 ESPACES</span>
+        <h2>Va directement à l’essentiel.</h2>
+        <p>L’accueil te guide. Les fonctionnalités détaillées ont maintenant chacune leur propre espace.</p>
     </div>
-
-    <div class="discovery-tools">
-        <input id="gameSearch" type="search" placeholder="Rechercher un jeu…" aria-label="Rechercher un jeu">
-        <select id="gameCategory" aria-label="Filtrer par catégorie">
-            <option value="all">Toutes les catégories</option>
-            <option value="Lettres">Lettres</option>
-            <option value="Logique">Logique</option>
-            <option value="Culture">Culture</option>
-            <option value="Quiz">Quiz</option>
-            <option value="Mémoire">Mémoire</option>
-            <option value="Rapidité">Rapidité</option>
-            <option value="Groupe">Groupe</option>
-        </select>
-    </div>
-
-    <div class="game-grid" style="margin-top:24px">
-        {% for slug, game in games.items() %}
-        <article class="game-card" data-game-card data-game-slug="{{ slug }}" data-game-name="{{ game.name }}" data-game-tag="{{ game.tag }}" data-game-emoji="{{ game.emoji }}" data-game-start-url="{{ url_for('start_game', game=slug) }}">
-            <div class="card-top">
-                <div class="game-icon">{{ game.emoji }}</div>
-                <span class="game-tag">{{ game.tag }}</span>
-            </div>
-            <h3>{{ game.name }}</h3>
-            <p>{{ game.description }}</p>
-            <div class="card-actions">
-                <a class="text-action strong" href="{{ url_for('start_game', game=slug) }}" data-game-start="{{ slug }}" data-source="catalog">Jouer <span>→</span></a>
-            </div>
+    <div class="info-grid">
+        <article class="info-card">
+            <span class="eyebrow">JEUX</span>
+            <h3>🎮 Tous les jeux</h3>
+            <p>Retrouve tout le catalogue PlayBed, recherche un jeu et lance une partie.</p>
+            <a class="secondary-button" href="{{ url_for('games_catalog') }}">Ouvrir les jeux</a>
         </article>
-        {% endfor %}
+        <article class="info-card">
+            <span class="eyebrow">MULTIJOUEUR</span>
+            <h3>👥 Salles</h3>
+            <p>Crée ou rejoins une partie d’Imposteur ou d’Action ou Vérité.</p>
+            <a class="secondary-button" href="{{ url_for('im_home') }}">Voir les salles</a>
+        </article>
+        <article class="info-card">
+            <span class="eyebrow">COMPÉTITION</span>
+            <h3>🏆 Classement</h3>
+            <p>Compare tes scores aux autres joueurs et suis ta progression.</p>
+            <a class="secondary-button" href="{{ url_for('leaderboard') }}">Voir le classement</a>
+        </article>
     </div>
-    <div id="gameFilterEmpty" class="filter-empty" hidden>Aucun jeu ne correspond à ce filtre.</div>
 </section>
 </main>
 {% endblock %}
