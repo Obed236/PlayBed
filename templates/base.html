@@ -10,117 +10,18 @@
 <!DOCTYPE html>
 <html lang="fr" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="referrer" content="strict-origin-when-cross-origin">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="{% block description %}PlayBed, la plateforme gratuite de mini-jeux rapides sur navigateur.{% endblock %}">
-    <meta name="author" content="Obed Gelly Ousmane Tassango">
-    <meta name="theme-color" content="#08111f">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="PlayBed">
-    <meta name="google-adsense-account" content="ca-pub-8115913863262508">
-    {% if not no_ads_page %}<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8115913863262508" crossorigin="anonymous" data-playbed-adsense="true"></script>{% endif %}
-    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','analytics_storage':'denied','wait_for_update':500});</script>
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-THGHCD6K');</script>
-    <meta name="robots" content="{% block robots %}index,follow,max-image-preview:large{% endblock %}">
-    <meta property="og:title" content="{% block og_title %}PlayBed V3{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}Joue, progresse et défie tes amis sur PlayBed.{% endblock %}">
-    <meta property="og:type" content="website"><meta property="og:url" content="https://playbed.fr{{ request.path }}">
-    <title>{% block title %}PlayBed{% endblock %}</title>
-    <link rel="canonical" href="https://playbed.fr{{ request.path }}"><link rel="manifest" href="{{ url_for('pwa_manifest') }}"><link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static', filename='icons/playbed-192.png') }}"><link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/playbed-192.png') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"><link rel="stylesheet" href="{{ url_for('static', filename='css/platform.css') }}"><link rel="stylesheet" href="{{ url_for('static', filename='css/engagement.css') }}"><link rel="stylesheet" href="{{ url_for('static', filename='css/growth.css') }}"><link rel="stylesheet" href="{{ url_for('static', filename='css/navigation.css') }}"><link rel="stylesheet" href="{{ url_for('static', filename='css/app-layout.css') }}">
-    <style>.site-announcements{display:grid;gap:8px;padding:10px max(16px,calc((100vw - 1180px)/2));background:#07111f;color:#eaf2ff}.site-announcement{border:1px solid rgba(125,170,255,.35);border-radius:12px;padding:10px 14px;background:rgba(42,94,170,.13);color:#eaf2ff;font-size:14px;line-height:1.5}.site-announcement strong{margin-right:6px;color:#fff}.site-announcement[data-kind="success"]{border-color:rgba(68,201,138,.45);background:rgba(35,130,88,.12)}.site-announcement[data-kind="warning"]{border-color:rgba(255,200,87,.45);background:rgba(180,120,25,.12)}@media(max-width:650px){.site-announcement{font-size:15px;padding:12px 14px}}</style>
-    <script defer src="{{ url_for('static', filename='js/main.js') }}"></script><script defer src="{{ url_for('static', filename='js/platform.js') }}"></script><script defer src="{{ url_for('static', filename='js/pwa.js') }}"></script><script defer src="{{ url_for('static', filename='js/growth.js') }}"></script><script defer src="{{ url_for('static', filename='js/navigation-swipe.js') }}"></script><script defer src="{{ url_for('static', filename='js/mobile-drawer.js') }}"></script>
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","@id":"https://playbed.fr/#website","name":"PlayBed","url":"https://playbed.fr/","inLanguage":"fr","description":"Plateforme gratuite de mini-jeux en ligne avec niveaux, missions, défis, classements et profils joueurs.","creator":{"@id":"https://playbed.fr/createur#person"}}</script>
-    {% block head_extra %}{% endblock %}
-</head>
-<body class="{% if immersive_page %}pb-immersive-page{% endif %}" data-ads-page="{{ 'false' if no_ads_page else 'true' }}">
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-THGHCD6K" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <a class="skip-link" href="#main-content">Aller au contenu principal</a>
-
-    <header class="pb-header-shell">
-        <div class="pb-navbar">
-            <a class="pb-brand" href="{{ url_for('home') }}" aria-label="Accueil PlayBed"><span class="pb-brand-mark" aria-hidden="true">🎮</span><span>PlayBed</span></a>
-            <nav class="pb-primary-nav" aria-label="Navigation principale">
-                <a class="pb-nav-link{% if home_active %} is-active{% endif %}" href="{{ url_for('home') }}"{% if home_active %} aria-current="page"{% endif %}>🏠 Accueil</a>
-                <a class="pb-nav-link{% if games_active %} is-active{% endif %}" href="{{ url_for('games_catalog') }}"{% if games_active %} aria-current="page"{% endif %}>🎮 Jeux</a>
-                <a class="pb-nav-link{% if rooms_active %} is-active{% endif %}" href="{{ url_for('im_home') }}"{% if rooms_active %} aria-current="page"{% endif %}>👥 Salles</a>
-                <a class="pb-nav-link{% if leaderboard_active %} is-active{% endif %}" href="{{ url_for('leaderboard') }}"{% if leaderboard_active %} aria-current="page"{% endif %}>🏆 Classement</a>
-                <a class="pb-profile-link{% if profile_active %} is-active{% endif %}" href="{{ profile_url }}"{% if profile_active %} aria-current="page"{% endif %}>👤 Profil</a>
-            </nav>
-            <div class="pb-nav-actions">
-                {% if pseudo %}<span class="pb-player-chip" title="Joueur actif">{{ pseudo }}</span>{% endif %}
-                <button class="pb-mobile-menu-button" id="pbMobileMenuButton" type="button" aria-label="Ouvrir le menu" aria-controls="pbMobileDrawer" aria-expanded="false">☰</button>
-                <button class="pb-theme-toggle theme-toggle" id="themeToggle" type="button" aria-label="Changer de thème">☀️</button>
-            </div>
-        </div>
-    </header>
-
-    {% if site_announcements %}<aside class="site-announcements" aria-label="Annonces PlayBed">{% for announcement in site_announcements %}<div class="site-announcement" data-kind="{{ announcement.kind }}"><strong>{{ announcement.title }}</strong>{{ announcement.message }}</div>{% endfor %}</aside>{% endif %}
-
-    <div id="main-content" tabindex="-1">{% block content %}{% endblock %}</div>
-
-    <div class="pb-mobile-drawer-backdrop" id="pbMobileDrawerBackdrop" aria-hidden="true"></div>
-    <aside class="pb-mobile-drawer" id="pbMobileDrawer" aria-hidden="true" aria-label="Menu PlayBed">
-        <div class="pb-mobile-drawer-head">
-            <strong>PLAYBED</strong>
-            <button id="pbMobileDrawerClose" type="button" aria-label="Fermer le menu">×</button>
-        </div>
-
-        <nav class="pb-drawer-sections" aria-label="Liens PlayBed">
-            <section class="pb-drawer-section">
-                <h2>ⓘ PlayBed</h2>
-                <a href="{{ url_for('about_page') }}">ⓘ <span>À propos</span></a>
-                <a href="{{ url_for('creator_page') }}">♙ <span>Créateur</span></a>
-                <a href="{{ url_for('platform_news') }}">☆ <span>Nouveautés</span></a>
-                <a href="{{ url_for('site_map_page') }}">▱ <span>Plan du site</span></a>
-            </section>
-
-            <section class="pb-drawer-section">
-                <h2>🎮 Jouer</h2>
-                <a href="{{ url_for('games_catalog') }}">▦ <span>Tous les jeux</span></a>
-                <a href="{{ url_for('versus_home') }}">♧ <span>Affronter un joueur</span></a>
-                <a href="{{ url_for('im_home') }}">♧ <span>Salles</span></a>
-                <a href="{{ url_for('av_home') }}">🎭 <span>Action ou Vérité</span></a>
-            </section>
-
-            <section class="pb-drawer-section">
-                <h2>▣ Aide</h2>
-                <a href="{{ url_for('how_to_play_page') }}">▣ <span>Comment jouer</span></a>
-                <a href="{{ url_for('platform_guides') }}">⌂ <span>Guides</span></a>
-                <a href="{{ url_for('faq_page') }}">? <span>FAQ</span></a>
-                <a href="{{ url_for('platform_contact') }}">✉ <span>Contact</span></a>
-            </section>
-
-            <section class="pb-drawer-section">
-                <h2>◇ Légal & installation</h2>
-                <a href="{{ url_for('platform_legal') }}">▤ <span>Mentions légales</span></a>
-                <a href="{{ url_for('privacy_page') }}">▢ <span>Confidentialité</span></a>
-                <a href="{{ url_for('terms_page') }}">◇ <span>Conditions d’utilisation</span></a>
-                <button class="pwa-install-button pb-drawer-install" data-pwa-install type="button" hidden>⇩ <span>Installer PlayBed</span></button>
-            </section>
-        </nav>
-    </aside>
-
-    <nav class="pb-mobile-nav" aria-label="Navigation mobile">
-        <a class="pb-mobile-link{% if home_active %} is-active{% endif %}" href="{{ url_for('home') }}" data-swipe-tab="home"{% if home_active %} aria-current="page"{% endif %}><span class="pb-mobile-icon" aria-hidden="true">🏠</span><span>Accueil</span></a>
-        <a class="pb-mobile-link{% if games_active %} is-active{% endif %}" href="{{ url_for('games_catalog') }}" data-swipe-tab="games"{% if games_active %} aria-current="page"{% endif %}><span class="pb-mobile-icon" aria-hidden="true">🎮</span><span>Jeux</span></a>
-        <a class="pb-mobile-link{% if rooms_active %} is-active{% endif %}" href="{{ url_for('im_home') }}" data-swipe-tab="rooms"{% if rooms_active %} aria-current="page"{% endif %}><span class="pb-mobile-icon" aria-hidden="true">👥</span><span>Salles</span></a>
-        <a class="pb-mobile-link{% if leaderboard_active %} is-active{% endif %}" href="{{ url_for('leaderboard') }}" data-swipe-tab="leaderboard"{% if leaderboard_active %} aria-current="page"{% endif %}><span class="pb-mobile-icon" aria-hidden="true">🏆</span><span>Classement</span></a>
-        <a class="pb-mobile-link{% if profile_active %} is-active{% endif %}" href="{{ profile_url }}" data-swipe-tab="profile"{% if profile_active %} aria-current="page"{% endif %}><span class="pb-mobile-icon" aria-hidden="true">👤</span><span>Profil</span></a>
-    </nav>
-
-    <footer class="pb-site-footer">
-        <div class="pb-footer-panel">
-            <div class="pb-footer-grid">
-                <section class="pb-footer-column"><h3>PlayBed</h3><div class="pb-footer-links"><a href="{{ url_for('about_page') }}">À propos</a><a href="{{ url_for('creator_page') }}">Créateur</a><a href="{{ url_for('platform_news') }}">Nouveautés</a><a href="{{ url_for('site_map_page') }}">Plan du site</a></div></section>
-                <section class="pb-footer-column"><h3>Jouer</h3><div class="pb-footer-links"><a href="{{ url_for('games_catalog') }}">Tous les jeux</a><a href="{{ url_for('versus_home') }}">Affronter un joueur</a><a href="{{ url_for('im_home') }}">Salles</a><a href="{{ url_for('av_home') }}">Action ou Vérité</a></div></section>
-                <section class="pb-footer-column"><h3>Aide</h3><div class="pb-footer-links"><a href="{{ url_for('how_to_play_page') }}">Comment jouer</a><a href="{{ url_for('platform_guides') }}">Guides</a><a href="{{ url_for('faq_page') }}">FAQ</a><a href="{{ url_for('platform_contact') }}">Contact</a></div></section>
-                <section class="pb-footer-column"><h3>Légal & installation</h3><div class="pb-footer-links"><a href="{{ url_for('platform_legal') }}">Mentions légales</a><a href="{{ url_for('privacy_page') }}">Confidentialité</a><a href="{{ url_for('terms_page') }}">Conditions d’utilisation</a><button class="pwa-install-button" data-pwa-install type="button" hidden>Installer PlayBed</button></div></section>
-            </div>
-        </div>
-        <div class="pb-footer-bottom"><p>© 2026 PlayBed</p><p>Créé et développé par <a href="{{ url_for('creator_page') }}">Obed Gelly Ousmane Tassango</a>.</p><div class="pb-footer-divider"></div><span class="pb-footer-domain">🌐 playbed.fr</span></div>
-    </footer>
-</body></html>
+<meta charset="UTF-8"><meta name="referrer" content="strict-origin-when-cross-origin"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="{% block description %}PlayBed, la plateforme gratuite de mini-jeux rapides sur navigateur.{% endblock %}"><meta name="author" content="Obed Gelly Ousmane Tassango"><meta name="theme-color" content="#08111f"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="PlayBed"><meta name="google-adsense-account" content="ca-pub-8115913863262508">
+{% if not no_ads_page %}<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8115913863262508" crossorigin="anonymous" data-playbed-adsense="true"></script>{% endif %}
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','analytics_storage':'denied','wait_for_update':500});</script><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-THGHCD6K');</script>
+<meta name="robots" content="{% block robots %}index,follow,max-image-preview:large{% endblock %}"><meta property="og:title" content="{% block og_title %}PlayBed V3{% endblock %}"><meta property="og:description" content="{% block og_description %}Joue, progresse et défie tes amis sur PlayBed.{% endblock %}"><meta property="og:type" content="website"><meta property="og:url" content="https://playbed.fr{{ request.path }}"><title>{% block title %}PlayBed{% endblock %}</title>
+<link rel="canonical" href="https://playbed.fr{{ request.path }}"><link rel="manifest" href="{{ url_for('pwa_manifest') }}"><link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static', filename='icons/playbed-192.png') }}"><link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/playbed-192.png') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"><link rel="stylesheet" href="{{ url_for('static', filename='css/platform.css') }}"><link rel="stylesheet" href="{{ url_for('static', filename='css/engagement.css') }}"><link rel="stylesheet" href="{{ url_for('static', filename='css/growth.css') }}"><link rel="stylesheet" href="{{ url_for('static', filename='css/navigation.css', v='20260901-2') }}"><link rel="stylesheet" href="{{ url_for('static', filename='css/app-layout.css', v='20260901-2') }}">
+<style>.site-announcements{display:grid;gap:8px;padding:10px max(16px,calc((100vw - 1180px)/2));background:#07111f;color:#eaf2ff}.site-announcement{border:1px solid rgba(125,170,255,.35);border-radius:12px;padding:10px 14px;background:rgba(42,94,170,.13);color:#eaf2ff;font-size:14px;line-height:1.5}.site-announcement strong{margin-right:6px;color:#fff}.site-announcement[data-kind="success"]{border-color:rgba(68,201,138,.45);background:rgba(35,130,88,.12)}.site-announcement[data-kind="warning"]{border-color:rgba(255,200,87,.45);background:rgba(180,120,25,.12)}@media(max-width:650px){.site-announcement{font-size:15px;padding:12px 14px}}</style>
+<script defer src="{{ url_for('static', filename='js/main.js') }}"></script><script defer src="{{ url_for('static', filename='js/platform.js') }}"></script><script defer src="{{ url_for('static', filename='js/pwa.js') }}"></script><script defer src="{{ url_for('static', filename='js/growth.js') }}"></script><script defer src="{{ url_for('static', filename='js/navigation-swipe.js') }}"></script><script defer src="{{ url_for('static', filename='js/mobile-drawer.js', v='20260901-2') }}"></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","@id":"https://playbed.fr/#website","name":"PlayBed","url":"https://playbed.fr/","inLanguage":"fr","description":"Plateforme gratuite de mini-jeux en ligne avec niveaux, missions, défis, classements et profils joueurs.","creator":{"@id":"https://playbed.fr/createur#person"}}</script>{% block head_extra %}{% endblock %}
+</head><body class="{% if immersive_page %}pb-immersive-page{% endif %}" data-ads-page="{{ 'false' if no_ads_page else 'true' }}"><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-THGHCD6K" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><a class="skip-link" href="#main-content">Aller au contenu principal</a>
+<header class="pb-header-shell"><div class="pb-navbar"><a class="pb-brand" href="{{ url_for('home') }}" aria-label="Accueil PlayBed"><span class="pb-brand-mark" aria-hidden="true">🎮</span><span>PlayBed</span></a><nav class="pb-primary-nav" aria-label="Navigation principale"><a class="pb-nav-link{% if home_active %} is-active{% endif %}" href="{{ url_for('home') }}">🏠 Accueil</a><a class="pb-nav-link{% if games_active %} is-active{% endif %}" href="{{ url_for('games_catalog') }}">🎮 Jeux</a><a class="pb-nav-link{% if rooms_active %} is-active{% endif %}" href="{{ url_for('im_home') }}">👥 Salles</a><a class="pb-nav-link{% if leaderboard_active %} is-active{% endif %}" href="{{ url_for('leaderboard') }}">🏆 Classement</a><a class="pb-profile-link{% if profile_active %} is-active{% endif %}" href="{{ profile_url }}">👤 Profil</a></nav><div class="pb-nav-actions">{% if pseudo %}<span class="pb-player-chip">{{ pseudo }}</span>{% endif %}<button class="pb-mobile-menu-button" id="pbMobileMenuButton" type="button" aria-label="Ouvrir le menu" aria-controls="pbMobileDrawer" aria-expanded="false">☰</button><button class="pb-theme-toggle theme-toggle" id="themeToggle" type="button" aria-label="Changer de thème">☀️</button></div></div></header>
+{% if site_announcements %}<aside class="site-announcements" aria-label="Annonces PlayBed">{% for announcement in site_announcements %}<div class="site-announcement" data-kind="{{ announcement.kind }}"><strong>{{ announcement.title }}</strong>{{ announcement.message }}</div>{% endfor %}</aside>{% endif %}<div id="main-content" tabindex="-1">{% block content %}{% endblock %}</div>
+<div class="pb-mobile-drawer-backdrop" id="pbMobileDrawerBackdrop" aria-hidden="true"></div><aside class="pb-mobile-drawer" id="pbMobileDrawer" aria-hidden="true" aria-label="Menu PlayBed"><div class="pb-mobile-drawer-head"><strong>PLAYBED</strong><button id="pbMobileDrawerClose" type="button" aria-label="Fermer le menu">×</button></div><nav class="pb-drawer-sections" aria-label="Liens PlayBed"><section class="pb-drawer-section"><h2>ⓘ PlayBed</h2><a href="{{ url_for('about_page') }}">ⓘ <span>À propos</span></a><a href="{{ url_for('creator_page') }}">♙ <span>Créateur</span></a><a href="{{ url_for('platform_news') }}">☆ <span>Nouveautés</span></a><a href="{{ url_for('site_map_page') }}">▱ <span>Plan du site</span></a></section><section class="pb-drawer-section"><h2>🎮 Jouer</h2><a href="{{ url_for('games_catalog') }}">▦ <span>Tous les jeux</span></a><a href="{{ url_for('versus_home') }}">♧ <span>Affronter un joueur</span></a><a href="{{ url_for('im_home') }}">♧ <span>Salles</span></a><a href="{{ url_for('av_home') }}">🎭 <span>Action ou Vérité</span></a></section><section class="pb-drawer-section"><h2>▣ Aide</h2><a href="{{ url_for('how_to_play_page') }}">▣ <span>Comment jouer</span></a><a href="{{ url_for('platform_guides') }}">⌂ <span>Guides</span></a><a href="{{ url_for('faq_page') }}">? <span>FAQ</span></a><a href="{{ url_for('platform_contact') }}">✉ <span>Contact</span></a></section><section class="pb-drawer-section"><h2>◇ Légal & installation</h2><a href="{{ url_for('platform_legal') }}">▤ <span>Mentions légales</span></a><a href="{{ url_for('privacy_page') }}">▢ <span>Confidentialité</span></a><a href="{{ url_for('terms_page') }}">◇ <span>Conditions d’utilisation</span></a><button class="pwa-install-button pb-drawer-install" data-pwa-install type="button" hidden>⇩ <span>Installer PlayBed</span></button></section></nav></aside>
+<nav class="pb-mobile-nav" aria-label="Navigation mobile"><a class="pb-mobile-link{% if home_active %} is-active{% endif %}" href="{{ url_for('home') }}" data-swipe-tab="home"><span class="pb-mobile-icon">🏠</span><span>Accueil</span></a><a class="pb-mobile-link{% if games_active %} is-active{% endif %}" href="{{ url_for('games_catalog') }}" data-swipe-tab="games"><span class="pb-mobile-icon">🎮</span><span>Jeux</span></a><a class="pb-mobile-link{% if rooms_active %} is-active{% endif %}" href="{{ url_for('im_home') }}" data-swipe-tab="rooms"><span class="pb-mobile-icon">👥</span><span>Salles</span></a><a class="pb-mobile-link{% if leaderboard_active %} is-active{% endif %}" href="{{ url_for('leaderboard') }}" data-swipe-tab="leaderboard"><span class="pb-mobile-icon">🏆</span><span>Classement</span></a><a class="pb-mobile-link{% if profile_active %} is-active{% endif %}" href="{{ profile_url }}" data-swipe-tab="profile"><span class="pb-mobile-icon">👤</span><span>Profil</span></a></nav>
+<footer class="pb-site-footer"><div class="pb-footer-panel"><div class="pb-footer-grid"><section class="pb-footer-column"><h3>PlayBed</h3><div class="pb-footer-links"><a href="{{ url_for('about_page') }}">À propos</a><a href="{{ url_for('creator_page') }}">Créateur</a><a href="{{ url_for('platform_news') }}">Nouveautés</a><a href="{{ url_for('site_map_page') }}">Plan du site</a></div></section><section class="pb-footer-column"><h3>Jouer</h3><div class="pb-footer-links"><a href="{{ url_for('games_catalog') }}">Tous les jeux</a><a href="{{ url_for('versus_home') }}">Affronter un joueur</a><a href="{{ url_for('im_home') }}">Salles</a><a href="{{ url_for('av_home') }}">Action ou Vérité</a></div></section><section class="pb-footer-column"><h3>Aide</h3><div class="pb-footer-links"><a href="{{ url_for('how_to_play_page') }}">Comment jouer</a><a href="{{ url_for('platform_guides') }}">Guides</a><a href="{{ url_for('faq_page') }}">FAQ</a><a href="{{ url_for('platform_contact') }}">Contact</a></div></section><section class="pb-footer-column"><h3>Légal & installation</h3><div class="pb-footer-links"><a href="{{ url_for('platform_legal') }}">Mentions légales</a><a href="{{ url_for('privacy_page') }}">Confidentialité</a><a href="{{ url_for('terms_page') }}">Conditions d’utilisation</a><button class="pwa-install-button" data-pwa-install type="button" hidden>Installer PlayBed</button></div></section></div></div><div class="pb-footer-bottom"><p>© 2026 PlayBed</p><p>Créé et développé par <a href="{{ url_for('creator_page') }}">Obed Gelly Ousmane Tassango</a>.</p><div class="pb-footer-divider"></div><span class="pb-footer-domain">🌐 playbed.fr</span></div></footer></body></html>
