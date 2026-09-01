@@ -25,6 +25,7 @@ from admin_accounts import register_admin_accounts
 from admin_badges import register_admin_badges
 from admin_complete import register_admin_complete
 from admin_action_verite import register_admin_action_verite
+from catalog_routes import register_catalog_routes
 
 GUIDES.update(EDITORIAL_GUIDES)
 GAMES.update(EXTRA_GAMES)
@@ -57,6 +58,7 @@ for scope, functions in list(app.before_request_funcs.items()):
 DATABASE_OPTIONAL_ENDPOINTS = {
     "static",
     "home",
+    "games_catalog",
     "about_page",
     "how_to_play_page",
     "faq_page",
@@ -144,6 +146,7 @@ register_admin_accounts(app, db_connection)
 register_admin_badges(app, db_connection)
 register_admin_complete(app, GAMES, db_connection, current_pseudo, core_module)
 register_admin_action_verite(app, db_connection)
+register_catalog_routes(app, GAMES, current_pseudo)
 
 # Le module admin possède un garde générique. On le remplace ici par une
 # version plus légère qui ne recrée pas le schéma admin à chaque requête.
