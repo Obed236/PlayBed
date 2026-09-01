@@ -1,72 +1,76 @@
 {% extends "base.html" %}
-{% block title %}PlayBed — Mini-jeux gratuits et défis{% endblock %}
-{% block description %}PlayBed propose des mini-jeux gratuits, des affrontements 1 contre 1, L’Imposteur et Action ou Vérité en multijoueur, des profils publics et des classements. Joue sans compte depuis ton navigateur.{% endblock %}
+{% block title %}PlayBed — Mini-jeux gratuits{% endblock %}
+{% block description %}Choisis rapidement un jeu sur PlayBed : mini-jeux, L’Imposteur et Action ou Vérité.{% endblock %}
 {% block content %}
 <main>
 <section class="hero">
     <div class="hero-copy">
-        <span class="eyebrow">PLAYBED V3</span>
-        <h1>Joue.<br>Défie.<br><span>Amuse-toi.</span></h1>
-        <p>PlayBed rassemble {{ games|length }} jeux gratuits et rapides avec profils publics, affrontements 1 contre 1, jeux multijoueurs et classements. Aucun téléchargement ni compte obligatoire.</p>
-        <div class="hero-actions"><a class="primary-button" href="#games">Choisir un jeu</a><a class="secondary-button" href="#games" id="surpriseGameButton" title="Lancer un jeu au hasard">🎲 Jeu surprise</a><a class="secondary-button" href="{{ url_for('im_home') }}">🕵️ L’Imposteur</a><a class="secondary-button" href="{{ url_for('av_home') }}">🎭 Action ou Vérité</a><a class="secondary-button" href="{{ url_for('versus_home') }}">⚔️ Affronter un joueur</a><a class="secondary-button" href="{{ url_for('platform_daily_challenge') }}">🔥 Défi du jour</a><a class="secondary-button" href="{{ url_for('leaderboard') }}">🏆 Classement</a></div>
+        <span class="eyebrow">PLAYBED</span>
+        <h1>À quoi veux-tu<br><span>jouer ?</span></h1>
+        <p>Choisis un jeu et lance une partie. Pas de téléchargement, pas de compte obligatoire.</p>
+        <div class="hero-actions">
+            <a class="primary-button" href="#games">Voir les jeux</a>
+            <a class="secondary-button" href="{{ url_for('im_home') }}">👥 Jouer à plusieurs</a>
+        </div>
     </div>
-    <div class="hero-card"><div class="orb">🕹️</div><strong>{{ games|length }} jeux disponibles</strong><span>{{ total_scores }} score(s) enregistré(s)</span><div class="mini-stats"><span>🎮 Mini-jeux</span><span>⚔️ Affrontements</span><span>👥 Multijoueur</span><span>📱 PWA</span></div></div>
+    <div class="hero-card">
+        <div class="orb">🎮</div>
+        <strong>{{ games|length }} jeux disponibles</strong>
+        <span>Solo, défis et multijoueur</span>
+    </div>
 </section>
 
+{% if not pseudo %}
 <section class="section player-panel" id="player">
-    <div><span class="eyebrow">JOUEUR</span>{% if pseudo %}<h2>Salut {{ pseudo }} 👋</h2><p>Ton pseudo est actif. Retrouve toutes tes informations personnelles de jeu dans ton profil.</p>{% else %}<h2>Choisis ton pseudo</h2><p>Aucun compte n'est nécessaire. Ton pseudo sert à identifier tes scores et ton profil public.</p>{% endif %}</div>
-    {% if pseudo %}<div class="player-actions"><a class="primary-button" href="{{ url_for('platform_profile') }}">Voir mon profil</a><a class="secondary-button" href="{{ url_for('versus_home') }}">⚔️ Affronter un joueur{% if versus_wallet %} · {{ versus_wallet.balance }} pts{% endif %}</a><a class="secondary-button" href="{{ url_for('growth_public_profile', pseudo=pseudo) }}">Profil public</a><a class="danger-link" href="{{ url_for('clear_pseudo') }}">Changer de joueur</a></div>{% else %}<form class="pseudo-form" action="{{ url_for('set_pseudo') }}" method="post"><label class="sr-only" for="pseudoInput">Choisir un pseudo</label><input id="pseudoInput" type="text" name="pseudo" minlength="2" maxlength="20" required placeholder="Ex. Obed" autocomplete="nickname"><button class="primary-button" type="submit">Commencer</button></form>{% endif %}
+    <div>
+        <span class="eyebrow">JOUEUR</span>
+        <h2>Choisis ton pseudo</h2>
+        <p>Il sert à enregistrer tes scores et à t’identifier dans les parties multijoueurs.</p>
+    </div>
+    <form class="pseudo-form" action="{{ url_for('set_pseudo') }}" method="post">
+        <label class="sr-only" for="pseudoInput">Choisir un pseudo</label>
+        <input id="pseudoInput" type="text" name="pseudo" minlength="2" maxlength="20" required placeholder="Ex. Obed" autocomplete="nickname">
+        <button class="primary-button" type="submit">Commencer</button>
+    </form>
 </section>
-
-<section class="section pwa-banner"><div><span class="eyebrow">PLAYBED SUR TON ÉCRAN D’ACCUEIL</span><h2>Installe PlayBed comme une application.</h2><p>Accède plus vite aux jeux, au défi du jour, aux affrontements 1 contre 1 et aux classements depuis ton téléphone ou ton ordinateur compatible.</p></div><button class="primary-button pwa-install-button" data-pwa-install type="button" hidden>📱 Installer PlayBed</button></section>
+{% endif %}
 
 <section class="section" id="games">
-    <div class="section-heading"><span class="eyebrow">EXPLORER</span><h2>Trouve ton prochain jeu.</h2><p>Recherche un jeu, filtre par catégorie ou retrouve rapidement tes favoris et tes dernières parties.</p></div>
+    <div class="section-heading">
+        <span class="eyebrow">JEUX</span>
+        <h2>Choisis et joue.</h2>
+    </div>
+
     <div class="discovery-tools">
         <input id="gameSearch" type="search" placeholder="Rechercher un jeu…" aria-label="Rechercher un jeu">
-        <select id="gameCategory" aria-label="Filtrer par catégorie"><option value="all">Toutes les catégories</option><option value="Lettres">Lettres</option><option value="Logique">Logique</option><option value="Culture">Culture</option><option value="Quiz">Quiz</option><option value="Mémoire">Mémoire</option><option value="Rapidité">Rapidité</option><option value="Groupe">Groupe</option></select>
-        <label><input id="favoritesOnly" type="checkbox"> Favoris seulement</label>
+        <select id="gameCategory" aria-label="Filtrer par catégorie">
+            <option value="all">Toutes les catégories</option>
+            <option value="Lettres">Lettres</option>
+            <option value="Logique">Logique</option>
+            <option value="Culture">Culture</option>
+            <option value="Quiz">Quiz</option>
+            <option value="Mémoire">Mémoire</option>
+            <option value="Rapidité">Rapidité</option>
+            <option value="Groupe">Groupe</option>
+        </select>
     </div>
-    {% if growth_trending %}<div class="trending-strip" aria-label="Jeux populaires"><span class="season-pill">🔥 Populaires :</span>{% for item in growth_trending %}<a class="trending-chip" href="{{ url_for('start_game', game=item.slug) }}" data-game-start="{{ item.slug }}" data-source="trending">{{ item.emoji }} {{ item.name }}</a>{% endfor %}</div>{% endif %}
+
     <div class="game-grid" style="margin-top:24px">
         {% for slug, game in games.items() %}
         <article class="game-card" data-game-card data-game-slug="{{ slug }}" data-game-name="{{ game.name }}" data-game-tag="{{ game.tag }}" data-game-emoji="{{ game.emoji }}" data-game-start-url="{{ url_for('start_game', game=slug) }}">
-            <div class="card-top"><div class="game-icon">{{ game.emoji }}</div><div style="display:flex;gap:8px;align-items:center"><span class="game-tag">{{ game.tag }}</span><button class="favorite-button" type="button" data-favorite-game="{{ slug }}" aria-pressed="false" title="Ajouter aux favoris">☆</button></div></div>
-            <h3>{{ game.name }}</h3><p>{{ game.description }}</p>
-            <div class="card-actions"><a class="text-action" href="{{ url_for('platform_game_detail', game=slug) }}">Règles & astuces</a>{% if slug not in ['action-verite', 'imposteur'] %}<a class="text-action" href="{{ url_for('versus_home', jeu=slug) }}">⚔️ Défier</a>{% endif %}<a class="text-action strong" href="{{ url_for('start_game', game=slug) }}" data-game-start="{{ slug }}" data-source="catalog">Jouer <span>→</span></a></div>
+            <div class="card-top">
+                <div class="game-icon">{{ game.emoji }}</div>
+                <span class="game-tag">{{ game.tag }}</span>
+            </div>
+            <h3>{{ game.name }}</h3>
+            <p>{{ game.description }}</p>
+            <div class="card-actions">
+                <a class="text-action strong" href="{{ url_for('start_game', game=slug) }}" data-game-start="{{ slug }}" data-source="catalog">Jouer <span>→</span></a>
+            </div>
         </article>
         {% endfor %}
     </div>
     <div id="gameFilterEmpty" class="filter-empty" hidden>Aucun jeu ne correspond à ce filtre.</div>
-    <div class="quick-panels">
-        <article class="quick-panel"><h3>🕘 Joués récemment</h3><div class="quick-game-list" id="recentGames"></div></article>
-        <article class="quick-panel"><h3>⭐ Mes favoris</h3><div class="quick-game-list" id="favoriteGames"></div></article>
-        <article class="quick-panel"><h3>👥 Joueurs suivis</h3><div class="quick-game-list" id="followedPlayers"></div></article>
-    </div>
 </section>
-
-<section class="section feature-section"><div class="section-heading"><span class="eyebrow">UNE VRAIE PLATEFORME</span><h2>Joue seul ou avec les autres.</h2><p>L’accueil reste centré sur les jeux. Tes informations personnelles et ton suivi sont regroupés dans ton profil.</p></div><div class="info-grid"><article class="info-card"><span class="eyebrow">MULTIJOUEUR</span><h3>🕵️ L’Imposteur</h3><p>Crée une salle publique ou privée, découvre ton rôle secret, donne des indices et vote pour éliminer l’imposteur.</p></article><article class="info-card"><span class="eyebrow">DUEL</span><h3>Affrontements 1 contre 1</h3><p>Choisis un jeu à score, fixe une mise de points virtuels et affronte un autre joueur.</p></article><article class="info-card"><span class="eyebrow">PROFIL</span><h3>Ton espace joueur</h3><p>Retrouve au même endroit toutes les informations liées à ton activité sur PlayBed.</p></article><article class="info-card"><span class="eyebrow">GROUPE</span><h3>Action ou Vérité à distance</h3><p>Crée une classe privée et joue avec plusieurs personnes depuis différents téléphones.</p></article></div><div class="section-cta"><a class="primary-button" href="{{ url_for('im_home') }}">🕵️ Jouer à L’Imposteur</a><a class="secondary-button" href="{{ url_for('av_home') }}">🎭 Action ou Vérité</a><a class="secondary-button" href="{{ url_for('versus_home') }}">⚔️ Affronter un joueur</a><a class="secondary-button" href="{{ url_for('platform_guides') }}">Découvrir les guides</a></div></section>
-
-<section class="section about"><span class="eyebrow">PLAYBED</span><h2>Un projet informatique devenu une plateforme publique.</h2><p>PlayBed a été créé et développé par Obed Gelly Ousmane Tassango dans le cadre d'un projet autour du web, du réseau et de la programmation. Le projet est désormais accessible gratuitement au public et continue d’évoluer avec de nouvelles fonctionnalités.</p><p>L’objectif reste simple : proposer une expérience rapide et agréable, sans inscription obligatoire, tout en donnant suffisamment d’informations aux joueurs pour comprendre les règles, les scores et la manière dont leurs données sont utilisées.</p><a class="secondary-button" href="{{ url_for('about_page') }}">En savoir plus sur PlayBed</a></section>
 </main>
-
-<script>
-(() => {
-    const button = document.getElementById('surpriseGameButton');
-    if (!button) return;
-
-    button.addEventListener('click', (event) => {
-        const excludedGames = new Set(['action-verite', 'imposteur']);
-        const cards = Array.from(document.querySelectorAll('[data-game-card]')).filter((card) => {
-            return !excludedGames.has(card.dataset.gameSlug) && card.dataset.gameStartUrl;
-        });
-
-        if (!cards.length) return;
-
-        event.preventDefault();
-        const selected = cards[Math.floor(Math.random() * cards.length)];
-        window.location.href = selected.dataset.gameStartUrl;
-    });
-})();
-</script>
 {% endblock %}
