@@ -3,77 +3,45 @@
 {% block description %}PlayBed est une plateforme gratuite de jeux rapides, défis et expériences multijoueurs sur navigateur.{% endblock %}
 {% block content %}
 <main>
-<section class="hero">
-    <div class="hero-copy">
-        <span class="eyebrow">PLAYBED</span>
-        <h1>Joue.<br>Défie.<br><span>Partage.</span></h1>
-        <p>Une plateforme gratuite pour lancer des jeux rapides, affronter d’autres joueurs et créer des parties multijoueurs depuis ton navigateur.</p>
-        <div class="hero-actions">
-            <a class="primary-button" href="{{ url_for('games_catalog') }}">Découvrir les jeux</a>
-            <a class="secondary-button" href="{{ url_for('im_home') }}">👥 Jouer à plusieurs</a>
-        </div>
+<section class="pb-home-shell">
+    <div class="pb-home-brand"><span class="pb-home-brand-icon" aria-hidden="true">🎮</span><span>PlayBed</span></div>
+    <p class="pb-home-intro">Mini-jeux gratuits pour tous, sur mobile et ordinateur. Joue seul, défie d’autres joueurs ou lance une partie entre amis, sans compte obligatoire.</p>
+    <div class="pb-home-actions">
+        <a class="primary-button" href="{{ url_for('games_catalog') }}">Découvrir les jeux</a>
+        <a class="secondary-button" href="{{ url_for('im_home') }}">Jouer à plusieurs</a>
     </div>
-    <div class="hero-card">
-        <div class="orb">🎮</div>
-        <strong>Ton espace de jeu</strong>
-        <span>Solo, défis et multijoueur</span>
-        <div class="mini-stats"><span>🎯 Rapide</span><span>📱 Mobile</span><span>👥 Entre amis</span></div>
+
+    <div class="pb-home-cards">
+        <a class="pb-home-card" href="{{ url_for('versus_home') }}">
+            <span class="pb-home-card-icon" aria-hidden="true">⚔️</span>
+            <h3>Affronter un joueur</h3>
+            <p>Défie un autre joueur et compare directement vos scores.</p>
+        </a>
+        <a class="pb-home-card" href="{{ url_for('im_home') }}">
+            <span class="pb-home-card-icon" aria-hidden="true">👥</span>
+            <h3>Jouer à plusieurs</h3>
+            <p>Retrouve L’Imposteur et Action ou Vérité dans l’espace Salles.</p>
+        </a>
+        <a class="pb-home-card" href="{{ url_for('leaderboard') }}">
+            <span class="pb-home-card-icon" aria-hidden="true">🏆</span>
+            <h3>Progression</h3>
+            <p>Gagne des points, retrouve tes scores et grimpe dans le classement.</p>
+        </a>
     </div>
 </section>
 
+<section class="pb-home-player">
 {% if not pseudo %}
-<section class="section player-panel" id="player">
-    <div>
-        <span class="eyebrow">TON PROFIL JOUEUR</span>
-        <h2>Choisis ton pseudo.</h2>
-        <p>Pas besoin de créer un compte. Ton pseudo suffit pour enregistrer tes scores et rejoindre les parties multijoueurs.</p>
+    <div class="player-panel" id="player">
+        <div><span class="eyebrow">TON PROFIL JOUEUR</span><h2>Choisis ton pseudo.</h2><p>Pas besoin de créer un compte. Ton pseudo suffit pour enregistrer tes scores et rejoindre les parties multijoueurs.</p></div>
+        <form class="pseudo-form" action="{{ url_for('set_pseudo') }}" method="post"><label class="sr-only" for="pseudoInput">Choisir un pseudo</label><input id="pseudoInput" type="text" name="pseudo" minlength="2" maxlength="20" required placeholder="Ex. Obed" autocomplete="nickname"><button class="primary-button" type="submit">Commencer</button></form>
     </div>
-    <form class="pseudo-form" action="{{ url_for('set_pseudo') }}" method="post">
-        <label class="sr-only" for="pseudoInput">Choisir un pseudo</label>
-        <input id="pseudoInput" type="text" name="pseudo" minlength="2" maxlength="20" required placeholder="Ex. Obed" autocomplete="nickname">
-        <button class="primary-button" type="submit">Commencer</button>
-    </form>
-</section>
 {% else %}
-<section class="section player-panel">
-    <div>
-        <span class="eyebrow">BON RETOUR</span>
-        <h2>Salut {{ pseudo }} 👋</h2>
-        <p>Continue une partie, consulte ton classement ou retrouve ton espace joueur.</p>
+    <div class="player-panel">
+        <div><span class="eyebrow">BON RETOUR</span><h2>Salut {{ pseudo }} 👋</h2><p>Continue à jouer, consulte ton classement ou retrouve ton espace joueur.</p></div>
+        <div class="player-actions"><a class="primary-button" href="{{ url_for('games_catalog') }}">Voir les jeux</a><a class="secondary-button" href="{{ url_for('platform_profile') }}">Mon profil</a></div>
     </div>
-    <div class="player-actions">
-        <a class="primary-button" href="{{ url_for('games_catalog') }}">Voir les jeux</a>
-        <a class="secondary-button" href="{{ url_for('platform_profile') }}">Mon profil</a>
-    </div>
-</section>
 {% endif %}
-
-<section class="section feature-section">
-    <div class="section-heading">
-        <span class="eyebrow">PLAYBED EN 3 ESPACES</span>
-        <h2>Va directement à l’essentiel.</h2>
-        <p>L’accueil te guide. Les fonctionnalités détaillées ont maintenant chacune leur propre espace.</p>
-    </div>
-    <div class="info-grid">
-        <article class="info-card">
-            <span class="eyebrow">JEUX</span>
-            <h3>🎮 Tous les jeux</h3>
-            <p>Retrouve tout le catalogue PlayBed, recherche un jeu et lance une partie.</p>
-            <a class="secondary-button" href="{{ url_for('games_catalog') }}">Ouvrir les jeux</a>
-        </article>
-        <article class="info-card">
-            <span class="eyebrow">MULTIJOUEUR</span>
-            <h3>👥 Salles</h3>
-            <p>Crée ou rejoins une partie d’Imposteur ou d’Action ou Vérité.</p>
-            <a class="secondary-button" href="{{ url_for('im_home') }}">Voir les salles</a>
-        </article>
-        <article class="info-card">
-            <span class="eyebrow">COMPÉTITION</span>
-            <h3>🏆 Classement</h3>
-            <p>Compare tes scores aux autres joueurs et suis ta progression.</p>
-            <a class="secondary-button" href="{{ url_for('leaderboard') }}">Voir le classement</a>
-        </article>
-    </div>
 </section>
 </main>
 {% endblock %}
