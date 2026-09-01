@@ -1,4 +1,4 @@
-/* PlayBed navigation — familiar patterns inspired by Jakob's Law */
+/* PlayBed navigation — desktop + app-like mobile navigation */
 .pb-header-shell {
     position: sticky;
     top: 0;
@@ -105,7 +105,8 @@
     font-weight: 800;
 }
 
-.pb-theme-toggle {
+.pb-theme-toggle,
+.pb-mobile-menu-button {
     width: 40px;
     height: 40px;
     border: 1px solid var(--border);
@@ -114,22 +115,24 @@
     cursor: pointer;
 }
 
-/* Mobile: persistent bottom navigation, a pattern familiar from most apps. */
-.pb-mobile-nav {
+.pb-mobile-menu-button,
+.pb-mobile-nav,
+.pb-mobile-drawer,
+.pb-mobile-drawer-backdrop {
     display: none;
 }
 
 @media (max-width: 820px) {
     body:not(.pb-immersive-page) {
-        padding-bottom: calc(76px + env(safe-area-inset-bottom));
+        padding-bottom: calc(82px + env(safe-area-inset-bottom));
     }
 
-    .pb-header-shell {
-        position: sticky;
+    body.pb-drawer-open {
+        overflow: hidden;
     }
 
     .pb-navbar {
-        width: min(100% - 28px, 1180px);
+        width: min(100% - 24px, 1180px);
         min-height: 62px;
     }
 
@@ -148,34 +151,39 @@
         border-radius: 10px;
     }
 
+    .pb-mobile-menu-button {
+        display: inline-grid;
+        place-items: center;
+        font-size: 1.15rem;
+    }
+
     .pb-mobile-nav {
         position: fixed;
-        left: 10px;
-        right: 10px;
-        bottom: max(10px, env(safe-area-inset-bottom));
-        z-index: 1100;
+        left: 8px;
+        right: 8px;
+        bottom: max(8px, env(safe-area-inset-bottom));
+        z-index: 1200;
         display: grid;
         grid-template-columns: repeat(5, minmax(0, 1fr));
-        min-height: 64px;
+        min-height: 70px;
         padding: 6px;
         border: 1px solid var(--border);
-        border-radius: 20px;
-        background: color-mix(in srgb, var(--surface-solid) 92%, transparent);
-        box-shadow: 0 18px 45px rgba(0, 0, 0, .32);
+        border-radius: 22px;
+        background: color-mix(in srgb, var(--surface-solid) 94%, transparent);
+        box-shadow: 0 18px 45px rgba(0, 0, 0, .36);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
     }
 
     .pb-mobile-link {
-        position: relative;
         min-width: 0;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 3px;
-        padding: 6px 2px;
-        border-radius: 14px;
+        gap: 4px;
+        padding: 7px 2px;
+        border-radius: 16px;
         color: var(--muted);
         font-size: .68rem;
         font-weight: 800;
@@ -183,20 +191,152 @@
     }
 
     .pb-mobile-link .pb-mobile-icon {
-        font-size: 1.2rem;
+        font-size: 1.32rem;
         line-height: 1;
     }
 
     .pb-mobile-link.is-active {
         color: var(--text);
-        background: rgba(124, 92, 255, .16);
+        background: color-mix(in srgb, var(--primary) 19%, var(--surface));
+        box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--primary) 80%, transparent);
     }
 
     .pb-mobile-link:active {
         transform: scale(.96);
     }
 
-    body.pb-immersive-page .pb-mobile-nav {
+    .pb-mobile-drawer-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 1300;
+        display: block;
+        background: rgba(0, 0, 0, .56);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity .22s ease;
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+    }
+
+    .pb-mobile-drawer-backdrop.is-open {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .pb-mobile-drawer {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        bottom: calc(86px + env(safe-area-inset-bottom));
+        z-index: 1400;
+        display: flex;
+        flex-direction: column;
+        width: min(78vw, 390px);
+        max-width: calc(100vw - 70px);
+        padding: 22px 20px 28px;
+        border: 1px solid var(--border);
+        border-radius: 26px;
+        background: color-mix(in srgb, var(--surface-solid) 96%, transparent);
+        box-shadow: 22px 0 55px rgba(0, 0, 0, .42);
+        transform: translateX(calc(-100% - 24px));
+        transition: transform .24s ease;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+    }
+
+    .pb-mobile-drawer.is-open {
+        transform: translateX(0);
+    }
+
+    .pb-mobile-drawer-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding-bottom: 18px;
+    }
+
+    .pb-mobile-drawer-head strong {
+        color: var(--text);
+        font-size: 1.2rem;
+        letter-spacing: .14em;
+    }
+
+    .pb-mobile-drawer-head button {
+        width: 38px;
+        height: 38px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: var(--surface);
+        color: var(--muted);
+        font-size: 1.55rem;
+        line-height: 1;
+        cursor: pointer;
+    }
+
+    .pb-drawer-sections {
+        display: grid;
+        gap: 0;
+    }
+
+    .pb-drawer-section {
+        padding: 20px 0;
+        border-top: 1px solid var(--border);
+    }
+
+    .pb-drawer-section h2 {
+        margin: 0 0 12px;
+        color: var(--primary);
+        font-size: .78rem;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+    }
+
+    .pb-drawer-section a,
+    .pb-drawer-section button {
+        width: 100%;
+        min-height: 46px;
+        display: grid;
+        grid-template-columns: 26px 1fr;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 0;
+        border: 0;
+        background: transparent;
+        color: var(--muted);
+        text-align: left;
+        font: inherit;
+        font-weight: 750;
+        cursor: pointer;
+    }
+
+    .pb-drawer-section a:hover,
+    .pb-drawer-section button:hover {
+        color: var(--text);
+    }
+
+    .pb-drawer-install {
+        display: grid;
+    }
+
+    .pb-site-footer .pb-footer-panel {
+        display: none;
+    }
+
+    .pb-site-footer {
+        margin-top: 26px;
+    }
+
+    .pb-site-footer .pb-footer-bottom {
+        margin: 0 0 96px;
+        padding: 20px 16px;
+        border-radius: 20px;
+    }
+
+    body.pb-immersive-page .pb-mobile-nav,
+    body.pb-immersive-page .pb-mobile-menu-button,
+    body.pb-immersive-page .pb-mobile-drawer,
+    body.pb-immersive-page .pb-mobile-drawer-backdrop {
         display: none;
     }
 }
@@ -205,12 +345,19 @@
     .pb-mobile-link {
         font-size: .62rem;
     }
+
+    .pb-mobile-drawer {
+        width: min(84vw, 360px);
+        max-width: calc(100vw - 46px);
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
     .pb-nav-link,
     .pb-profile-link,
-    .pb-mobile-link {
+    .pb-mobile-link,
+    .pb-mobile-drawer,
+    .pb-mobile-drawer-backdrop {
         transition: none;
     }
 }
