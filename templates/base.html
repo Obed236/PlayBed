@@ -2,8 +2,8 @@
 {% set no_ads_page = request.path.startswith('/play/') or request.path.startswith('/arcade/') or request.path.startswith('/action-verite') or request.path.startswith('/jeux/action-verite') or request.path.startswith('/profil') or request.path.startswith('/joueur/') or request.path.startswith('/defi/') or request.path.startswith('/affronter') or request.path.startswith('/classement') or privacy_policy_page or request.path.startswith('/mentions-legales') or request.path.startswith('/conditions-utilisation') or request.path.startswith('/contact') %}
 {% set immersive_page = request.path.startswith('/play/') or request.path.startswith('/arcade/') %}
 {% set home_active = request.path == '/' %}
-{% set games_active = request.path.startswith('/jeu') or request.path.startswith('/play/') or request.path.startswith('/arcade/') %}
-{% set rooms_active = request.path.startswith('/imposteur') or request.path.startswith('/action-verite') %}
+{% set rooms_active = request.path.startswith('/imposteur') or request.path.startswith('/action-verite') or request.path.startswith('/jeux/action-verite') or request.path.startswith('/jeux/imposteur') %}
+{% set games_active = request.path == '/jeux' or request.path.startswith('/jeu/') or request.path.startswith('/play/') or request.path.startswith('/arcade/') %}
 {% set leaderboard_active = request.path.startswith('/classement') %}
 {% set profile_active = request.path.startswith('/profil') or request.path.startswith('/joueur/') %}
 {% set profile_url = url_for('platform_profile') if pseudo else url_for('home') ~ '#player' %}
@@ -49,7 +49,7 @@
 
             <nav class="pb-primary-nav" aria-label="Navigation principale">
                 <a class="pb-nav-link{% if home_active %} is-active{% endif %}" href="{{ url_for('home') }}"{% if home_active %} aria-current="page"{% endif %}>🏠 Accueil</a>
-                <a class="pb-nav-link{% if games_active %} is-active{% endif %}" href="{{ url_for('home') }}#games"{% if games_active %} aria-current="page"{% endif %}>🎮 Jeux</a>
+                <a class="pb-nav-link{% if games_active %} is-active{% endif %}" href="{{ url_for('games_catalog') }}"{% if games_active %} aria-current="page"{% endif %}>🎮 Jeux</a>
                 <a class="pb-nav-link{% if rooms_active %} is-active{% endif %}" href="{{ url_for('im_home') }}"{% if rooms_active %} aria-current="page"{% endif %}>👥 Salles</a>
                 <a class="pb-nav-link{% if leaderboard_active %} is-active{% endif %}" href="{{ url_for('leaderboard') }}"{% if leaderboard_active %} aria-current="page"{% endif %}>🏆 Classement</a>
                 <a class="pb-profile-link{% if profile_active %} is-active{% endif %}" href="{{ profile_url }}"{% if profile_active %} aria-current="page"{% endif %}>👤 Profil</a>
@@ -67,11 +67,11 @@
     <div id="main-content" tabindex="-1">{% block content %}{% endblock %}</div>
 
     <nav class="pb-mobile-nav" aria-label="Navigation mobile">
-        <a class="pb-mobile-link{% if home_active %} is-active{% endif %}" href="{{ url_for('home') }}"{% if home_active %} aria-current="page"{% endif %}><span class="pb-mobile-icon" aria-hidden="true">🏠</span><span>Accueil</span></a>
-        <a class="pb-mobile-link{% if games_active %} is-active{% endif %}" href="{{ url_for('home') }}#games"{% if games_active %} aria-current="page"{% endif %}><span class="pb-mobile-icon" aria-hidden="true">🎮</span><span>Jeux</span></a>
-        <a class="pb-mobile-link{% if rooms_active %} is-active{% endif %}" href="{{ url_for('im_home') }}"{% if rooms_active %} aria-current="page"{% endif %}><span class="pb-mobile-icon" aria-hidden="true">👥</span><span>Salles</span></a>
-        <a class="pb-mobile-link{% if leaderboard_active %} is-active{% endif %}" href="{{ url_for('leaderboard') }}"{% if leaderboard_active %} aria-current="page"{% endif %}><span class="pb-mobile-icon" aria-hidden="true">🏆</span><span>Classement</span></a>
-        <a class="pb-mobile-link{% if profile_active %} is-active{% endif %}" href="{{ profile_url }}"{% if profile_active %} aria-current="page"{% endif %}><span class="pb-mobile-icon" aria-hidden="true">👤</span><span>Profil</span></a>
+        <a class="pb-mobile-link{% if home_active %} is-active{% endif %}" href="{{ url_for('home') }}" data-swipe-tab="home"{% if home_active %} aria-current="page"{% endif %}><span class="pb-mobile-icon" aria-hidden="true">🏠</span><span>Accueil</span></a>
+        <a class="pb-mobile-link{% if games_active %} is-active{% endif %}" href="{{ url_for('games_catalog') }}" data-swipe-tab="games"{% if games_active %} aria-current="page"{% endif %}><span class="pb-mobile-icon" aria-hidden="true">🎮</span><span>Jeux</span></a>
+        <a class="pb-mobile-link{% if rooms_active %} is-active{% endif %}" href="{{ url_for('im_home') }}" data-swipe-tab="rooms"{% if rooms_active %} aria-current="page"{% endif %}><span class="pb-mobile-icon" aria-hidden="true">👥</span><span>Salles</span></a>
+        <a class="pb-mobile-link{% if leaderboard_active %} is-active{% endif %}" href="{{ url_for('leaderboard') }}" data-swipe-tab="leaderboard"{% if leaderboard_active %} aria-current="page"{% endif %}><span class="pb-mobile-icon" aria-hidden="true">🏆</span><span>Classement</span></a>
+        <a class="pb-mobile-link{% if profile_active %} is-active{% endif %}" href="{{ profile_url }}" data-swipe-tab="profile"{% if profile_active %} aria-current="page"{% endif %}><span class="pb-mobile-icon" aria-hidden="true">👤</span><span>Profil</span></a>
     </nav>
 
     <footer><div class="footer-copy"><span>© 2026 PlayBed · Créé et développé par <a href="{{ url_for('creator_page') }}">Obed Gelly Ousmane Tassango</a>.</span><span>Mini-jeux gratuits · Mobile et ordinateur · Aucun compte obligatoire</span></div><nav class="footer-links" aria-label="Informations et mentions"><a href="{{ url_for('versus_home') }}">Affronter un joueur</a><a href="{{ url_for('av_home') }}">Action ou Vérité</a><a href="{{ url_for('about_page') }}">À propos</a><a href="{{ url_for('creator_page') }}">Créateur</a><a href="{{ url_for('how_to_play_page') }}">Comment jouer</a><a href="{{ url_for('platform_guides') }}">Guides</a><a href="{{ url_for('platform_news') }}">Nouveautés</a><a href="{{ url_for('faq_page') }}">FAQ</a><a href="{{ url_for('site_map_page') }}">Plan du site</a><a href="{{ url_for('platform_contact') }}">Contact</a><a href="{{ url_for('platform_legal') }}">Mentions légales</a><a href="{{ url_for('privacy_page') }}">Confidentialité</a><a href="{{ url_for('terms_page') }}">Conditions d’utilisation</a><button class="footer-link-button pwa-install-button" data-pwa-install type="button" hidden>Installer PlayBed</button></nav></footer>
