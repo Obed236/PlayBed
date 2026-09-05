@@ -36,7 +36,7 @@
 
         {% elif game == 'memory' %}
             <div class="memory-toolbar"><div><span>Coups</span><strong id="memoryMoves">0</strong></div><div><span>Temps</span><strong><span id="memoryTime">0</span>s</strong></div></div>
-            <div id="memoryGame" class="memory-grid" data-score-url="{{ url_for('memory_score') }}"></div><div id="memoryResult" class="memory-result" hidden></div>
+            <div id="memoryGame" class="memory-grid" data-flip-url="{{ url_for('memory_flip') }}"></div><div id="memoryResult" class="memory-result" hidden></div>
         {% endif %}
 
         {% if state.finished and state.points is defined %}<div class="points-earned">+ {{ state.points }} points 🏆</div>{% endif %}
