@@ -20,19 +20,14 @@
     const board = document.getElementById("memoryGame");
     if (!board) return;
 
-    const icons = ["🚀","🎮","⚽","💻","🔥","🎵","🧠","🍕"];
-    const cards = [...icons, ...icons].sort(() => Math.random() - 0.5);
     const movesEl = document.getElementById("memoryMoves");
     const timeEl = document.getElementById("memoryTime");
     const resultEl = document.getElementById("memoryResult");
 
     let first = null;
-    let second = null;
     let locked = false;
-    let matched = 0;
-    let moves = 0;
-    let seconds = 0;
     let started = false;
+    let seconds = 0;
     let timer = null;
 
     function startTimer() {
@@ -44,70 +39,104 @@
         }, 1000);
     }
 
-    cards.forEach((icon, index) => {
+    function stopTimer(serverSeconds) {
+        if (timer) clearInterval(timer);
+        timer = null;
+        started = false;
+        if (Number.isFinite(serverSeconds)) {
+            seconds = serverSeconds;
+            timeEl.textContent = serverSeconds;
+        }
+    }
+
+    for (let index = 0; index < 16; index += 1) {
         const button = document.createElement("button");
         button.className = "memory-card";
         button.type = "button";
-        button.dataset.value = icon;
-        button.dataset.index = index;
-        button.innerHTML = `<span class="face">${icon}</span>`;
+        button.dataset.index = String(index);
+        button.setAttribute("aria-label", `Carte ${index + 1}`);
+        button.innerHTML = '<span class="face"></span>';
         board.appendChild(button);
-    });
+    }
 
     board.addEventListener("click", async (event) => {
         const card = event.target.closest(".memory-card");
         if (!card || locked || card.classList.contains("matched") || card === first) return;
 
-        startTimer();
-        card.classList.add("revealed");
+        locked = true;
+        const index = Number.parseInt(card.dataset.index, 10);
 
-        if (!first) {
-            first = card;
-            return;
-        }
+        try {
+            const response = await fetch(board.dataset.flipUrl, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({index})
+            });
+            const data = await response.json();
 
-        second = card;
-        moves += 1;
-        movesEl.textContent = moves;
-
-        if (first.dataset.value === second.dataset.value) {
-            first.classList.add("matched");
-            second.classList.add("matched");
-            first.classList.remove("revealed");
-            second.classList.remove("revealed");
-            matched += 2;
-            first = null;
-            second = null;
-
-            if (matched === cards.length) {
-                clearInterval(timer);
-                resultEl.hidden = false;
-                resultEl.textContent = "Partie terminée…";
-                try {
-                    const response = await fetch(board.dataset.scoreUrl, {
-                        method: "POST",
-                        headers: {"Content-Type": "application/json"},
-                        body: JSON.stringify({moves, seconds})
-                    });
-                    const data = await response.json();
-                    if (data.ok) {
-                        resultEl.textContent = `Bravo ! ${moves} coups, ${seconds}s — +${data.points} points 🏆`;
-                    } else {
-                        resultEl.textContent = `Bravo ! ${moves} coups en ${seconds}s.`;
-                    }
-                } catch {
-                    resultEl.textContent = `Bravo ! ${moves} coups en ${seconds}s.`;
+            if (!response.ok || !data.ok) {
+                if (response.status === 429) {
+                    resultEl.hidden = false;
+                    resultEl.textContent = "Trop de requêtes. Réessaie dans quelques instants.";
                 }
-            }
-        } else {
-            locked = true;
-            setTimeout(() => {
-                first.classList.remove("revealed");
-                second.classList.remove("revealed");
-                first = null;
-                second = null;
                 locked = false;
-            }, 750);
+                return;
+            }
+
+            const face = card.querySelector(".face");
+            face.textContent = data.icon || "";
+            card.classList.add("revealed");
+            startTimer();
+
+            if (Number.isFinite(data.moves)) {
+                movesEl.textContent = data.moves;
+            }
+
+            if (data.status === "first") {
+                first = card;
+                locked = false;
+                return;
+            }
+
+            if (data.status === "match") {
+                if (first) {
+                    first.classList.add("matched");
+                    first.classList.remove("revealed");
+                }
+                card.classList.add("matched");
+                card.classList.remove("revealed");
+                first = null;
+                locked = false;
+            } else if (data.status === "mismatch") {
+                const previous = first;
+                first = null;
+                setTimeout(() => {
+                    if (previous) {
+                        previous.classList.remove("revealed");
+                        const previousFace = previous.querySelector(".face");
+                        if (previousFace) previousFace.textContent = "";
+                    }
+                    card.classList.remove("revealed");
+                    face.textContent = "";
+                    locked = false;
+                }, 750);
+            } else {
+                locked = false;
+            }
+
+            if (data.finished) {
+                stopTimer(Number(data.seconds));
+                locked = true;
+                resultEl.hidden = false;
+                resultEl.textContent = `Bravo ! ${data.moves} coups, ${data.seconds}s — +${data.points} points 🏆`;
+                board.querySelectorAll(".memory-card").forEach((button) => {
+                    button.disabled = true;
+                });
+            }
+        } catch {
+            locked = false;
+            resultEl.hidden = false;
+            resultEl.textContent = "Impossible de valider la carte. Réessaie.";
         }
     });
 })();
