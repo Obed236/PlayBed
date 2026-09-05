@@ -1,9 +1,10 @@
 name: PlayBed checks
 
 on:
-  pull_request:
   push:
-    branches: [main]
+    branches:
+      - main
+  pull_request:
 
 permissions:
   contents: read
@@ -11,16 +12,54 @@ permissions:
 jobs:
   python-checks:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
+          python-version: "3.13"
+
       - name: Install dependencies
         run: pip install -r requirements.txt
+
       - name: Compile Python files
-        run: python -m py_compile app.py core.py imposteur.py admin_routes.py admin_accounts.py admin_linking.py admin_badges.py admin_complete.py admin_action_verite.py
-      - name: Import Flask application and check templates
+        run: python -m compileall -q .
+
+      - name: Import Flask application and check routes
         env:
           SECRET_KEY: ci-secret-key
-        run: python -c "import app; rules={r.rule for r in app.app.url_map.iter_rules()}; assert '/imposteur' in rules; assert '/admin/administrateurs/pseudo' in rules; assert '/mon-compte-admin/pseudo' in rules; app.app.jinja_env.get_template('leaderboard.html'); app.app.jinja_env.get_template('admin/users.html'); app.app.jinja_env.get_template('admin/admins.html'); app.app.jinja_env.get_template('admin/dashboard.html'); print('Routes:', len(rules), 'Imposteur: OK, admin self-link: OK')"
+          SESSION_COOKIE_SECURE: "0"
+        run: |
+          python - <<'PY'
+          import app
+          rules = {rule.rule for rule in app.app.url_map.iter_rules()}
+          required = {
+              "/",
+              "/health",
+              "/imposteur",
+              "/api/memory-flip",
+              "/admin/administrateurs/pseudo",
+              "/mon-compte-admin/pseudo",
+          }
+          missing = required - rules
+          assert not missing, f"Routes manquantes: {sorted(missing)}"
+          assert app.app.session_interface.__class__.__name__ == "DatabaseSessionInterface"
+          print("PlayBed import and routes: OK")
+          PY
+
+      - name: Render public home
+        env:
+          SECRET_KEY: ci-secret-key
+          SESSION_COOKIE_SECURE: "0"
+        run: |
+          python - <<'PY'
+          import app
+          client = app.app.test_client()
+          response = client.get("/")
+          assert response.status_code == 200
+          assert b"PlayBed" in response.data
+          print("Home render: OK")
+          PY
