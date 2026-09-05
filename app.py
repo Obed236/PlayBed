@@ -26,6 +26,10 @@ from admin_badges import register_admin_badges
 from admin_complete import register_admin_complete
 from admin_action_verite import register_admin_action_verite
 from catalog_routes import register_catalog_routes
+from server_session import register_server_side_sessions
+from security import register_security
+
+register_server_side_sessions(app, db_connection)
 
 GUIDES.update(EDITORIAL_GUIDES)
 GAMES.update(EXTRA_GAMES)
@@ -257,6 +261,9 @@ def apply_admin_runtime_controls():
         app.logger.exception("Contrôles administrateur temporairement indisponibles")
 
     return None
+
+
+register_security(app, db_connection)
 
 
 if __name__ == "__main__":
