@@ -3,7 +3,7 @@ import json
 import os
 import re
 import secrets
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from functools import wraps
 
 from flask import abort, redirect, render_template, request, session, url_for
@@ -34,6 +34,8 @@ PATH_PERMISSIONS = (
     ("/admin/journal", "logs"),
     ("/admin/parametres", "settings"),
 )
+
+ADMIN_SESSION_MAX_AGE = timedelta(hours=8)
 
 
 def register_admin_accounts(app, db_connection):
@@ -72,8 +74,7 @@ def register_admin_accounts(app, db_connection):
     def legacy_configured():
         username = os.environ.get("PLAYBED_ADMIN_USERNAME", "").strip()
         password_hash = os.environ.get("PLAYBED_ADMIN_PASSWORD_HASH", "").strip()
-        password = os.environ.get("PLAYBED_ADMIN_PASSWORD", "")
-        return bool(username and (password_hash or password))
+        return bool(username and password_hash)
 
     def legacy_credentials_valid(identifier, password):
         expected_username = os.environ.get("PLAYBED_ADMIN_USERNAME", "").strip()
@@ -81,14 +82,12 @@ def register_admin_accounts(app, db_connection):
             return False
 
         password_hash = os.environ.get("PLAYBED_ADMIN_PASSWORD_HASH", "").strip()
-        if password_hash:
-            try:
-                return check_password_hash(password_hash, password)
-            except (ValueError, TypeError):
-                return False
-
-        expected_password = os.environ.get("PLAYBED_ADMIN_PASSWORD", "")
-        return bool(expected_password) and hmac.compare_digest(password, expected_password)
+        if not password_hash:
+            return False
+        try:
+            return check_password_hash(password_hash, password)
+        except (ValueError, TypeError):
+            return False
 
     def parse_permissions(raw):
         try:
@@ -147,25 +146,50 @@ def register_admin_accounts(app, db_connection):
             "admin_permissions",
             "admin_account_id",
             "admin_source",
+            "admin_authenticated_at",
         ):
             session.pop(key, None)
 
-    def set_super_admin_session(username):
+    def admin_session_is_fresh():
+        raw = session.get("admin_authenticated_at")
+        if not raw:
+            return False
+        try:
+            authenticated_at = datetime.fromisoformat(raw)
+        except (TypeError, ValueError):
+            return False
+        if authenticated_at.tzinfo is None:
+            authenticated_at = authenticated_at.replace(tzinfo=timezone.utc)
+        age = datetime.now(timezone.utc) - authenticated_at
+        return timedelta(0) <= age <= ADMIN_SESSION_MAX_AGE
+
+    def set_super_admin_session(username, fresh=True):
+        if fresh:
+            clear_admin_session()
+        session.permanent = True
         session["playbed_admin"] = username
         session["admin_role"] = "super_admin"
         session["admin_permissions"] = list(ADMIN_PERMISSIONS)
         session["admin_source"] = "environment"
         session.pop("admin_account_id", None)
-        session["admin_csrf"] = secrets.token_urlsafe(32)
+        if fresh or not session.get("admin_csrf"):
+            session["admin_csrf"] = secrets.token_urlsafe(32)
+        if fresh or not session.get("admin_authenticated_at"):
+            session["admin_authenticated_at"] = now_iso()
 
-    def set_database_admin_session(row):
+    def set_database_admin_session(row, fresh=False):
+        if fresh:
+            clear_admin_session()
+        session.permanent = True
         session["playbed_admin"] = row["username"]
         session["admin_role"] = "admin"
         session["admin_permissions"] = parse_permissions(row["permissions_json"])
         session["admin_source"] = "database"
         session["admin_account_id"] = row["id"]
-        if not session.get("admin_csrf"):
+        if fresh or not session.get("admin_csrf"):
             session["admin_csrf"] = secrets.token_urlsafe(32)
+        if fresh or not session.get("admin_authenticated_at"):
+            session["admin_authenticated_at"] = now_iso()
 
     def log_action(action, details=""):
         try:
@@ -214,9 +238,13 @@ def register_admin_accounts(app, db_connection):
         if not username:
             return False
 
+        if not admin_session_is_fresh():
+            clear_admin_session()
+            return False
+
         if session.get("admin_source") == "environment" or session.get("admin_role") == "super_admin":
             expected = os.environ.get("PLAYBED_ADMIN_USERNAME", "").strip()
-            if expected and hmac.compare_digest(username, expected):
+            if expected and legacy_configured() and hmac.compare_digest(username, expected):
                 session["admin_role"] = "super_admin"
                 session["admin_permissions"] = list(ADMIN_PERMISSIONS)
                 session["admin_source"] = "environment"
@@ -229,7 +257,7 @@ def register_admin_accounts(app, db_connection):
         if not row or int(row["active"]) != 1:
             clear_admin_session()
             return False
-        set_database_admin_session(row)
+        set_database_admin_session(row, fresh=False)
         return True
 
     @app.context_processor
@@ -276,41 +304,45 @@ def register_admin_accounts(app, db_connection):
 
     def multi_admin_login():
         if session.get("playbed_admin"):
-            return redirect(url_for("admin_dashboard"))
+            if admin_session_is_fresh():
+                return redirect(url_for("admin_dashboard"))
+            clear_admin_session()
 
         error = None
         if request.method == "POST":
             identifier = (request.form.get("username") or "").strip()
             password = request.form.get("password") or ""
 
-            if legacy_credentials_valid(identifier, password):
-                set_super_admin_session(identifier)
+            if len(identifier) > 64 or len(password) > 128:
+                error = "Nom d’utilisateur ou mot de passe incorrect."
+            elif legacy_credentials_valid(identifier, password):
+                set_super_admin_session(identifier, fresh=True)
                 log_action("login", "Connexion super-admin")
                 next_url = request.args.get("next", "")
                 if next_url.startswith("/admin/"):
                     return redirect(next_url)
                 return redirect(url_for("admin_dashboard"))
-
-            try:
-                row = database_account_by_login(identifier) if identifier else None
-            except Exception:
-                app.logger.exception("Connexion administrateur base de données indisponible")
-                row = None
-
-            if row and int(row["active"]) == 1:
+            else:
                 try:
-                    password_ok = check_password_hash(row["password_hash"], password)
-                except (ValueError, TypeError):
-                    password_ok = False
-                if password_ok:
-                    set_database_admin_session(row)
-                    log_action("login", "Connexion administrateur délégué")
-                    next_url = request.args.get("next", "")
-                    if next_url.startswith("/admin/"):
-                        return redirect(next_url)
-                    return redirect(url_for("admin_dashboard"))
+                    row = database_account_by_login(identifier) if identifier else None
+                except Exception:
+                    app.logger.exception("Connexion administrateur base de données indisponible")
+                    row = None
 
-            error = "Nom d’utilisateur ou mot de passe incorrect."
+                if row and int(row["active"]) == 1:
+                    try:
+                        password_ok = check_password_hash(row["password_hash"], password)
+                    except (ValueError, TypeError):
+                        password_ok = False
+                    if password_ok:
+                        set_database_admin_session(row, fresh=True)
+                        log_action("login", "Connexion administrateur délégué")
+                        next_url = request.args.get("next", "")
+                        if next_url.startswith("/admin/"):
+                            return redirect(next_url)
+                        return redirect(url_for("admin_dashboard"))
+
+                error = "Nom d’utilisateur ou mot de passe incorrect."
 
         return render_template("admin/login.html", configured=admin_configured(), error=error)
 
@@ -322,6 +354,7 @@ def register_admin_accounts(app, db_connection):
         verify_csrf()
         log_action("logout", "Déconnexion de l'interface administrateur")
         clear_admin_session()
+        session.permanent = False
         return redirect(url_for("admin_login"))
 
     app.view_functions["admin_logout"] = multi_admin_logout
@@ -334,6 +367,9 @@ def register_admin_accounts(app, db_connection):
 
     def valid_username(value):
         return bool(re.fullmatch(r"[A-Za-z0-9._-]{1,8}", value or ""))
+
+    def valid_password(value):
+        return 12 <= len(value or "") <= 128
 
     @app.route("/admin/administrateurs")
     @super_admin_required
@@ -380,8 +416,8 @@ def register_admin_accounts(app, db_connection):
 
         if not valid_username(username):
             return redirect(url_for("admin_accounts_page", error="Nom d’utilisateur invalide : 1 à 8 caractères, lettres/chiffres/._- uniquement."))
-        if len(password) < 8:
-            return redirect(url_for("admin_accounts_page", error="Le mot de passe doit contenir au moins 8 caractères."))
+        if not valid_password(password):
+            return redirect(url_for("admin_accounts_page", error="Le mot de passe doit contenir entre 12 et 128 caractères."))
 
         primary = os.environ.get("PLAYBED_ADMIN_USERNAME", "").strip()
         if primary and username.lower() == primary.lower():
@@ -437,8 +473,8 @@ def register_admin_accounts(app, db_connection):
 
         if not valid_username(new_username):
             return redirect(url_for("admin_accounts_page", error="Nom d’utilisateur invalide : 1 à 8 caractères, lettres/chiffres/._- uniquement."))
-        if new_password and len(new_password) < 8:
-            return redirect(url_for("admin_accounts_page", error="Le nouveau mot de passe doit contenir au moins 8 caractères."))
+        if new_password and not valid_password(new_password):
+            return redirect(url_for("admin_accounts_page", error="Le nouveau mot de passe doit contenir entre 12 et 128 caractères."))
 
         primary = os.environ.get("PLAYBED_ADMIN_USERNAME", "").strip()
         if primary and new_username.lower() == primary.lower():
