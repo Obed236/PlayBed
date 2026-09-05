@@ -5,7 +5,11 @@ from contextlib import contextmanager
 import sqlite3
 import os
 import re
-from datetime import datetime, timezone
+import secrets
+import time
+from datetime import datetime, timedelta, timezone
+
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
@@ -18,11 +22,32 @@ if USE_POSTGRES:
     from psycopg.rows import dict_row
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY", "playbed-v2-dev-secret-change-me")
+
+_is_production = bool(
+    os.environ.get("RENDER")
+    or os.environ.get("PLAYBED_PRODUCTION", "").strip().lower() in {"1", "true", "yes"}
+)
+_secret_key = os.environ.get("SECRET_KEY")
+if not _secret_key:
+    if _is_production:
+        raise RuntimeError("SECRET_KEY doit être configurée en production.")
+    _secret_key = secrets.token_urlsafe(64)
+
+_cookie_secure_default = "1" if _is_production else "0"
+_cookie_secure = os.environ.get("SESSION_COOKIE_SECURE", _cookie_secure_default).strip().lower() not in {
+    "0", "false", "no", "off"
+}
+
+app.secret_key = _secret_key
 app.config.update(
     SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SECURE=_cookie_secure,
     SESSION_COOKIE_SAMESITE="Lax",
+    PERMANENT_SESSION_LIFETIME=timedelta(hours=8),
 )
+
+# Render termine TLS devant Gunicorn. On ne fait confiance qu'au dernier proxy.
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
 
 GAMES = {
     "pendu": {
@@ -201,8 +226,14 @@ def new_game(game):
         }
 
     if game == "memory":
+        icons = ["🚀", "🎮", "⚽", "💻", "🔥", "🎵", "🧠", "🍕"]
         return {
             "game": game,
+            "memory_board": sample(icons + icons, k=16),
+            "memory_first": None,
+            "memory_matched": [],
+            "memory_moves": 0,
+            "memory_started_at": None,
             "finished": False,
             "saved": False,
             "message": "Retrouve les 8 paires.",
@@ -433,24 +464,103 @@ def calculate_points(game, state):
     return 0
 
 
-@app.route("/api/memory-score", methods=["POST"])
-def memory_score():
+@app.route("/api/memory-flip", methods=["POST"])
+def memory_flip():
     if not current_pseudo():
         return jsonify({"ok": False, "error": "pseudo_required"}), 401
 
+    state = session.get("current_game")
+    if not isinstance(state, dict) or state.get("game") != "memory":
+        return jsonify({"ok": False, "error": "memory_game_required"}), 409
+
     data = request.get_json(silent=True) or {}
     try:
-        moves = int(data.get("moves", 0))
-        seconds = int(data.get("seconds", 0))
+        index = int(data.get("index"))
     except (TypeError, ValueError):
-        return jsonify({"ok": False}), 400
+        return jsonify({"ok": False, "error": "invalid_index"}), 400
 
-    if moves < 8 or seconds < 0:
-        return jsonify({"ok": False}), 400
+    board = state.get("memory_board")
+    matched = list(state.get("memory_matched") or [])
+    if not isinstance(board, list) or len(board) != 16 or not 0 <= index < 16:
+        return jsonify({"ok": False, "error": "invalid_state"}), 400
+    if state.get("finished"):
+        return jsonify({
+            "ok": True,
+            "finished": True,
+            "moves": int(state.get("memory_moves", 0)),
+            "seconds": int(state.get("memory_seconds", 0)),
+            "points": int(state.get("points", 0)),
+        })
 
-    points = max(100, 1800 - moves * 45 - seconds * 4)
-    save_score("memory", points)
-    return jsonify({"ok": True, "points": points})
+    first_index = state.get("memory_first")
+    if index in matched or index == first_index:
+        return jsonify({"ok": False, "error": "card_unavailable"}), 400
+
+    now = time.time()
+    if state.get("memory_started_at") is None:
+        state["memory_started_at"] = now
+
+    icon = board[index]
+    elapsed = max(0, int(now - float(state["memory_started_at"])))
+
+    if first_index is None:
+        state["memory_first"] = index
+        session["current_game"] = state
+        return jsonify({
+            "ok": True,
+            "status": "first",
+            "index": index,
+            "icon": icon,
+            "moves": int(state.get("memory_moves", 0)),
+            "seconds": elapsed,
+            "finished": False,
+        })
+
+    state["memory_moves"] = int(state.get("memory_moves", 0)) + 1
+    is_match = board[first_index] == icon
+    state["memory_first"] = None
+
+    if is_match:
+        matched.extend([first_index, index])
+        state["memory_matched"] = sorted(set(matched))
+        status = "match"
+    else:
+        status = "mismatch"
+
+    finished = len(state.get("memory_matched") or []) == 16
+    points = None
+    if finished:
+        elapsed = max(1, int(now - float(state["memory_started_at"])))
+        state["finished"] = True
+        state["memory_seconds"] = elapsed
+        if not state.get("saved"):
+            points = max(100, 1800 - state["memory_moves"] * 45 - elapsed * 4)
+            save_score("memory", points)
+            state["saved"] = True
+            state["points"] = points
+        else:
+            points = int(state.get("points", 0))
+
+    session["current_game"] = state
+    return jsonify({
+        "ok": True,
+        "status": status,
+        "index": index,
+        "icon": icon,
+        "first_index": first_index,
+        "matched": bool(is_match),
+        "moves": int(state.get("memory_moves", 0)),
+        "seconds": elapsed,
+        "finished": finished,
+        "points": points,
+    })
+
+
+@app.route("/api/memory-score", methods=["POST"])
+def memory_score():
+    # Ancien endpoint conservé pour les clients mis en cache, mais il ne peut plus
+    # enregistrer un score fourni par le navigateur.
+    return jsonify({"ok": False, "error": "server_authoritative_memory"}), 410
 
 
 @app.route("/restart/<game>")
