@@ -1,0 +1,46 @@
+name: Security checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "17 4 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  python-security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install application and audit tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pip-audit bandit
+
+      - name: Compile Python sources
+        run: python -m compileall -q .
+
+      - name: Import Flask application
+        env:
+          SECRET_KEY: security-ci-secret-key-only
+          SESSION_COOKIE_SECURE: "0"
+        run: python -c "import app; assert app.app.secret_key; assert app.app.session_interface.__class__.__name__ == 'DatabaseSessionInterface'"
+
+      - name: Audit Python dependencies
+        run: pip-audit -r requirements.txt
+
+      - name: Scan Python code for high severity issues
+        run: bandit -r . -x ./tests -lll
