@@ -12,6 +12,13 @@ UNSAFE_METHODS = {"POST", "PUT", "PATCH", "DELETE"}
 def register_security(app, db_connection):
     """Central security policy: rate limiting, origin checks and hardened response headers."""
 
+    # Le vieux hook de core.py est remplacé par cette politique plus stricte.
+    for scope, functions in list(app.after_request_funcs.items()):
+        app.after_request_funcs[scope] = [
+            function for function in functions
+            if getattr(function, "__name__", "") != "security_headers"
+        ]
+
     app.config.setdefault("MAX_CONTENT_LENGTH", 1024 * 1024)
     app.config.setdefault("MAX_FORM_MEMORY_SIZE", 128 * 1024)
     app.config.setdefault("MAX_FORM_PARTS", 200)
@@ -138,6 +145,13 @@ def register_security(app, db_connection):
                 limited, retry_after = hit_rate_limit("pseudo-change", 30, 60)
                 if limited:
                     return reject_rate_limit(retry_after)
+
+            if request.method in UNSAFE_METHODS and request.path.startswith(
+                ("/imposteur", "/action-verite", "/jeux/imposteur", "/jeux/action-verite")
+            ):
+                limited, retry_after = hit_rate_limit("room-write", 180, 60)
+                if limited:
+                    return reject_rate_limit(retry_after)
         except Exception:
             app.logger.exception("Rate limiting temporairement indisponible")
             if request.path == "/admin/login" and request.method == "POST":
@@ -184,12 +198,13 @@ def register_security(app, db_connection):
             response.headers["Content-Security-Policy"] = (
                 "default-src 'self'; "
                 "script-src 'self' 'unsafe-inline' https://*.googletagmanager.com "
-                "https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net; "
+                "https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net "
+                "https://*.gstatic.com https://*.googleadservices.com; "
                 "style-src 'self' 'unsafe-inline' https:; "
                 "img-src 'self' data: blob: https:; "
                 "font-src 'self' data: https:; "
                 "connect-src 'self' https://*.google-analytics.com https://*.googlesyndication.com "
-                "https://*.google.com https://*.doubleclick.net; "
+                "https://*.google.com https://*.doubleclick.net https://*.googleadservices.com; "
                 "frame-src 'self' https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net; "
                 "frame-ancestors 'self'; "
                 "form-action 'self'; "
