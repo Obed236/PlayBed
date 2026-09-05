@@ -57,6 +57,7 @@ jobs:
         run: |
           python - <<'PY'
           import app
+          app.init_db()
           client = app.app.test_client()
           response = client.get("/")
           assert response.status_code == 200
