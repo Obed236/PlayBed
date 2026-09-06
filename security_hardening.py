@@ -75,16 +75,10 @@ def apply_security(app):
         response.headers["Cache-Control"] = (
             "no-store" if request.path.startswith("/admin") else response.headers.get("Cache-Control", "")
         )
-        # Conservative CSP compatible with the current templates (which contain
-        # inline styles/scripts). It still blocks plugins, framing and foreign bases.
-        response.headers["Content-Security-Policy"] = (
-            "default-src 'self'; "
-            "base-uri 'self'; object-src 'none'; frame-ancestors 'none'; "
-            "form-action 'self'; img-src 'self' data: https:; "
-            "font-src 'self' data: https:; style-src 'self' 'unsafe-inline' https:; "
-            "script-src 'self' 'unsafe-inline' https:; connect-src 'self' https:; "
-            "upgrade-insecure-requests"
-        )
+
+        # The request-specific CSP nonce and the final CSP header are owned by
+        # security.register_security(). Keeping a second CSP here would overwrite
+        # or conflict with the nonce-bearing policy when production uses wsgi.py.
         return response
 
     return app
