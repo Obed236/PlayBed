@@ -50,17 +50,47 @@ jobs:
           print("PlayBed import and routes: OK")
           PY
 
-      - name: Render public home
+      - name: Render public home and verify CSP
         env:
           SECRET_KEY: ci-secret-key
           SESSION_COOKIE_SECURE: "0"
         run: |
           python - <<'PY'
+          import re
           import app
+
           app.init_db()
           client = app.app.test_client()
           response = client.get("/")
           assert response.status_code == 200
           assert b"PlayBed" in response.data
-          print("Home render: OK")
+
+          csp = response.headers["Content-Security-Policy"]
+          directives = {
+              part.strip().split(" ", 1)[0]: part.strip()
+              for part in csp.split(";")
+              if part.strip()
+          }
+
+          script_src = directives["script-src"]
+          style_src = directives["style-src"]
+
+          assert "'unsafe-inline'" not in script_src
+          assert "'strict-dynamic'" in script_src
+          assert directives["script-src-attr"] == "script-src-attr 'none'"
+          assert "'unsafe-inline'" not in style_src
+          assert directives["style-src-attr"] == "style-src-attr 'unsafe-inline'"
+
+          nonce_match = re.search(r"'nonce-([^']+)'", script_src)
+          assert nonce_match, "Nonce CSP manquant"
+          nonce = nonce_match.group(1)
+          html = response.get_data(as_text=True)
+          assert f'nonce="{nonce}"' in html
+          assert "/static/js/csp-events.js" in html
+
+          bridge = client.get("/static/js/csp-events.js")
+          assert bridge.status_code == 200
+          assert b"migrateLegacyHandlers" in bridge.data
+
+          print("Home render and CSP nonce: OK")
           PY
