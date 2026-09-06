@@ -1,12 +1,49 @@
 import hashlib
 import os
+import re
+import secrets
 import time
 from urllib.parse import urlsplit
 
-from flask import abort, jsonify, request
+from flask import abort, g, jsonify, request
 
 
 UNSAFE_METHODS = {"POST", "PUT", "PATCH", "DELETE"}
+
+_SCRIPT_OR_STYLE_TAG = re.compile(
+    r"<(?P<tag>script|style)\b(?![^>]*\bnonce\s*=)(?P<attrs>[^>]*)>",
+    re.IGNORECASE,
+)
+_BODY_CLOSE_TAG = re.compile(r"</body\s*>", re.IGNORECASE)
+_CSP_EVENTS_SCRIPT = "/static/js/csp-events.js"
+
+
+def _nonce_html_response(response, nonce):
+    """Attach the request nonce to inline script/style tags and load the CSP bridge."""
+    if response.direct_passthrough or response.mimetype != "text/html":
+        return response
+
+    body = response.get_data(as_text=True)
+    if not body:
+        return response
+
+    def add_nonce(match):
+        return f'<{match.group("tag")} nonce="{nonce}"{match.group("attrs")}>'
+
+    body = _SCRIPT_OR_STYLE_TAG.sub(add_nonce, body)
+
+    if _CSP_EVENTS_SCRIPT not in body:
+        bridge = (
+            f'<script nonce="{nonce}" defer src="{_CSP_EVENTS_SCRIPT}" '
+            'data-playbed-csp-events="true"></script>'
+        )
+        if _BODY_CLOSE_TAG.search(body):
+            body = _BODY_CLOSE_TAG.sub(lambda match: bridge + match.group(0), body, count=1)
+        else:
+            body += bridge
+
+    response.set_data(body)
+    return response
 
 
 def register_security(app, db_connection):
@@ -121,6 +158,12 @@ def register_security(app, db_connection):
         return origin_parts.scheme in {"https", "http"} and origin_host == request_host
 
     @app.before_request
+    def prepare_csp_nonce():
+        # One unpredictable nonce per HTTP response. Inline blocks only execute when
+        # PlayBed itself stamped them with this nonce.
+        g.csp_nonce = secrets.token_urlsafe(18)
+
+    @app.before_request
     def enforce_security_policy():
         if request.method in UNSAFE_METHODS and not same_origin_request():
             abort(403)
@@ -166,6 +209,9 @@ def register_security(app, db_connection):
     @app.after_request
     def harden_response(response):
         is_admin = request.path.startswith("/admin")
+        nonce = getattr(g, "csp_nonce", secrets.token_urlsafe(18))
+
+        response = _nonce_html_response(response, nonce)
 
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
@@ -181,8 +227,11 @@ def register_security(app, db_connection):
             response.headers["X-Robots-Tag"] = "noindex, nofollow, noarchive"
             response.headers["Content-Security-Policy"] = (
                 "default-src 'self'; "
-                "script-src 'self' 'unsafe-inline'; "
-                "style-src 'self' 'unsafe-inline'; "
+                f"script-src 'self' 'nonce-{nonce}' 'strict-dynamic'; "
+                "script-src-attr 'none'; "
+                f"style-src 'self' 'nonce-{nonce}'; "
+                f"style-src-elem 'self' 'nonce-{nonce}'; "
+                "style-src-attr 'unsafe-inline'; "
                 "img-src 'self' data:; "
                 "font-src 'self' data:; "
                 "connect-src 'self'; "
@@ -197,10 +246,14 @@ def register_security(app, db_connection):
             response.headers["Cross-Origin-Opener-Policy"] = "same-origin-allow-popups"
             response.headers["Content-Security-Policy"] = (
                 "default-src 'self'; "
-                "script-src 'self' 'unsafe-inline' https://*.googletagmanager.com "
-                "https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net "
-                "https://*.gstatic.com https://*.googleadservices.com; "
-                "style-src 'self' 'unsafe-inline' https:; "
+                f"script-src 'self' 'nonce-{nonce}' 'strict-dynamic' "
+                "https://*.googletagmanager.com https://*.googlesyndication.com "
+                "https://*.google.com https://*.doubleclick.net https://*.gstatic.com "
+                "https://*.googleadservices.com; "
+                "script-src-attr 'none'; "
+                f"style-src 'self' 'nonce-{nonce}' https:; "
+                f"style-src-elem 'self' 'nonce-{nonce}' https:; "
+                "style-src-attr 'unsafe-inline'; "
                 "img-src 'self' data: blob: https:; "
                 "font-src 'self' data: https:; "
                 "connect-src 'self' https://*.google-analytics.com https://*.googlesyndication.com "
