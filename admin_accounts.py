@@ -74,7 +74,8 @@ def register_admin_accounts(app, db_connection):
     def legacy_configured():
         username = os.environ.get("PLAYBED_ADMIN_USERNAME", "").strip()
         password_hash = os.environ.get("PLAYBED_ADMIN_PASSWORD_HASH", "").strip()
-        return bool(username and password_hash)
+        password = os.environ.get("PLAYBED_ADMIN_PASSWORD", "")
+        return bool(username and (password_hash or password))
 
     def legacy_credentials_valid(identifier, password):
         expected_username = os.environ.get("PLAYBED_ADMIN_USERNAME", "").strip()
@@ -82,12 +83,15 @@ def register_admin_accounts(app, db_connection):
             return False
 
         password_hash = os.environ.get("PLAYBED_ADMIN_PASSWORD_HASH", "").strip()
-        if not password_hash:
-            return False
-        try:
-            return check_password_hash(password_hash, password)
-        except (ValueError, TypeError):
-            return False
+        if password_hash:
+            try:
+                if check_password_hash(password_hash, password):
+                    return True
+            except (ValueError, TypeError):
+                pass
+
+        expected_password = os.environ.get("PLAYBED_ADMIN_PASSWORD", "")
+        return bool(expected_password) and hmac.compare_digest(password, expected_password)
 
     def parse_permissions(raw):
         try:
