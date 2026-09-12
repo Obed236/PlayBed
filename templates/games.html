@@ -38,6 +38,7 @@
                 <option value="Rapidité">Rapidité</option>
                 <option value="Groupe">Groupe</option>
             </select>
+            <label for="favoritesOnly"><input id="favoritesOnly" type="checkbox"> Mes favoris</label>
         </div>
 
         <div class="game-grid" style="margin-top:24px">
@@ -46,6 +47,7 @@
                 <div class="card-top">
                     <div class="game-icon">{{ game.emoji }}</div>
                     <span class="game-tag">{{ game.tag }}</span>
+                    <button type="button" class="favorite-button" data-favorite-game="{{ slug }}" aria-label="Favori : {{ game.name }}" aria-pressed="false" title="Ajouter aux favoris">☆</button>
                 </div>
                 <h3>{{ game.name }}</h3>
                 <p>{{ game.description }}</p>
@@ -56,7 +58,9 @@
             </article>
             {% endfor %}
         </div>
-        <div id="gameFilterEmpty" class="filter-empty" hidden>Aucun jeu ne correspond à ta recherche.</div>
+        <p class="growth-empty">Tes favoris sont enregistrés dans ce navigateur.</p>
+        <p id="favoriteStorageNotice" class="growth-empty" role="status" hidden>Le stockage du navigateur est indisponible : tes favoris seront perdus en quittant cette page.</p>
+        <div id="gameFilterEmpty" class="filter-empty" role="status" hidden>Aucun jeu ne correspond à ta recherche.</div>
     </section>
 </section>
 </main>
