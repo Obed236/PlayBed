@@ -65,3 +65,9 @@
     .duel-scoreboard { grid-template-columns: 1fr; }
     .duel-vs { padding: 2px 0; }
 }
+
+.discovery-tools input[type="checkbox"] { width: auto; padding: 0; flex-shrink: 0; }
+.discovery-tools label { min-height: 44px; }
+.favorite-button { color: var(--text); flex-shrink: 0; min-width: 44px; min-height: 44px; }
+.favorite-button:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+.game-card[hidden] { display: none; }
