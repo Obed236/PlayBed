@@ -373,7 +373,7 @@ def register_admin_accounts(app, db_connection):
         return bool(re.fullmatch(r"[A-Za-z0-9._-]{1,8}", value or ""))
 
     def valid_password(value):
-        return 12 <= len(value or "") <= 128
+        return 8 <= len(value or "") <= 128
 
     @app.route("/admin/administrateurs")
     @super_admin_required
@@ -421,7 +421,7 @@ def register_admin_accounts(app, db_connection):
         if not valid_username(username):
             return redirect(url_for("admin_accounts_page", error="Nom d’utilisateur invalide : 1 à 8 caractères, lettres/chiffres/._- uniquement."))
         if not valid_password(password):
-            return redirect(url_for("admin_accounts_page", error="Le mot de passe doit contenir entre 12 et 128 caractères."))
+            return redirect(url_for("admin_accounts_page", error="Le mot de passe doit contenir entre 8 et 128 caractères."))
 
         primary = os.environ.get("PLAYBED_ADMIN_USERNAME", "").strip()
         if primary and username.lower() == primary.lower():
@@ -478,7 +478,7 @@ def register_admin_accounts(app, db_connection):
         if not valid_username(new_username):
             return redirect(url_for("admin_accounts_page", error="Nom d’utilisateur invalide : 1 à 8 caractères, lettres/chiffres/._- uniquement."))
         if new_password and not valid_password(new_password):
-            return redirect(url_for("admin_accounts_page", error="Le nouveau mot de passe doit contenir entre 12 et 128 caractères."))
+            return redirect(url_for("admin_accounts_page", error="Le nouveau mot de passe doit contenir entre 8 et 128 caractères."))
 
         primary = os.environ.get("PLAYBED_ADMIN_USERNAME", "").strip()
         if primary and new_username.lower() == primary.lower():
