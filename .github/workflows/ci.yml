@@ -1,9 +1,10 @@
 name: PlayBed checks
 
 on:
-  pull_request:
   push:
-    branches: [main]
+    branches:
+      - main
+  pull_request:
 
 permissions:
   contents: read
@@ -11,16 +12,91 @@ permissions:
 jobs:
   python-checks:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
+          python-version: "3.13"
+
       - name: Install dependencies
         run: pip install -r requirements.txt
+
       - name: Compile Python files
-        run: python -m py_compile app.py core.py imposteur.py admin_routes.py admin_accounts.py admin_linking.py admin_badges.py admin_complete.py admin_action_verite.py
-      - name: Import Flask application and check templates
+        run: python -m compileall -q .
+
+      - name: Check dependency consistency
+        run: pip check
+
+      - name: Start production Gunicorn and check HTTP responses
+        run: python tests/gunicorn_smoke.py
+
+      - name: Import Flask application and check routes
         env:
           SECRET_KEY: ci-secret-key
-        run: python -c "import app; rules={r.rule for r in app.app.url_map.iter_rules()}; assert '/imposteur' in rules; assert '/admin/administrateurs/pseudo' in rules; assert '/mon-compte-admin/pseudo' in rules; app.app.jinja_env.get_template('leaderboard.html'); app.app.jinja_env.get_template('admin/users.html'); app.app.jinja_env.get_template('admin/admins.html'); app.app.jinja_env.get_template('admin/dashboard.html'); print('Routes:', len(rules), 'Imposteur: OK, admin self-link: OK')"
+          SESSION_COOKIE_SECURE: "0"
+        run: |
+          python - <<'PY'
+          import app
+          rules = {rule.rule for rule in app.app.url_map.iter_rules()}
+          required = {
+              "/",
+              "/health",
+              "/imposteur",
+              "/api/memory-flip",
+              "/admin/administrateurs/pseudo",
+              "/mon-compte-admin/pseudo",
+          }
+          missing = required - rules
+          assert not missing, f"Routes manquantes: {sorted(missing)}"
+          assert app.app.session_interface.__class__.__name__ == "DatabaseSessionInterface"
+          print("PlayBed import and routes: OK")
+          PY
+
+      - name: Render public home and verify CSP
+        env:
+          SECRET_KEY: ci-secret-key
+          SESSION_COOKIE_SECURE: "0"
+        run: |
+          python - <<'PY'
+          import re
+          import app
+
+          app.init_db()
+          client = app.app.test_client()
+          response = client.get("/")
+          assert response.status_code == 200
+          assert b"PlayBed" in response.data
+
+          csp = response.headers["Content-Security-Policy"]
+          directives = {
+              part.strip().split(" ", 1)[0]: part.strip()
+              for part in csp.split(";")
+              if part.strip()
+          }
+
+          script_src = directives["script-src"]
+          style_src = directives["style-src"]
+
+          assert "'unsafe-inline'" not in script_src
+          assert "'strict-dynamic'" in script_src
+          assert directives["script-src-attr"] == "script-src-attr 'none'"
+          assert "'unsafe-inline'" not in style_src
+          assert directives["style-src-attr"] == "style-src-attr 'unsafe-inline'"
+
+          nonce_match = re.search(r"'nonce-([^']+)'", script_src)
+          assert nonce_match, "Nonce CSP manquant"
+          nonce = nonce_match.group(1)
+          html = response.get_data(as_text=True)
+          assert f'nonce="{nonce}"' in html
+          assert "/static/js/csp-events.js" in html
+
+          bridge = client.get("/static/js/csp-events.js")
+          assert bridge.status_code == 200
+          assert b"migrateLegacyHandlers" in bridge.data
+
+          print("Home render and CSP nonce: OK")
+          PY

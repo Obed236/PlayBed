@@ -7,7 +7,9 @@
     window.dataLayer.push({ event, ...data });
   };
 
+  const sessionLists = new Map();
   const readList = (key) => {
+    if (sessionLists.has(key)) return sessionLists.get(key);
     try {
       const value = JSON.parse(localStorage.getItem(key));
       return Array.isArray(value) ? value : [];
@@ -15,7 +17,16 @@
       return [];
     }
   };
-  const writeList = (key, value) => localStorage.setItem(key, JSON.stringify(value));
+  const writeList = (key, value) => {
+    sessionLists.set(key, value);
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+    } catch {
+      // Keep controls usable when browser storage is unavailable.
+      const notice = document.getElementById("favoriteStorageNotice");
+      if (notice) notice.hidden = false;
+    }
+  };
 
   const gameCards = [...document.querySelectorAll("[data-game-card]")];
   const search = document.getElementById("gameSearch");
@@ -37,7 +48,12 @@
       card.hidden = !show;
       if (show) visible += 1;
     });
-    if (emptyState) emptyState.hidden = visible !== 0;
+    if (emptyState) {
+      emptyState.hidden = visible !== 0;
+      emptyState.textContent = favoritesOnly?.checked && favorites.size === 0
+        ? "Aucun favori pour le moment. Décoche Mes favoris, puis ajoute un jeu avec ☆."
+        : "Aucun jeu ne correspond à tes filtres.";
+    }
   };
 
   search?.addEventListener("input", () => {
