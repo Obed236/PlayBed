@@ -13,6 +13,9 @@ jobs:
   python-checks:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    strategy:
+      matrix:
+        python-version: ["3.13", "3.14.3"]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -20,13 +23,19 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.13"
+          python-version: ${{ matrix.python-version }}
 
       - name: Install dependencies
         run: pip install -r requirements.txt
 
       - name: Compile Python files
         run: python -m compileall -q .
+
+      - name: Check dependency consistency
+        run: pip check
+
+      - name: Start production Gunicorn and check HTTP responses
+        run: python tests/gunicorn_smoke.py
 
       - name: Import Flask application and check routes
         env:
