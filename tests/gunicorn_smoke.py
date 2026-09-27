@@ -1,5 +1,6 @@
 """Exercise the production WSGI entry point in an isolated local database."""
 import json
+import http.client
 import os
 from pathlib import Path
 import shutil
@@ -12,7 +13,7 @@ from urllib.error import URLError
 from urllib.request import urlopen
 
 
-def main():
+def main(entrypoint):
     root = Path(__file__).resolve().parents[1]
     with tempfile.TemporaryDirectory(prefix="playbed-smoke-") as directory:
         target = Path(directory)
@@ -26,7 +27,11 @@ def main():
         env = os.environ.copy()
         for key in ("DATABASE_URL", "GUNICORN_CMD_ARGS", "WEB_CONCURRENCY"):
             env.pop(key, None)
-        env.update(PORT=str(port), SECRET_KEY="isolated-gunicorn-smoke-test", RENDER="true")
+        env.update(
+            PORT=str(port), SECRET_KEY="isolated-gunicorn-smoke-test", RENDER="true",
+            SESSION_COOKIE_SECURE="1",
+            PLAYBED_TRUSTED_HOSTS="127.0.0.1,playbed.example",
+        )
         subprocess.run(
             [sys.executable, "-c", "import app; app.init_db()"],
             cwd=target, env=env, check=True, timeout=30,
@@ -35,7 +40,7 @@ def main():
         # Match render.yaml: Gunicorn must pick up PORT without an explicit bind.
         with tempfile.TemporaryFile(mode="w+") as log:
             process = subprocess.Popen(
-                [sys.executable, "-m", "gunicorn", "wsgi:app"],
+                [sys.executable, "-m", "gunicorn", entrypoint],
                 cwd=target, env=env, stdout=log, stderr=subprocess.STDOUT,
             )
             try:
@@ -60,9 +65,32 @@ def main():
                 with urlopen(base + "/static/js/csp-events.js", timeout=5) as response:
                     assert response.status == 200
                     assert b"migrateLegacyHandlers" in response.read()
+                # Simulate Render's TLS-terminating proxy and preserve the session.
+                headers = {
+                    "X-Forwarded-Proto": "https",
+                    "X-Forwarded-Host": "playbed.example",
+                    "Origin": "https://playbed.example",
+                    "Content-Type": "application/x-www-form-urlencoded",
+                }
+                connection = http.client.HTTPConnection("127.0.0.1", port, timeout=10)
+                try:
+                    connection.request("POST", "/pseudo", "pseudo=GunicornSmoke", headers)
+                    response = connection.getresponse()
+                    assert response.status == 302
+                    assert response.getheader("Location") in ("/", "https://playbed.example/")
+                    cookie = response.getheader("Set-Cookie")
+                    assert cookie and "Secure" in cookie and "HttpOnly" in cookie
+                    response.read()
+                    headers["Cookie"] = cookie.split(";", 1)[0]
+                    connection.request("GET", "/", headers=headers)
+                    response = connection.getresponse()
+                    assert response.status == 200
+                    assert b"GunicornSmoke" in response.read()
+                finally:
+                    connection.close()
                 process.terminate()
                 assert process.wait(timeout=15) == 0, "Gunicorn failed to shut down cleanly"
-                print("Gunicorn WSGI: PORT, health, home, CSP, static files and SIGTERM OK")
+                print(f"Gunicorn {entrypoint}: HTTP, proxy, session and SIGTERM OK")
             finally:
                 if process.poll() is None:
                     process.terminate()
@@ -76,4 +104,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    for entrypoint in ("app:app", "wsgi:app"):
+        main(entrypoint)
